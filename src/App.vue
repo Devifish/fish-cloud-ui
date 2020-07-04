@@ -1,8 +1,11 @@
 <template>
-  <div id="app">
-    <router-view/>
-  </div>
+  <a-config-provider>
+    <router-view />
+  </a-config-provider>
 </template>
 
-<style lang="less">
-</style>
+<script>
+export default {
+  name: "App "  
+}
+</script>

@@ -1,16 +1,18 @@
 <template>
-  <div class="home">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <common-layout>
+    <hello-world msg="hello world"/>
+  </common-layout>
 </template>
 
 <script>
-import HelloWorld from '@/components/HelloWorld.vue'
+import CommonLayout from "@/layouts/CommonLayout.vue";
+import HelloWorld from "@/components/HelloWorld.vue";
 
 export default {
-  name: 'Home',
+  name: "Home",
   components: {
-    HelloWorld
-  }
-}
+    CommonLayout,
+    HelloWorld,
+  },
+};
 </script>
