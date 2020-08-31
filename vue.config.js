@@ -10,9 +10,9 @@ const cdn = {
   },
   css: [],
   js: [
-    "https://cdn.jsdelivr.net/npm/vue@3.0.0-rc.9/dist/vue.global.min.js",
-    "https://cdn.jsdelivr.net/npm/vuex@4.0.0-beta.4/dist/vuex.global.min.js",
-    "https://cdn.jsdelivr.net/npm/vue-router@4.0.0-beta.7/dist/vue-router.global.min.js",
+    "https://cdn.jsdelivr.net/npm/vue@3.0.0-rc.9/dist/vue.runtime.global.prod.js",
+    "https://cdn.jsdelivr.net/npm/vuex@4.0.0-beta.4/dist/vuex.global.prod.js",
+    "https://cdn.jsdelivr.net/npm/vue-router@4.0.0-beta.7/dist/vue-router.global.prod.js",
     "https://cdn.jsdelivr.net/npm/ant-design-vue@2.0.0-beta.4/dist/antd.min.js",
     "https://cdn.jsdelivr.net/npm/axios@0.20.0/dist/axios.min.js"
   ]
