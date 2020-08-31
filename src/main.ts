@@ -1,12 +1,14 @@
 import { createApp } from "vue";
 import Antd from "ant-design-vue";
+import Router from "./router";
+import Store from "./store";
+import Axios from "./library/axios";
 import App from "./App.vue";
-import router from "./router";
-import store from "./store";
 import "ant-design-vue/dist/antd.less";
 
 createApp(App)
-  .use(store)
-  .use(router)
+  .use(Store)
+  .use(Router)
   .use(Antd)
+  .use(Axios)
   .mount("#app");
