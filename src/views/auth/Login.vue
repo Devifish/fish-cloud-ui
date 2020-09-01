@@ -139,7 +139,7 @@ export default defineComponent({
     QqOutlined,
     WechatOutlined,
     WeiboCircleOutlined
-  } as Record<string, Component>
+  }
 });
 </script>
 
