@@ -1,5 +1,5 @@
 <template>
-  <div class="user-layout-wrapper">
+  <a-layout class="user-layout-wrapper">
     <div class="container">
       <div class="top">
         <div class="header">
@@ -9,15 +9,15 @@
           </a>
         </div>
         <div class="desc">
-          登录系统进行下一步使用
+          欢迎使用 Fish Cloud 微服务开发框架
         </div>
       </div>
 
-      <div class="main">
+      <a-layout-content class="main">
         <router-view />
-      </div>
+      </a-layout-content>
 
-      <div class="footer">
+      <a-layout-footer class="footer">
         <div class="links">
           <a href="_self">帮助</a>
           <a href="_self">隐私</a>
@@ -26,9 +26,9 @@
         <div class="copyright">
           Copyright &copy; 2020 Devifish
         </div>
-      </div>
+      </a-layout-footer>
     </div>
-  </div>
+  </a-layout>
 </template>
 
 <style lang="less">
