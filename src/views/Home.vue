@@ -14,13 +14,13 @@ export default defineComponent({
   data() {
     return {
       msg: "Welcome to Your Vue.js + TypeScript App"
-    }
+    };
   },
   components: {
     HelloWorld
   },
   created() {
-    this.$data.msg
+    console.log(this.$data.msg);
   }
 });
 </script>

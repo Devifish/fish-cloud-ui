@@ -15,6 +15,15 @@ export default <Array<RouteRecordRaw>>[
             /* webpackChunkName: "auth" */
             "@/views/auth/Login.vue"
           )
+      },
+      {
+        path: "/auth/register",
+        name: "Register",
+        component: () =>
+          import(
+            /* webpackChunkName: "auth" */
+            "@/views/auth/Register.vue"
+          )
       }
     ]
   }

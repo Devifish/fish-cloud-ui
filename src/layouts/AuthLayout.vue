@@ -4,12 +4,12 @@
       <div class="top">
         <div class="header">
           <a href="/">
-            <!-- <img src="~@/assets/logo.svg" class="logo" alt="logo" /> -->
+            <img src="~@/assets/logo.svg" class="logo" alt="logo" />
             <span class="title">Fish Cloud</span>
           </a>
         </div>
         <div class="desc">
-          请登录后台管理系统进行下一步使用
+          登录系统进行下一步使用
         </div>
       </div>
 
@@ -31,7 +31,7 @@
   </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="less">
 .user-layout-wrapper {
   height: 100%;
 

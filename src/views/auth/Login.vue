@@ -1,12 +1,12 @@
 <template>
-  <a-form id="formLogin" class="user-layout-login" ref="formLogin">
+  <a-form id="formLogin" class="user-login-page" ref="formLogin">
     <a-tabs
       :activeKey="activeKey"
       :tabBarStyle="{ textAlign: 'center', borderBottom: 'unset' }"
-      @change="activeKey = $event"
+      @change="tabChangeHandle"
     >
       <!-- 用于账号密码方式登录系统 -->
-      <a-tab-pane key="password-login" tab="账号密码登录">
+      <a-tab-pane key="password" tab="账号密码登录">
         <a-alert
           v-if="isLoginError"
           type="error"
@@ -31,7 +31,8 @@
         </a-form-item>
       </a-tab-pane>
 
-      <a-tab-pane key="mobile-login" tab="手机号登录">
+      <!-- 用于短信验证码方式登录系统 -->
+      <a-tab-pane key="sms-code" tab="短信登录">
         <a-form-item>
           <a-input size="large" type="text" placeholder="请输入手机号">
             <template v-slot:prefix>
@@ -90,7 +91,7 @@
       <a>
         <weibo-circle-outlined class="item-icon" />
       </a>
-      <router-link class="register" to="/">
+      <router-link class="register" to="/auth/register">
         注册账户
       </router-link>
     </div>
@@ -98,7 +99,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, Component } from "vue";
 import {
   UserOutlined,
   LockOutlined,
@@ -110,12 +111,26 @@ import {
 } from "@ant-design/icons-vue";
 
 export default defineComponent({
-  data() {
+  name: "Login",
+  setup() {
     return {
-      activeKey: "password-login"
+      isLoginError: false
     };
   },
-  methods: {},
+  computed: {
+    activeKey() {
+      return this.$route.query.type || "password";
+    }
+  },
+  methods: {
+    tabChangeHandle(key: string) {
+      this.$router.push({
+        query: {
+          type: key
+        }
+      });
+    }
+  },
   components: {
     UserOutlined,
     LockOutlined,
@@ -124,12 +139,12 @@ export default defineComponent({
     QqOutlined,
     WechatOutlined,
     WeiboCircleOutlined
-  }
+  } as Record<string, Component>
 });
 </script>
 
-<style lang="less" scoped>
-.user-layout-login {
+<style lang="less">
+.user-login-page {
   .input-icon {
     color: #aaa;
   }
