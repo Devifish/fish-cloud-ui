@@ -33,7 +33,7 @@
 
       <a-tab-pane key="mobile-login" tab="手机号登录">
         <a-form-item>
-          <a-input size="large" type="text" placeholder="手机号">
+          <a-input size="large" type="text" placeholder="请输入手机号">
             <template v-slot:prefix>
               <mobile-outlined class="input-icon" />
             </template>
@@ -43,7 +43,7 @@
         <a-row :gutter="16">
           <a-col class="gutter-row" :span="16">
             <a-form-item>
-              <a-input size="large" type="text" placeholder="验证码">
+              <a-input size="large" type="text" placeholder="请输入验证码">
                 <template v-slot:prefix>
                   <mail-outlined class="input-icon" />
                 </template>
