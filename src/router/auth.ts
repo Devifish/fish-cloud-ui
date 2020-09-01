@@ -5,10 +5,11 @@ export default <Array<RouteRecordRaw>>[
   {
     path: "/auth",
     name: "AuthLayout",
+    redirect: "/auth/login",
     component: AuthLayout,
     children: [
       {
-        path: "/auth/login",
+        path: "login",
         name: "Login",
         component: () =>
           import(
@@ -17,7 +18,7 @@ export default <Array<RouteRecordRaw>>[
           )
       },
       {
-        path: "/auth/register",
+        path: "register",
         name: "Register",
         component: () =>
           import(

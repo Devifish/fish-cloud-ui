@@ -1,8 +1,11 @@
 <template>
   <a-form id="formRegister" class="user-register-page" ref="formRegister">
-    <h3>
-      <span>用户注册</span>
-    </h3>
+    <a-page-header
+      class="title"
+      title="用户注册"
+      @back="$router.back()"
+      style="padding: 0"
+    />
     <a-form-item>
       <a-input size="large" type="text" placeholder="请输入用户名">
         <template v-slot:prefix>
@@ -50,6 +53,7 @@ import {
 } from "@ant-design/icons-vue";
 
 export default defineComponent({
+  name: "Register",
   components: {
     UserOutlined,
     LockOutlined,
@@ -65,10 +69,8 @@ export default defineComponent({
     color: #aaa;
   }
 
-  & > h3 {
-    font-size: 18px;
+  .title {
     margin-bottom: 20px;
-    text-align: center;
   }
 
   .register-button {
