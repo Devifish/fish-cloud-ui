@@ -82,15 +82,11 @@
 
     <div class="user-login-other">
       <span>其他登录方式</span>
-      <a>
+      <a-tooltip placement="bottom" title="暂不支持">
         <qq-outlined class="item-icon" />
-      </a>
-      <a>
         <wechat-outlined class="item-icon" />
-      </a>
-      <a>
         <weibo-circle-outlined class="item-icon" />
-      </a>
+      </a-tooltip>
       <router-link class="register" to="/auth/register">
         注册账户
       </router-link>
@@ -144,6 +140,8 @@ export default defineComponent({
 </script>
 
 <style lang="less">
+@import "ant-design-vue/lib/style/themes";
+
 .user-login-page {
   .input-icon {
     color: #aaa;
@@ -176,7 +174,7 @@ export default defineComponent({
       transition: color 0.3s;
 
       &:hover {
-        color: #1890ff;
+        color: @primary-color;
       }
     }
 

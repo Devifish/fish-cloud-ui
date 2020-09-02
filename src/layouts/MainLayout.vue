@@ -96,7 +96,7 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-@import '~ant-design-vue/lib/style/themes/default.less';
+@import "ant-design-vue/lib/style/themes";
 
 .main-layout {
   width: 100%;

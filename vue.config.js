@@ -28,7 +28,8 @@ module.exports = {
     loaderOptions: {
       less: {
         lessOptions: {
-          javascriptEnabled: true
+          javascriptEnabled: true,
+          modifyVars: {}
         }
       }
     }
