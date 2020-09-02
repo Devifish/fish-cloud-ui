@@ -29,6 +29,14 @@
   </a-layout>
 </template>
 
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
+  name: "AuthLayout"
+});
+</script>
+
 <style lang="less">
 .auth-layout {
   width: 100%;

@@ -1,9 +1,9 @@
 import { RouteRecordRaw } from "vue-router";
-import _403 from "../views/error/403.vue";
-import _404 from "../views/error/404.vue";
-import _500 from "../views/error/500.vue";
+import _403 from "@/views/error/403.vue";
+import _404 from "@/views/error/404.vue";
+import _500 from "@/views/error/500.vue";
 
-export default <Array<RouteRecordRaw>>[
+const routes: Array<RouteRecordRaw> = [
   {
     path: "/error/403",
     name: "403",
@@ -24,3 +24,5 @@ export default <Array<RouteRecordRaw>>[
     redirect: "/error/404"
   }
 ];
+
+export default routes;

@@ -1,15 +1,15 @@
 import { RouteRecordRaw } from "vue-router";
-import AuthLayout from "../layouts/AuthLayout.vue";
+import AuthLayout from "@/layouts/AuthLayout.vue";
 
-export default <Array<RouteRecordRaw>>[
+const routes: Array<RouteRecordRaw> = [
   {
     path: "/auth",
-    name: "AuthLayout",
+    name: "Auth",
     redirect: "/auth/login",
     component: AuthLayout,
     children: [
       {
-        path: "login",
+        path: "/auth/login",
         name: "Login",
         component: () =>
           import(
@@ -18,7 +18,7 @@ export default <Array<RouteRecordRaw>>[
           )
       },
       {
-        path: "register",
+        path: "/auth/register",
         name: "Register",
         component: () =>
           import(
@@ -29,3 +29,5 @@ export default <Array<RouteRecordRaw>>[
     ]
   }
 ];
+
+export default routes;
