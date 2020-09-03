@@ -1,12 +1,20 @@
 import { Router, RouteLocationNormalized, RouteLocationRaw } from "vue-router";
+import UserLoginInterceptor from "./user-login";
+import PermissionInterceptor from "./permission";
 
-interface RouterInterceptor {
+export interface RouterInterceptor {
   (to: RouteLocationNormalized, from: RouteLocationNormalized):
     | boolean
     | RouteLocationRaw;
 }
 
-const interceptors: Array<RouterInterceptor> = [];
+/**
+ * 拦截器列表
+ */
+const interceptors: Array<RouterInterceptor> = [
+  UserLoginInterceptor,
+  PermissionInterceptor
+];
 
 export default {
   setup(router: Router) {
@@ -30,7 +38,7 @@ export default {
           break;
         }
       }
-      
+
       // 全部拦截器放行
       if (pass) next();
     });

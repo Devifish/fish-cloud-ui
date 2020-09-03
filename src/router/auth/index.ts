@@ -1,6 +1,8 @@
 import { RouteRecordRaw } from "vue-router";
 import AuthLayout from "@/layouts/AuthLayout.vue";
 
+export const LOGIN_PAGE_NAME = "Login";
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/auth",
@@ -10,7 +12,7 @@ const routes: Array<RouteRecordRaw> = [
     children: [
       {
         path: "/auth/login",
-        name: "Login",
+        name: LOGIN_PAGE_NAME,
         component: () =>
           import(
             /* webpackChunkName: "auth" */
