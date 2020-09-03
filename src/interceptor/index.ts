@@ -20,27 +20,25 @@ export default {
   setup(router: Router) {
     router.beforeEach((to, from, next) => {
       if (interceptors.length === 0) next();
-
+      
       // 轮询各个路由拦截器
-      let pass = false;
       for (const interceptor of interceptors) {
         const collback = interceptor(to, from);
 
-        if (collback === true) {
-          pass = true;
-        } else if (collback === false) {
-          pass = false;
-          next(false);
-          break;
+        if (typeof collback === "boolean") {
+          if (collback) {
+            continue;
+          } else {
+            next(false);
+            return;
+          }
         } else {
-          pass = false;
           next(collback);
-          break;
+          return;
         }
       }
 
-      // 全部拦截器放行
-      if (pass) next();
+      next();
     });
   }
 };

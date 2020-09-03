@@ -1,8 +1,12 @@
 import { RouterInterceptor } from "./index";
+import { createPathMatcher } from "@/utils/path-matcher";
 import { LOGIN_PAGE_NAME } from "@/router/auth";
 
 // 白名单
-const ignore: any[] = [LOGIN_PAGE_NAME, "Register"];
+const ignore = ["/auth/**", "/error/**"];
+
+// 创建路径匹配器
+const pathMatcher = createPathMatcher(ignore);
 
 /**
  * 用户登录拦截器
@@ -11,11 +15,11 @@ const ignore: any[] = [LOGIN_PAGE_NAME, "Register"];
  * @param to 出口
  * @param from 入口
  */
-var interceptor: RouterInterceptor = (to, from) => {
-  const { name } = to;
+const interceptor: RouterInterceptor = (to, from) => {
+  const { path } = to;
 
   // 放行白名单
-  if (ignore.includes(name)) return true;
+  if (pathMatcher.match(path)) return true;
 
   // 未登录则跳转至登录页
   return { name: LOGIN_PAGE_NAME };
