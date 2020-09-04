@@ -95,7 +95,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, Component } from "vue";
+import { defineComponent, reactive, computed, toRefs } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import {
   UserOutlined,
   LockOutlined,
@@ -105,28 +106,10 @@ import {
   WechatOutlined,
   WeiboCircleOutlined
 } from "@ant-design/icons-vue";
+import AuthApi from "@/api/auth";
 
 export default defineComponent({
   name: "Login",
-  setup() {
-    return {
-      isLoginError: false
-    };
-  },
-  computed: {
-    activeKey() {
-      return this.$route.query.type || "password";
-    }
-  },
-  methods: {
-    tabChangeHandle(key: string) {
-      this.$router.push({
-        query: {
-          type: key
-        }
-      });
-    }
-  },
   components: {
     UserOutlined,
     LockOutlined,
@@ -135,6 +118,31 @@ export default defineComponent({
     QqOutlined,
     WechatOutlined,
     WeiboCircleOutlined
+  },
+  setup() {
+    const route = useRoute();
+    const router = useRouter();
+
+    // 页面状态
+    const state = reactive({
+      isLoginError: false,
+      activeKey: computed(() => route.query.type || "password")
+    });
+
+    function tabChangeHandle(key: string) {
+      router.push({
+        query: {
+          type: key
+        }
+      });
+    }
+
+    return {
+      route,
+      router,
+      ...toRefs(state),
+      tabChangeHandle
+    };
   }
 });
 </script>

@@ -59,7 +59,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, reactive, toRefs } from "vue";
 import CommonFooter from "@/components/common/CommonFooter.vue";
 import {
   PieChartOutlined,
@@ -72,17 +72,6 @@ import {
 
 export default defineComponent({
   name: "MainLayout",
-  data() {
-    return {
-      collapsed: false,
-      selectedKeys: null
-    };
-  },
-  methods: {
-    menuCollapseHandle(collapsed: boolean) {
-      //this.collapsed = collapsed;
-    }
-  },
   components: {
     CommonFooter,
     MenuOutlined,
@@ -91,7 +80,22 @@ export default defineComponent({
     UserOutlined,
     TeamOutlined,
     FileOutlined
+  },
+  setup() {
+  const state = reactive({
+    collapsed: false,
+    selectedKeys: null
+  });
+
+  function menuCollapseHandle(collapsed: boolean) {
+    //this.collapsed = collapsed;
   }
+
+  return {
+    ...toRefs(state),
+    menuCollapseHandle
+  };
+}
 });
 </script>
 
