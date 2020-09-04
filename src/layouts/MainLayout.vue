@@ -82,20 +82,20 @@ export default defineComponent({
     FileOutlined
   },
   setup() {
-  const state = reactive({
-    collapsed: false,
-    selectedKeys: null
-  });
+    const state = reactive({
+      collapsed: false,
+      selectedKeys: null
+    });
 
-  function menuCollapseHandle(collapsed: boolean) {
-    //this.collapsed = collapsed;
+    function menuCollapseHandle(collapsed: boolean) {
+      //this.collapsed = collapsed;
+    }
+
+    return {
+      ...toRefs(state),
+      menuCollapseHandle
+    };
   }
-
-  return {
-    ...toRefs(state),
-    menuCollapseHandle
-  };
-}
 });
 </script>
 

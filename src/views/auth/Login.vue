@@ -8,7 +8,7 @@
       <!-- 用于账号密码方式登录系统 -->
       <a-tab-pane key="password" tab="账号密码登录">
         <a-alert
-          v-if="isLoginError"
+          v-if="state.isLoginError"
           type="error"
           showIcon
           style="margin-bottom: 24px;"
@@ -95,8 +95,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, computed, toRefs } from "vue";
+import { defineComponent, reactive, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { Form } from "ant-design-vue"
 import {
   UserOutlined,
   LockOutlined,
@@ -125,10 +126,17 @@ export default defineComponent({
 
     // 页面状态
     const state = reactive({
-      isLoginError: false,
-      activeKey: computed(() => route.query.type || "password")
+      isLoginError: false
     });
 
+    // 当前Tab活动页
+    const activeKey = computed(() => route.query.type || "password");
+
+    /**
+     * Tab切换事件处理
+     * 
+     * @param key Tabkey
+     */
     function tabChangeHandle(key: string) {
       router.push({
         query: {
@@ -140,7 +148,8 @@ export default defineComponent({
     return {
       route,
       router,
-      ...toRefs(state),
+      state,
+      activeKey,
       tabChangeHandle
     };
   }
