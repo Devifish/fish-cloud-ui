@@ -50,7 +50,12 @@
       <!-- 用于短信验证码方式登录系统 -->
       <a-tab-pane key="sms-code" tab="短信登录">
         <a-form-item>
-          <a-input size="large" type="text" placeholder="请输入手机号">
+          <a-input
+            v-model:value="form.telephone"
+            size="large"
+            type="text"
+            placeholder="请输入手机号"
+          >
             <template v-slot:prefix>
               <mobile-outlined class="input-icon" />
             </template>
@@ -58,18 +63,31 @@
         </a-form-item>
 
         <a-row :gutter="16">
-          <a-col class="gutter-row" :span="16">
+          <a-col class="gutter-row" :span="15">
             <a-form-item>
-              <a-input size="large" type="text" placeholder="请输入验证码">
+              <a-input
+                v-model:value="form.smsCode"
+                size="large"
+                type="text"
+                placeholder="请输入验证码"
+              >
                 <template v-slot:prefix>
                   <mail-outlined class="input-icon" />
                 </template>
               </a-input>
             </a-form-item>
           </a-col>
-          <a-col class="gutter-row" :span="8">
-            <a-button class="get-captcha" tabindex="-1">
+          <a-col class="gutter-row" :span="9">
+            <a-button
+              class="get-captcha"
+              tabindex="-1"
+              :disabled="state.disableSmsBtn"
+              @click="sendSmsCodeHandle"
+            >
               获取验证码
+              <template v-if="state.disableSmsBtn">
+                {{ `(${state.timeout}s)` }}
+              </template>
             </a-button>
           </a-col>
         </a-row>
@@ -124,7 +142,9 @@ import {
   WechatOutlined,
   WeiboCircleOutlined
 } from "@ant-design/icons-vue";
-import AuthApi from "@/api/auth";
+import { loginByPassword, loginBySmsCode } from "@/api/auth";
+
+const SEND_SMS_CODE_TIMEOUT = 60;
 
 export default defineComponent({
   name: "Login",
@@ -144,8 +164,10 @@ export default defineComponent({
     // 页面状态
     const state = reactive({
       isLoginError: false,
+      message: "",
       logging: false,
-      message: ""
+      disableSmsBtn: false,
+      timeout: 0
     });
 
     // 表单参数
@@ -175,14 +197,16 @@ export default defineComponent({
         switch (key) {
           case "password": {
             const { username, password } = form;
-            data = await AuthApi.loginByPassword(username, password);
+            data = await loginByPassword(username, password);
             break;
           }
           case "sms-code": {
             const { telephone, smsCode } = form;
-            data = await AuthApi.loginBySmsCode(telephone, smsCode);
+            data = await loginBySmsCode(telephone, smsCode);
             break;
           }
+          default:
+            return;
         }
 
         // 登录成功
@@ -194,6 +218,25 @@ export default defineComponent({
       } finally {
         state.logging = false;
       }
+    }
+
+    /**
+     * 发送登录短信验证码处理
+     */
+    let sendSmsCodeInterval: number;
+    async function sendSmsCodeHandle() {
+      state.disableSmsBtn = true;
+      state.timeout = SEND_SMS_CODE_TIMEOUT;
+
+      const { telephone } = form;
+      sendSmsCodeInterval = setInterval(() => {
+        state.timeout--;
+
+        if (state.timeout <= 0) {
+          state.disableSmsBtn = true;
+          clearInterval(sendSmsCodeInterval);
+        }
+      }, 1000);
     }
 
     /**
@@ -216,7 +259,8 @@ export default defineComponent({
       form,
       activeKey,
       loginSubmit,
-      tabChangeHandle
+      tabChangeHandle,
+      sendSmsCodeHandle
     };
   }
 });
