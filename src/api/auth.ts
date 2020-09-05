@@ -19,12 +19,14 @@ export default {
     formData.append("username", username);
     formData.append("password", password);
 
-    return Axios.post("/api/upms/oauth/token", {
+    return Axios.post("/api/upms/oauth/token", formData, {
       auth: OAuthClient,
       params: {
         grant_type: "password"
       },
-      data: formData
+      message: {
+        show: false
+      }
     });
   },
 
@@ -39,12 +41,14 @@ export default {
     formData.append("telephone", telephone);
     formData.append("code", code);
 
-    return Axios.post("/api/upms/oauth/token", {
+    return Axios.post("/api/upms/oauth/token", formData, {
       auth: OAuthClient,
       params: {
         grant_type: "sms_code"
       },
-      data: formData
+      message: {
+        show: false
+      }
     });
   }
 };

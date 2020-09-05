@@ -1,5 +1,11 @@
 <template>
-  <a-form id="formLogin" class="user-login-page" ref="formLogin">
+  <a-form
+    id="formLogin"
+    class="user-login-page"
+    ref="formLogin"
+    :model="form"
+    @submit="loginSubmit"
+  >
     <a-tabs
       :activeKey="activeKey"
       :tabBarStyle="{ textAlign: 'center', borderBottom: 'unset' }"
@@ -14,16 +20,25 @@
           style="margin-bottom: 24px;"
           message="账户或密码错误"
         />
-        <a-form-item>
-          <a-input size="large" type="text" placeholder="请输入用户名">
+        <a-form-item name="username">
+          <a-input
+            v-model:value="form.username"
+            size="large"
+            type="text"
+            placeholder="请输入用户名"
+          >
             <template v-slot:prefix>
               <user-outlined class="input-icon" />
             </template>
           </a-input>
         </a-form-item>
 
-        <a-form-item>
-          <a-input-password size="large" placeholder="请输入密码">
+        <a-form-item name="password">
+          <a-input-password
+            v-model:value="form.password"
+            size="large"
+            placeholder="请输入密码"
+          >
             <template v-slot:prefix>
               <lock-outlined class="input-icon" />
             </template>
@@ -61,7 +76,7 @@
     </a-tabs>
 
     <a-form-item>
-      <a-checkbox>
+      <a-checkbox v-model:checked="form.autoLogin">
         自动登录
       </a-checkbox>
       <router-link class="forge-password" to="/" style="float: right;">
@@ -75,6 +90,8 @@
         type="primary"
         htmlType="submit"
         class="login-button"
+        :loading="state.logging"
+        :disabled="state.loginBtn"
       >
         登录
       </a-button>
@@ -95,9 +112,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, computed } from "vue";
+import { defineComponent, reactive, computed, toRefs } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { Form } from "ant-design-vue";
 import {
   UserOutlined,
   LockOutlined,
@@ -126,11 +142,53 @@ export default defineComponent({
 
     // 页面状态
     const state = reactive({
-      isLoginError: false
+      isLoginError: false,
+      logging: false
+    });
+
+    // 表单参数
+    const form = reactive({
+      username: "",
+      password: "",
+      telephone: "",
+      smsCode: "",
+      autoLogin: false
     });
 
     // 当前Tab活动页
-    const activeKey = computed(() => route.query.type || "password");
+    const activeKey = computed(
+      () => (route.query.type as string) || "password"
+    );
+
+    /**
+     * 提交登录表单
+     *
+     * @param e Event
+     */
+    async function loginSubmit(e: Event) {
+      e.preventDefault();
+      state.isLoginError = false;
+      state.logging = true;
+
+      try {
+        const key = activeKey.value;
+        switch (key) {
+          case "password": {
+            const { username, password } = form;
+            const data = await AuthApi.loginByPassword(username, password);
+
+
+            break;
+          }
+          case "sms-code": {
+          }
+        }
+      } catch {
+        state.isLoginError = true;
+      } finally {
+        state.logging = false;
+      }
+    }
 
     /**
      * Tab切换事件处理
@@ -149,7 +207,9 @@ export default defineComponent({
       route,
       router,
       state,
+      form,
       activeKey,
+      loginSubmit,
       tabChangeHandle
     };
   }
