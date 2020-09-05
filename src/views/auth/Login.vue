@@ -142,7 +142,12 @@ import {
   WechatOutlined,
   WeiboCircleOutlined
 } from "@ant-design/icons-vue";
-import { loginByPassword, loginBySmsCode } from "@/api/auth";
+import {
+  loginByPassword,
+  loginBySmsCode,
+  sendSmsCode,
+  SmsCodeType
+} from "@/api/auth";
 
 const SEND_SMS_CODE_TIMEOUT = 60;
 
@@ -225,10 +230,12 @@ export default defineComponent({
      */
     let sendSmsCodeInterval: number;
     async function sendSmsCodeHandle() {
+      const { telephone } = form;
+      await sendSmsCode(telephone, SmsCodeType.UserLogin);
+
+      // 开始倒计时
       state.disableSmsBtn = true;
       state.timeout = SEND_SMS_CODE_TIMEOUT;
-
-      const { telephone } = form;
       sendSmsCodeInterval = setInterval(() => {
         state.timeout--;
 

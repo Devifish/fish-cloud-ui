@@ -18,6 +18,4 @@ app.use(Antd);
 Interceptor.setup(Router);
 
 // 挂载到Element
-Router.isReady().then(() => {
-  app.mount("#app", false);
-});
+app.mount("#app", false);
