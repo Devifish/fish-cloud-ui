@@ -97,7 +97,7 @@
 <script lang="ts">
 import { defineComponent, reactive, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { Form } from "ant-design-vue"
+import { Form } from "ant-design-vue";
 import {
   UserOutlined,
   LockOutlined,
@@ -134,7 +134,7 @@ export default defineComponent({
 
     /**
      * Tab切换事件处理
-     * 
+     *
      * @param key Tabkey
      */
     function tabChangeHandle(key: string) {
