@@ -9,9 +9,8 @@
     <a-alert
       v-if="state.isLoginError"
       type="error"
-      showIcon
-      style="margin-bottom: 24px;"
       :message="state.message"
+      show-icon
     />
 
     <a-tabs

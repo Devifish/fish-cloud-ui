@@ -88,6 +88,7 @@ export default defineComponent({
 
   .main {
     min-width: 260px;
+    min-height: 400px;
     width: 368px;
     margin: 0 auto;
   }
