@@ -6,6 +6,14 @@
     :model="form"
     @submit="loginSubmit"
   >
+    <a-alert
+      v-if="state.isLoginError"
+      type="error"
+      showIcon
+      style="margin-bottom: 24px;"
+      :message="state.message"
+    />
+
     <a-tabs
       :activeKey="activeKey"
       :tabBarStyle="{ textAlign: 'center', borderBottom: 'unset' }"
@@ -13,13 +21,6 @@
     >
       <!-- 用于账号密码方式登录系统 -->
       <a-tab-pane key="password" tab="账号密码登录">
-        <a-alert
-          v-if="state.isLoginError"
-          type="error"
-          showIcon
-          style="margin-bottom: 24px;"
-          message="账户或密码错误"
-        />
         <a-form-item name="username">
           <a-input
             v-model:value="form.username"
@@ -143,7 +144,8 @@ export default defineComponent({
     // 页面状态
     const state = reactive({
       isLoginError: false,
-      logging: false
+      logging: false,
+      message: ""
     });
 
     // 表单参数
@@ -156,9 +158,7 @@ export default defineComponent({
     });
 
     // 当前Tab活动页
-    const activeKey = computed(
-      () => (route.query.type as string) || "password"
-    );
+    const activeKey = computed(() => route.query.type ?? "password");
 
     /**
      * 提交登录表单
@@ -167,23 +167,29 @@ export default defineComponent({
      */
     async function loginSubmit(e: Event) {
       e.preventDefault();
-      state.isLoginError = false;
       state.logging = true;
 
       try {
+        let data: any;
         const key = activeKey.value;
         switch (key) {
           case "password": {
             const { username, password } = form;
-            const data = await AuthApi.loginByPassword(username, password);
-
-
+            data = await AuthApi.loginByPassword(username, password);
             break;
           }
           case "sms-code": {
+            const { telephone, smsCode } = form;
+            data = await AuthApi.loginBySmsCode(telephone, smsCode);
+            break;
           }
         }
-      } catch {
+
+        // 登录成功
+        state.isLoginError = false;
+        console.log(data);
+      } catch (error) {
+        state.message = error.response.data.message;
         state.isLoginError = true;
       } finally {
         state.logging = false;
