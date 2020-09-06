@@ -7,6 +7,12 @@ import setting from "./setting";
 export default createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes: [
+    {
+      path: "/",
+      name: "Index",
+      redirect: "/auth/login"
+    },
+
     ...auth,
     ...user,
     ...setting,

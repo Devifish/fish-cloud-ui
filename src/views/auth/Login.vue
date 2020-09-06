@@ -3,8 +3,8 @@
     id="formLogin"
     class="user-login-page"
     ref="formLogin"
+    :rules="rules"
     :model="form"
-    @submit="loginSubmit"
   >
     <a-alert
       v-if="state.isLoginError"
@@ -48,7 +48,7 @@
 
       <!-- 用于短信验证码方式登录系统 -->
       <a-tab-pane key="sms-code" tab="短信登录">
-        <a-form-item>
+        <a-form-item name="telephone">
           <a-input
             v-model:value="form.telephone"
             size="large"
@@ -63,7 +63,7 @@
 
         <a-row :gutter="16">
           <a-col class="gutter-row" :span="15">
-            <a-form-item>
+            <a-form-item name="smsCode">
               <a-input
                 v-model:value="form.smsCode"
                 size="large"
@@ -110,6 +110,7 @@
         class="login-button"
         :loading="state.logging"
         :disabled="state.loginBtn"
+        @click="loginSubmit"
       >
         登录
       </a-button>
@@ -130,7 +131,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, computed, toRefs } from "vue";
+import { defineComponent, reactive, computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import {
   UserOutlined,
@@ -147,6 +148,8 @@ import {
   sendSmsCode,
   SmsCodeType
 } from "@/api/auth";
+import { Form } from "ant-design-vue";
+import { PHONE_NUM } from "@/utils/regexp";
 
 const SEND_SMS_CODE_TIMEOUT = 60;
 
@@ -183,7 +186,32 @@ export default defineComponent({
       autoLogin: false
     });
 
-    // 当前Tab活动页
+    // 表单校验
+    const rules = reactive({
+      username: {
+        required: true,
+        message: "用户名不能为空",
+        trigger: "blur"
+      },
+      password: {
+        required: true,
+        message: "密码不能为空",
+        trigger: "blur"
+      },
+      telephone: {
+        required: true,
+        pattern: PHONE_NUM,
+        message: "请输出正确的手机号",
+        trigger: "blur"
+      },
+      smsCode: {
+        required: true,
+        message: "验证码不能为空",
+        trigger: "blur"
+      }
+    });
+
+    const formLogin = ref<Form>();
     const activeKey = computed(() => route.query.type ?? "password");
 
     /**
@@ -201,11 +229,15 @@ export default defineComponent({
         switch (key) {
           case "password": {
             const { username, password } = form;
+
+            await formLogin.value?.validate(["username", "password"]);
             data = await loginByPassword(username, password);
             break;
           }
           case "sms-code": {
             const { telephone, smsCode } = form;
+
+            await formLogin.value?.validate(["telephone", "smsCode"]);
             data = await loginBySmsCode(telephone, smsCode);
             break;
           }
@@ -230,6 +262,7 @@ export default defineComponent({
     let sendSmsCodeInterval: number;
     async function sendSmsCodeHandle() {
       const { telephone } = form;
+      await formLogin.value?.validate(["telephone"]);
       await sendSmsCode(telephone, SmsCodeType.UserLogin);
 
       // 开始倒计时
@@ -263,6 +296,8 @@ export default defineComponent({
       router,
       state,
       form,
+      rules,
+      formLogin,
       activeKey,
       loginSubmit,
       tabChangeHandle,
