@@ -71,7 +71,7 @@ export default defineComponent({
 
       .title {
         font-size: 33px;
-        color: rgba(0, 0, 0, 0.85);
+        color: #333;
         font-family: Avenir, "Helvetica Neue", Arial, Helvetica, sans-serif;
         font-weight: 600;
         position: relative;
@@ -80,7 +80,7 @@ export default defineComponent({
     }
     .desc {
       font-size: 14px;
-      color: rgba(0, 0, 0, 0.45);
+      color: #888;
       margin-top: 12px;
       margin-bottom: 40px;
     }

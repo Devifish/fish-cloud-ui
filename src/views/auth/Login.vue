@@ -142,12 +142,8 @@ import {
   WechatOutlined,
   WeiboCircleOutlined
 } from "@ant-design/icons-vue";
-import {
-  loginByPassword,
-  loginBySmsCode,
-  sendSmsCode,
-  SmsCodeType
-} from "@/api/auth";
+import { loginByPassword, loginBySmsCode } from "@/api/auth";
+import { sendSmsCode, SmsCodeType } from "@/api/user";
 import { Form } from "ant-design-vue";
 import { PHONE_NUM } from "@/utils/regexp";
 
@@ -272,7 +268,7 @@ export default defineComponent({
         state.timeout--;
 
         if (state.timeout <= 0) {
-          state.disableSmsBtn = true;
+          state.disableSmsBtn = false;
           clearInterval(sendSmsCodeInterval);
         }
       }, 1000);
@@ -308,7 +304,7 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-@import "ant-design-vue/lib/style/themes";
+@import "~ant-design-vue/lib/style/themes";
 
 .user-login-page {
   .input-icon {

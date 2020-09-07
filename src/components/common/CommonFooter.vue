@@ -1,9 +1,11 @@
 <template>
   <a-layout-footer class="common-footer">
     <div class="links">
-      <a href="_self">帮助</a>
-      <a href="_self">隐私</a>
-      <a href="_self">条款</a>
+      <a href="javascript:void(0);">帮助</a>
+      <a-divider class="divider" type="vertical" />
+      <a href="javascript:void(0);">隐私</a>
+      <a-divider class="divider" type="vertical" />
+      <a href="javascript:void(0);">条款</a>
     </div>
     <div class="copyright">
       Copyright &copy; 2020 devifish.cn
@@ -12,22 +14,26 @@
 </template>
 
 <style lang="less">
+@common-footer-color: #888;
+
 .common-footer {
   text-align: center;
 
   .links {
     margin-bottom: 8px;
     font-size: 14px;
+
     a {
-      color: rgba(0, 0, 0, 0.45);
+      color: @common-footer-color;
       transition: all 0.3s;
-      &:not(:last-child) {
-        margin-right: 40px;
-      }
+    }
+
+    .divider {
+      background: @common-footer-color;
     }
   }
   .copyright {
-    color: rgba(0, 0, 0, 0.45);
+    color: @common-footer-color;
     font-size: 14px;
   }
 }
