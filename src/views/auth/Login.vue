@@ -142,8 +142,8 @@ import {
   WechatOutlined,
   WeiboCircleOutlined
 } from "@ant-design/icons-vue";
-import { loginByPassword, loginBySmsCode } from "@/api/auth";
-import { sendSmsCode, SmsCodeType } from "@/api/user";
+import AuthApi from "@/api/auth";
+import UserApi, { SmsCodeType } from "@/api/user";
 import { Form } from "ant-design-vue";
 import { PHONE_NUM } from "@/utils/regexp";
 
@@ -223,28 +223,26 @@ export default defineComponent({
         let data: any;
         const key = activeKey.value;
         switch (key) {
-          case "password": {
-            const { username, password } = form;
-
+          case "password":
             await formLogin.value?.validate(["username", "password"]);
-            data = await loginByPassword(username, password);
-            break;
-          }
-          case "sms-code": {
-            const { telephone, smsCode } = form;
 
-            await formLogin.value?.validate(["telephone", "smsCode"]);
-            data = await loginBySmsCode(telephone, smsCode);
+            const { username, password } = form;
+            data = await AuthApi.loginByPassword(username, password);
             break;
-          }
-          default:
-            return;
+          case "sms-code":
+            await formLogin.value?.validate(["telephone", "smsCode"]);
+
+            const { telephone, smsCode } = form;
+            data = await AuthApi.loginBySmsCode(telephone, smsCode);
+            break;
         }
 
         // 登录成功
         state.isLoginError = false;
         console.log(data);
       } catch (error) {
+        if (!error.response) return;
+
         state.message = error.response.data.message;
         state.isLoginError = true;
       } finally {
@@ -259,7 +257,7 @@ export default defineComponent({
     async function sendSmsCodeHandle() {
       const { telephone } = form;
       await formLogin.value?.validate(["telephone"]);
-      await sendSmsCode(telephone, SmsCodeType.UserLogin);
+      await UserApi.sendSmsCode(telephone, SmsCodeType.UserLogin);
 
       // 开始倒计时
       state.disableSmsBtn = true;

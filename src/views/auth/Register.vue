@@ -59,6 +59,13 @@ export default defineComponent({
     LockOutlined,
     MobileOutlined,
     MailOutlined
+  },
+  setup() {
+
+
+    return {
+
+    }
   }
 });
 </script>
