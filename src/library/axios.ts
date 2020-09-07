@@ -1,4 +1,4 @@
-import Axios, { AxiosRequestConfig, AxiosTransformer } from "axios";
+import Axios, { AxiosRequestConfig } from "axios";
 import { App } from "vue";
 import { message } from "ant-design-vue";
 
@@ -44,15 +44,17 @@ class OAuth2Token {
   }
 }
 
+// 公共参数
+var token: OAuth2Token;
+const baseUrl = new URL(process.env.VUE_APP_API_BASE_URL);
+const withCredentials = location.hostname != baseUrl.hostname;
+
 // 公共Axios实例
 const axios = Axios.create({
-  baseURL: "https://cloud.devifish.cn",
+  baseURL: baseUrl.href,
   timeout: 10000,
-  withCredentials: true
+  withCredentials
 });
-
-// 用户Token
-var token: OAuth2Token;
 
 // Request 过滤器
 axios.interceptors.request.use(request => {
