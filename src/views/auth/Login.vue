@@ -16,7 +16,7 @@
     <a-tabs
       :activeKey="activeKey"
       :tabBarStyle="{ textAlign: 'center', borderBottom: 'unset' }"
-      @change="tabChangeHandle"
+      @change="key => $router.push({ query: { type: key } })"
     >
       <!-- 用于账号密码方式登录系统 -->
       <a-tab-pane key="password" tab="账号密码登录">
@@ -134,6 +134,7 @@
 import { defineComponent, reactive, computed, ref } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
+import { message } from "ant-design-vue";
 import {
   UserOutlined,
   LockOutlined,
@@ -240,6 +241,7 @@ export default defineComponent({
         }
 
         // 登录成功
+        message.success("登录成功");
         state.isLoginError = false;
         store.commit("auth/saveToken", tokenData);
         router.push("/");
@@ -261,6 +263,7 @@ export default defineComponent({
       const { telephone } = form;
       await formLogin.value?.validate(["telephone"]);
       await UserApi.sendSmsCode(telephone, SmsCodeType.UserLogin);
+      message.success("已发送至您的手机，请注意查收");
 
       // 开始倒计时
       state.disableSmsBtn = true;
@@ -275,19 +278,6 @@ export default defineComponent({
       }, 1000);
     }
 
-    /**
-     * Tab切换事件处理
-     *
-     * @param key Tabkey
-     */
-    function tabChangeHandle(key: string) {
-      router.push({
-        query: {
-          type: key
-        }
-      });
-    }
-
     return {
       state,
       form,
@@ -295,7 +285,6 @@ export default defineComponent({
       formLogin,
       activeKey,
       loginSubmit,
-      tabChangeHandle,
       sendSmsCodeHandle
     };
   }
