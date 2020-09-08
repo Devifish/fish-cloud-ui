@@ -31,8 +31,8 @@ class OAuth2Token {
   tokenType: string;
 
   constructor(accessToken: string, tokenType: string) {
-    this.accessToken = token.accessToken;
-    this.tokenType = token.tokenType;
+    this.accessToken = accessToken;
+    this.tokenType = tokenType;
   }
 
   tokenData() {
@@ -75,11 +75,8 @@ axios.interceptors.response.use(
     return data;
   },
   error => {
-    const response = error.response;
-
-    // 如果存在错误消息则处理
-    if (response) {
-      const { config, data, status } = response;
+    if (error.response) {
+      const { config, data, status } = error.response;
       const show = config.message?.show ?? true;
 
       if (show) {
@@ -102,6 +99,13 @@ axios.interceptors.response.use(
             break;
         }
         message.error(content, undefined, callback);
+      }
+    } else if (error.message) {
+      switch (error.message) {
+        case "Network Error":
+          message.error("网络错误, 无法连接服务器", undefined);
+        case "":
+
       }
     }
 
