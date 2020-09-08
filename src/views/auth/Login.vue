@@ -132,6 +132,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, computed, ref } from "vue";
+import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
 import {
   UserOutlined,
@@ -163,6 +164,7 @@ export default defineComponent({
   setup() {
     const route = useRoute();
     const router = useRouter();
+    const store = useStore();
 
     // 页面状态
     const state = reactive({
@@ -239,7 +241,7 @@ export default defineComponent({
 
         // 登录成功
         state.isLoginError = false;
-        console.log(data);
+        store.commit("auth/saveToken", data);
       } catch (error) {
         if (!error.response) return;
 
@@ -286,8 +288,6 @@ export default defineComponent({
     }
 
     return {
-      route,
-      router,
       state,
       form,
       rules,

@@ -1,9 +1,11 @@
 import Axios, { AxiosRequestConfig } from "axios";
 import { App } from "vue";
+import Store from "@/store";
 import { message } from "ant-design-vue";
 
 interface AxiosLibrary {
   install(app: App): void;
+  authorization: (accessToken: string, tokenType: string) => void;
   get: (url: string, config?: AxiosRequestConfig) => Promise<any>;
   delete: (url: string, config?: AxiosRequestConfig) => Promise<any>;
   head: (url: string, config?: AxiosRequestConfig) => Promise<any>;
@@ -24,28 +26,7 @@ declare module "axios" {
   }
 }
 
-class OAuth2Token {
-  readonly TOKEN_HEADER = "Authorization";
-
-  accessToken: string;
-  tokenType: string;
-
-  constructor(accessToken: string, tokenType: string) {
-    this.accessToken = accessToken;
-    this.tokenType = tokenType;
-  }
-
-  tokenData() {
-    const tokenValue = `${this.tokenType} ${this.accessToken}`;
-    return {
-      header: this.TOKEN_HEADER,
-      value: tokenValue
-    };
-  }
-}
-
 // 公共参数
-var token: OAuth2Token;
 const baseUrl = new URL(process.env.VUE_APP_API_BASE_URL);
 const withCredentials = location.hostname != baseUrl.hostname;
 
@@ -59,6 +40,7 @@ const axios = Axios.create({
 // Request 过滤器
 axios.interceptors.request.use(request => {
   const { headers } = request;
+  const { token } = Store.state.auth;
 
   // OAuth2用户Token注入
   if (token) {
@@ -101,11 +83,14 @@ axios.interceptors.response.use(
         message.error(content, undefined, callback);
       }
     } else if (error.message) {
-      switch (error.message) {
+      const msg = error.message;
+      switch (msg) {
         case "Network Error":
-          message.error("网络错误, 无法连接服务器", undefined);
-        case "":
-
+          message.error("网络错误, 无法连接服务器");
+          break;
+        default:
+          message.error(msg);
+          break;
       }
     }
 
@@ -117,11 +102,6 @@ axios.interceptors.response.use(
 export default <AxiosLibrary>{
   install(app: App) {
     app.config.globalProperties.$http = axios;
-  },
-  config: {
-    authorization(accessToken: string, tokenType: string) {
-      token = new OAuth2Token(accessToken, tokenType);
-    }
   },
 
   // 暴露 Axios 方法

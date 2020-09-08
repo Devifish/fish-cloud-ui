@@ -1,3 +1,4 @@
+import Store from "@/store";
 import { RouterInterceptor } from "./index";
 import { createPathMatcher } from "@/utils/path-matcher";
 import { LOGIN_PAGE_NAME } from "@/router/auth";
@@ -15,8 +16,11 @@ const pathMatcher = createPathMatcher(ignore);
  * @param to 出口
  * @param from 入口
  */
-const interceptor: RouterInterceptor = (to, from) => {
-  const { path } = to;
+const interceptor: RouterInterceptor = ({ path }) => {
+  const { token } = Store.state.auth;
+
+  // 用户已登录则直接放行
+  if (token) return true;
 
   // 放行白名单
   if (pathMatcher.match(path)) return true;
