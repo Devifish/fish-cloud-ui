@@ -222,26 +222,27 @@ export default defineComponent({
       state.logging = true;
 
       try {
-        let data: any;
+        let tokenData: any;
         const key = activeKey.value;
         switch (key) {
           case "password":
             await formLogin.value?.validate(["username", "password"]);
 
             const { username, password } = form;
-            data = await AuthApi.loginByPassword(username, password);
+            tokenData = await AuthApi.loginByPassword(username, password);
             break;
           case "sms-code":
             await formLogin.value?.validate(["telephone", "smsCode"]);
 
             const { telephone, smsCode } = form;
-            data = await AuthApi.loginBySmsCode(telephone, smsCode);
+            tokenData = await AuthApi.loginBySmsCode(telephone, smsCode);
             break;
         }
 
         // 登录成功
         state.isLoginError = false;
-        store.commit("auth/saveToken", data);
+        store.commit("auth/saveToken", tokenData);
+        router.push("/");
       } catch (error) {
         if (!error.response) return;
 

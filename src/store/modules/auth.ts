@@ -1,5 +1,5 @@
 import { Module } from "vuex";
-import Axios from "@/library/axios";
+import Cookies from "js-cookie";
 
 interface AuthStoreState {
   token: OAuth2Token | null;
@@ -40,7 +40,7 @@ const authModule: Module<AuthStoreState, any> = {
     let token = null;
 
     // 如果存在Token则注入
-    const tokenValue = localStorage.getItem(TOKEN_STORAGE);
+    const tokenValue = Cookies.get(TOKEN_STORAGE);
     if (tokenValue) {
       token = OAuth2Token.createByTokenString(tokenValue);
     }
@@ -50,15 +50,17 @@ const authModule: Module<AuthStoreState, any> = {
     };
   },
   getters: {
-
+    isLogin(state) {
+      return state.token != null;
+    }
   },
   mutations: {
     saveToken(state, data) {
-      const { access_token, token_type } = data;
+      const { access_token, token_type, expires_in } = data;
       const token = new OAuth2Token(access_token, token_type);
       const tokenValue = token.tokenData().value;
 
-      localStorage.setItem(TOKEN_STORAGE, tokenValue);
+      Cookies.set(TOKEN_STORAGE, tokenValue);
       state.token = token;
     }
   }

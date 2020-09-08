@@ -10,7 +10,7 @@ export default createRouter({
     {
       path: "/",
       name: "Index",
-      redirect: "/auth/login"
+      redirect: "/user/list"
     },
 
     ...auth,

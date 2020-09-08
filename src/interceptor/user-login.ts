@@ -17,10 +17,10 @@ const pathMatcher = createPathMatcher(ignore);
  * @param from 入口
  */
 const interceptor: RouterInterceptor = ({ path }) => {
-  const { token } = Store.state.auth;
+  const isLogin = Store.getters["auth/isLogin"];
 
   // 用户已登录则直接放行
-  if (token) return true;
+  if (isLogin) return true;
 
   // 放行白名单
   if (pathMatcher.match(path)) return true;
