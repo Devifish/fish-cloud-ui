@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import error from "./error";
 import auth from "./auth";
 import user from "./user";
-import setting from "./setting";
+import system from "./system";
 
 export default createRouter({
   history: createWebHistory(process.env.BASE_URL),
@@ -15,7 +15,7 @@ export default createRouter({
 
     ...auth,
     ...user,
-    ...setting,
+    ...system,
     ...error
   ]
 });

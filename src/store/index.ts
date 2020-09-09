@@ -1,5 +1,6 @@
 import { createStore, createLogger, Plugin } from "vuex";
 import auth from "./modules/auth";
+import menu from "./modules/menu";
 
 const isProd = process.env.NODE_ENV == "production";
 const plugins: Plugin<any>[] = [];
@@ -11,7 +12,8 @@ if (!isProd) {
 
 export default createStore({
   modules: {
-    auth
+    auth,
+    menu
   },
   plugins
 });

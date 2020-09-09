@@ -5,8 +5,8 @@ import dictionary from "./dictionary";
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: "/setting",
-    name: "SystemSetting",
+    path: "/system",
+    name: "SystemManager",
     component: MainLayout,
     children: [
       ...menu,

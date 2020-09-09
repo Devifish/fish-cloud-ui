@@ -6,36 +6,20 @@
       @collapse="menuCollapseHandle"
     >
       <div class="logo" />
-      <a-menu theme="dark" v-model:selectedKeys="selectedKeys" mode="inline">
-        <a-menu-item key="1">
-          <pie-chart-outlined />
-          <span>Dashboard</span>
-        </a-menu-item>
-        <a-sub-menu key="sub1">
-          <template v-slot:title>
-            <span>
-              <user-outlined />
-              <span>用户管理</span>
-            </span>
+      <a-menu
+        theme="dark"
+        v-model:selectedKeys="selectedKeys"
+        mode="inline"
+        v-if="menuTree"
+      >
+        <template v-for="item of menuTree" :key="item.id">
+          <template v-if="item.children?.length > 0">
+            <sub-menu-tree :data="item" />
           </template>
-          <a-menu-item key="3">用户管理</a-menu-item>
-          <a-menu-item key="4">角色管理</a-menu-item>
-          <a-menu-item key="5">部门管理</a-menu-item>
-        </a-sub-menu>
-        <a-sub-menu key="sub2">
-          <template v-slot:title>
-            <span>
-              <team-outlined />
-              <span>系统设置</span>
-            </span>
-          </template>
-          <a-menu-item key="6">菜单管理</a-menu-item>
-          <a-menu-item key="8">字典管理</a-menu-item>
-        </a-sub-menu>
-        <a-menu-item key="9">
-          <file-outlined />
-          <span>File</span>
-        </a-menu-item>
+          <a-menu-item v-else :key="item.id">
+            {{ item.name }}
+          </a-menu-item>
+        </template>
       </a-menu>
     </a-layout-sider>
 
@@ -46,8 +30,9 @@
 
       <a-layout-content style="margin: 0 16px">
         <a-breadcrumb style="margin: 16px 0">
-          <a-breadcrumb-item>User</a-breadcrumb-item>
-          <a-breadcrumb-item>Bill</a-breadcrumb-item>
+          <a-breadcrumb-item v-for="item of breadcrumbs" :key="item">
+            {{ item }}
+          </a-breadcrumb-item>
         </a-breadcrumb>
 
         <router-view />
@@ -59,8 +44,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from "vue";
+import {
+  defineComponent,
+  reactive,
+  computed,
+  toRefs,
+  onBeforeMount,
+  Component
+} from "vue";
+import { useRoute } from "vue-router";
+import { useStore } from "vuex";
 import CommonFooter from "@/components/common/CommonFooter.vue";
+import { Menu } from "ant-design-vue";
 import {
   PieChartOutlined,
   MenuOutlined,
@@ -70,10 +65,32 @@ import {
   FileOutlined
 } from "@ant-design/icons-vue";
 
+const SubMenuTree: Component = {
+  template: `
+    <a-sub-menu :key="data.id" v-bind="$props" v-on="$listeners">
+      <span slot="title">
+        <a-icon type="mail" /><span>{{ data.title }}</span>
+      </span>
+      <template v-for="item in data.children">
+        <sub-menu-tree v-if="item.children?.length > 0" :key="item.id" :data="item" />
+        <a-menu-item v-else :key="item.id">
+          <span>{{ item.title }}</span>
+        </a-menu-item>
+      </template>
+    </a-sub-menu>
+  `,
+  isSubMenu: true,
+  props: {
+    ...(Menu.SubMenu as any).props,
+    data: Object
+  }
+};
+
 export default defineComponent({
   name: "MainLayout",
   components: {
     CommonFooter,
+    SubMenuTree,
     MenuOutlined,
     PieChartOutlined,
     DesktopOutlined,
@@ -82,17 +99,30 @@ export default defineComponent({
     FileOutlined
   },
   setup() {
+    const route = useRoute();
+    const store = useStore();
+
     const state = reactive({
       collapsed: false,
       selectedKeys: null
     });
 
+    const menuTree = store.state.menu.menuTree;
+    const breadcrumbs = computed(() => route.path.split("/"));
+
     function menuCollapseHandle(collapsed: boolean) {
       //this.collapsed = collapsed;
     }
 
+    // 获取菜单数据
+    onBeforeMount(() => {
+      store.dispatch("menu/loadMenu");
+    });
+
     return {
       ...toRefs(state),
+      breadcrumbs,
+      menuTree,
       menuCollapseHandle
     };
   }

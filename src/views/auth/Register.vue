@@ -1,5 +1,10 @@
 <template>
-  <a-form id="formRegister" class="user-register-page" ref="formRegister">
+  <a-form
+    id="formRegister"
+    class="user-register-page"
+    ref="formRegister"
+    @submit="registerSubmit"
+  >
     <a-page-header
       class="title"
       title="用户注册"
@@ -44,7 +49,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, Component } from "vue";
+import { defineComponent, ref } from "vue";
+import { Form, message } from "ant-design-vue";
 import {
   UserOutlined,
   LockOutlined,
@@ -61,11 +67,23 @@ export default defineComponent({
     MailOutlined
   },
   setup() {
+    const formRegister = ref<Form>();
 
+    /**
+     * 提交注册表单
+     *
+     * @param e Event
+     */
+    async function registerSubmit() {
+      await formRegister.value?.validate();
+
+      message.warn("暂不提供注册功能");
+    }
 
     return {
-
-    }
+      formRegister,
+      registerSubmit
+    };
   }
 });
 </script>

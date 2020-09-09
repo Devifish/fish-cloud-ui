@@ -28,12 +28,14 @@ export class OAuth2Token {
     const data = token.split(" ");
     if (data.length != 2) throw new Error();
 
-    return new OAuth2Token(data[0], data[1]);
+    return new OAuth2Token(data[1], data[0]);
   }
 }
 
+// Token存储键名
 const TOKEN_STORAGE = OAuth2Token.TOKEN_HEADER;
 
+// 授权模块
 const authModule: Module<AuthStoreState, any> = {
   namespaced: true,
   state() {

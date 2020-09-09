@@ -134,7 +134,7 @@
 import { defineComponent, reactive, computed, ref } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
-import { message } from "ant-design-vue";
+import { Form, message } from "ant-design-vue";
 import {
   UserOutlined,
   LockOutlined,
@@ -146,10 +146,10 @@ import {
 } from "@ant-design/icons-vue";
 import AuthApi from "@/api/auth";
 import UserApi, { SmsCodeType } from "@/api/user";
-import { Form } from "ant-design-vue";
 import { PHONE_NUM } from "@/utils/regexp";
 
 const SEND_SMS_CODE_TIMEOUT = 60;
+const LOGIN_SUCCESS_PATH = "/";
 
 export default defineComponent({
   name: "Login",
@@ -166,6 +166,8 @@ export default defineComponent({
     const route = useRoute();
     const router = useRouter();
     const store = useStore();
+    const isLogin = store.getters["auth/isLogin"];
+    if (isLogin) router.push(LOGIN_SUCCESS_PATH);
 
     // 页面状态
     const state = reactive({
@@ -244,7 +246,7 @@ export default defineComponent({
         message.success("登录成功");
         state.isLoginError = false;
         store.commit("auth/saveToken", tokenData);
-        router.push("/");
+        router.push(LOGIN_SUCCESS_PATH);
       } catch (error) {
         if (!error.response) return;
 
