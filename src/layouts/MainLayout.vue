@@ -49,8 +49,7 @@ import {
   reactive,
   computed,
   toRefs,
-  onBeforeMount,
-  Component
+  onBeforeMount
 } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
@@ -72,13 +71,12 @@ export default defineComponent({
 
     const menuTree = store.state.menu.menuTree;
     const filterMenu = store.getters["menu/filterMenu"];
-    const currentMenu = filterMenu((menu: any) => menu.url == route.path);
 
     // 页面状态
     const state = reactive({
       collapsed: false,
       openKeys: [1],
-      selectedKeys: [currentMenu.id]
+      selectedKeys: [] as Array<any>
     });
 
     // 计算面包屑数据
@@ -86,7 +84,7 @@ export default defineComponent({
       const path = route.path;
       const menuData = filterMenu((menu: any) => menu.url == path);
 
-      return menuData ? [menuData.title] : [];
+      return menuData ? [menuData] : [];
     });
 
     /**
@@ -112,8 +110,11 @@ export default defineComponent({
     }
 
     // 加载菜单数据
-    onBeforeMount(() => {
-      store.dispatch("menu/loadMenu");
+    onBeforeMount(async () => {
+      await store.dispatch("menu/loadMenu");
+
+      const currentMenu = filterMenu((menu: any) => menu.url == route.path);
+      state.selectedKeys.push(currentMenu.id);
     });
 
     return {
