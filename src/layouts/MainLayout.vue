@@ -1,5 +1,6 @@
 <template>
   <a-layout class="main-layout">
+    <!-- 侧栏菜单 -->
     <a-layout-sider
       v-model:collapsed="collapsed"
       theme="dark"
@@ -7,18 +8,15 @@
     >
       <div class="logo" />
       <a-menu
-        theme="dark"
+        v-if="menuTree"
+        v-model:openKeys="openKeys"
         v-model:selectedKeys="selectedKeys"
         mode="inline"
-        v-if="menuTree"
+        theme="dark"
+        @click="menuClickHandle"
       >
         <template v-for="item of menuTree" :key="item.id">
-          <template v-if="item.children?.length > 0">
-            <sub-menu-tree :data="item" />
-          </template>
-          <a-menu-item v-else :key="item.id">
-            {{ item.name }}
-          </a-menu-item>
+          <sidebar-menu :data="item" />
         </template>
       </a-menu>
     </a-layout-sider>
@@ -29,12 +27,14 @@
       </a-layout-header>
 
       <a-layout-content style="margin: 0 16px">
-        <a-breadcrumb style="margin: 16px 0">
+        <!-- 菜单面包屑 -->
+        <a-breadcrumb v-if="breadcrumbs?.length > 0" style="margin: 16px 0">
           <a-breadcrumb-item v-for="item of breadcrumbs" :key="item">
             {{ item }}
           </a-breadcrumb-item>
         </a-breadcrumb>
 
+        <!-- 菜单内容 -->
         <router-view />
       </a-layout-content>
 
@@ -52,69 +52,66 @@ import {
   onBeforeMount,
   Component
 } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import CommonFooter from "@/components/common/CommonFooter.vue";
-import { Menu } from "ant-design-vue";
-import {
-  PieChartOutlined,
-  MenuOutlined,
-  DesktopOutlined,
-  UserOutlined,
-  TeamOutlined,
-  FileOutlined
-} from "@ant-design/icons-vue";
-
-const SubMenuTree: Component = {
-  template: `
-    <a-sub-menu :key="data.id" v-bind="$props" v-on="$listeners">
-      <span slot="title">
-        <a-icon type="mail" /><span>{{ data.title }}</span>
-      </span>
-      <template v-for="item in data.children">
-        <sub-menu-tree v-if="item.children?.length > 0" :key="item.id" :data="item" />
-        <a-menu-item v-else :key="item.id">
-          <span>{{ item.title }}</span>
-        </a-menu-item>
-      </template>
-    </a-sub-menu>
-  `,
-  isSubMenu: true,
-  props: {
-    ...(Menu.SubMenu as any).props,
-    data: Object
-  }
-};
+import SidebarMenu from "@/components/SidebarMenu.vue";
+import { MenuOutlined } from "@ant-design/icons-vue";
 
 export default defineComponent({
   name: "MainLayout",
   components: {
     CommonFooter,
-    SubMenuTree,
-    MenuOutlined,
-    PieChartOutlined,
-    DesktopOutlined,
-    UserOutlined,
-    TeamOutlined,
-    FileOutlined
+    SidebarMenu,
+    MenuOutlined
   },
   setup() {
     const route = useRoute();
+    const router = useRouter();
     const store = useStore();
 
+    const menuTree = store.state.menu.menuTree;
+    const filterMenu = store.getters["menu/filterMenu"];
+    const currentMenu = filterMenu((menu: any) => menu.url == route.path);
+
+    // 页面状态
     const state = reactive({
       collapsed: false,
-      selectedKeys: null
+      openKeys: [1],
+      selectedKeys: [currentMenu.id]
     });
 
-    const menuTree = store.state.menu.menuTree;
-    const breadcrumbs = computed(() => route.path.split("/"));
+    // 计算面包屑数据
+    const breadcrumbs = computed(() => {
+      const path = route.path;
+      const menuData = filterMenu((menu: any) => menu.url == path);
 
-    function menuCollapseHandle(collapsed: boolean) {
-      //this.collapsed = collapsed;
+      return menuData ? [menuData.title] : [];
+    });
+
+    /**
+     * 侧栏菜单打开收起事件处理
+     *
+     * @param collapsed 状态
+     */
+    function menuCollapseHandle(collapsed: boolean) {}
+
+    /**
+     * 菜单点击事件处理
+     *
+     * @param e Event
+     */
+    function menuClickHandle(e: any) {
+      const menuId = e.key;
+      const data = filterMenu((menu: any) => menu.id == menuId);
+
+      // 如果菜单存在URL则重定向
+      if (data.url) {
+        router.push(data.url);
+      }
     }
 
-    // 获取菜单数据
+    // 加载菜单数据
     onBeforeMount(() => {
       store.dispatch("menu/loadMenu");
     });
@@ -123,6 +120,7 @@ export default defineComponent({
       ...toRefs(state),
       breadcrumbs,
       menuTree,
+      menuClickHandle,
       menuCollapseHandle
     };
   }

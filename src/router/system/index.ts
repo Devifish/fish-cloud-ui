@@ -6,7 +6,7 @@ import dictionary from "./dictionary";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/system",
-    name: "SystemManager",
+    name: "SystemManagement",
     component: MainLayout,
     children: [
       ...menu,

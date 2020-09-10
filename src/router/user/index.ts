@@ -7,7 +7,7 @@ import dept from "./dept";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/user",
-    name: "UserManager",
+    name: "UserManagement",
     component: MainLayout,
     children: [
       ...user,

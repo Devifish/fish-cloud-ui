@@ -2,10 +2,27 @@ import { Module } from "vuex";
 import MenuApi from "@/api/menu";
 
 interface MenuStoreState {
-  menuTree: any | null;
+  menuTree: Array<any> | null;
 }
 
 const MENU_TREE_STORAGE = "menu-tree";
+
+/**
+ * 菜单树转换为列表
+ *
+ * @param menu 菜单
+ */
+function tree2list(menu: Array<any>) {
+  return menu.reduce((data, item) => {
+    const children = item.children;
+    if (children?.length > 0) {
+      data.push(tree2list(children));
+    }
+
+    data.push(item);
+    return data;
+  }, []);
+}
 
 const menuModule: Module<MenuStoreState, any> = {
   namespaced: true,
@@ -22,6 +39,29 @@ const menuModule: Module<MenuStoreState, any> = {
       menuTree
     };
   },
+  getters: {
+    menuList({ menuTree }) {
+      return tree2list(menuTree ?? []);
+    },
+    filterMenu({ menuTree }) {
+      return (filter: (menu: any) => boolean) => {
+        const recursion = (menu: Array<any>) => {
+          for (var item of menu) {
+            if (filter(item)) return item;
+
+            const children = item.children;
+            if (children?.length > 0) {
+              const callback: any = recursion(children);
+              if (callback) return callback;
+            }
+          }
+          return null;
+        };
+
+        return recursion(menuTree ?? []);
+      };
+    }
+  },
   mutations: {
     saveMenuTree(state, data) {
       state.menuTree = data;
@@ -32,7 +72,6 @@ const menuModule: Module<MenuStoreState, any> = {
   actions: {
     async loadMenu({ commit }) {
       const { data } = await MenuApi.currentMenuTree();
-      console.log(data);
 
       // 保存数据
       commit("saveMenuTree", data);
