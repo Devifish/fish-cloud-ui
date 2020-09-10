@@ -2,27 +2,10 @@ import { Module } from "vuex";
 import MenuApi from "@/api/menu";
 
 interface MenuStoreState {
-  menuTree: Array<any> | null;
+  menuTree: Array<any>;
 }
 
 const MENU_TREE_STORAGE = "menu-tree";
-
-/**
- * 菜单树转换为列表
- *
- * @param menu 菜单
- */
-function tree2list(menu: Array<any>) {
-  return menu.reduce((data, item) => {
-    const children = item.children;
-    if (children?.length > 0) {
-      data.push(tree2list(children));
-    }
-
-    data.push(item);
-    return data;
-  }, []);
-}
 
 const menuModule: Module<MenuStoreState, any> = {
   namespaced: true,
@@ -41,7 +24,31 @@ const menuModule: Module<MenuStoreState, any> = {
   },
   getters: {
     menuList({ menuTree }) {
-      return tree2list(menuTree ?? []);
+      const tree2list = (menu: Array<any>) => {
+        return menu.reduce((menus, item) => {
+          const children = item.children;
+          if (children?.length > 0) {
+            const childrenMenu = tree2list(children);
+            menus = menus.concat(childrenMenu);
+          }
+
+          menus.push(item);
+          return menus;
+        }, []);
+      };
+
+      return tree2list(menuTree);
+    },
+    menuMap(state, { menuList }) {
+      return (keyGen: (menu: any) => any) => {
+        const data = menuList.reduce((map: any, item: any) => {
+          map[keyGen(item)] = item;
+
+          return map;
+        }, {});
+
+        return data;
+      }
     },
     filterMenu({ menuTree }) {
       return (filter: (menu: any) => boolean) => {
@@ -49,7 +56,8 @@ const menuModule: Module<MenuStoreState, any> = {
           for (var item of menu) {
             if (filter(item)) return item;
 
-            const children = item.children;
+            // 如果存在子菜单则递归一次
+            const { children } = item;
             if (children?.length > 0) {
               const callback: any = recursion(children);
               if (callback) return callback;

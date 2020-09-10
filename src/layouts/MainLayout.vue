@@ -52,7 +52,7 @@ import {
   onBeforeMount
 } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useStore } from "vuex";
+import { useStore, mapGetters } from "vuex";
 import CommonFooter from "@/components/common/CommonFooter.vue";
 import SidebarMenu from "@/components/SidebarMenu.vue";
 import { MenuOutlined } from "@ant-design/icons-vue";
@@ -69,22 +69,48 @@ export default defineComponent({
     const router = useRouter();
     const store = useStore();
 
-    const menuTree = store.state.menu.menuTree;
     const filterMenu = store.getters["menu/filterMenu"];
+    const menuMap = store.getters["menu/menuMap"];
+
+    // 监听菜单数据
+    const menuTree = computed(() => store.state.menu.menuTree);
+    const menuIdMap = computed(() => menuMap((menu: any) => menu.id));
+    const currentMenuTree = computed(() => {
+      const { path } = route;
+      const current = filterMenu((menu: any) => menu.url == path);
+      const findParentList = (menu: any) => {
+        let list: any[] = [];
+        const { parentId } = menu;
+        if (parentId) {
+          const parentMenu = menuIdMap.value[parentId];
+          if (parentMenu) list.push(parentMenu);
+
+          const parentList = findParentList(parentMenu);
+          if (parentList.length > 0) {
+            list = list.concat(parentList);
+          }
+        }
+        return list;
+      };
+
+      return [current, ...findParentList(current)];
+    });
 
     // 页面状态
     const state = reactive({
       collapsed: false,
-      openKeys: [1],
-      selectedKeys: [] as Array<any>
-    });
-
-    // 计算面包屑数据
-    const breadcrumbs = computed(() => {
-      const path = route.path;
-      const menuData = filterMenu((menu: any) => menu.url == path);
-
-      return menuData ? [menuData] : [];
+      openKeys: computed(() => {
+        const { value } = currentMenuTree;
+        return value.slice(1).map(item => item.id);
+      }),
+      selectedKeys: computed(() => {
+        const { value } = currentMenuTree;
+        return [value[0].id];
+      }),
+      breadcrumbs: computed(() => {
+        const { value } = currentMenuTree;
+        return value.map(item => item.name);
+      })
     });
 
     /**
@@ -101,7 +127,7 @@ export default defineComponent({
      */
     function menuClickHandle(e: any) {
       const menuId = e.key;
-      const data = filterMenu((menu: any) => menu.id == menuId);
+      const data = menuMap.value[menuId];
 
       // 如果菜单存在URL则重定向
       if (data.url) {
@@ -110,16 +136,10 @@ export default defineComponent({
     }
 
     // 加载菜单数据
-    onBeforeMount(async () => {
-      await store.dispatch("menu/loadMenu");
-
-      const currentMenu = filterMenu((menu: any) => menu.url == route.path);
-      state.selectedKeys.push(currentMenu.id);
-    });
+    store.dispatch("menu/loadMenu");
 
     return {
       ...toRefs(state),
-      breadcrumbs,
       menuTree,
       menuClickHandle,
       menuCollapseHandle
