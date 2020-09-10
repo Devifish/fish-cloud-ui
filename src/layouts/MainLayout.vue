@@ -44,18 +44,14 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  reactive,
-  computed,
-  toRefs,
-  onBeforeMount
-} from "vue";
+import { defineComponent, defineAsyncComponent, reactive, computed, toRefs } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore, mapGetters } from "vuex";
 import CommonFooter from "@/components/common/CommonFooter.vue";
 import SidebarMenu from "@/components/SidebarMenu.vue";
 import { MenuOutlined } from "@ant-design/icons-vue";
+
+defineAsyncComponent(async () => defineComponent({}))
 
 export default defineComponent({
   name: "MainLayout",
@@ -69,6 +65,13 @@ export default defineComponent({
     const router = useRouter();
     const store = useStore();
 
+    // 页面状态
+    const state = reactive({
+      collapsed: false,
+      openKeys: [] as Array<any>,
+      selectedKeys: [] as Array<any>
+    });
+
     const filterMenu = store.getters["menu/filterMenu"];
     const menuMap = store.getters["menu/menuMap"];
 
@@ -76,8 +79,6 @@ export default defineComponent({
     const menuTree = computed(() => store.state.menu.menuTree);
     const menuIdMap = computed(() => menuMap((menu: any) => menu.id));
     const currentMenuTree = computed(() => {
-      const { path } = route;
-      const current = filterMenu((menu: any) => menu.url == path);
       const findParentList = (menu: any) => {
         let list: any[] = [];
         const { parentId } = menu;
@@ -93,24 +94,16 @@ export default defineComponent({
         return list;
       };
 
-      return [current, ...findParentList(current)];
+      // 获取当前菜单数据
+      const { path } = route;
+      const current = filterMenu((menu: any) => menu.url == path);
+      return current ? [current, ...findParentList(current)] : [];
     });
 
-    // 页面状态
-    const state = reactive({
-      collapsed: false,
-      openKeys: computed(() => {
-        const { value } = currentMenuTree;
-        return value.slice(1).map(item => item.id);
-      }),
-      selectedKeys: computed(() => {
-        const { value } = currentMenuTree;
-        return [value[0].id];
-      }),
-      breadcrumbs: computed(() => {
-        const { value } = currentMenuTree;
-        return value.map(item => item.name);
-      })
+    // 计算面包屑
+    const breadcrumbs = computed(() => {
+      const { value } = currentMenuTree;
+      return value?.map(item => item.name).reverse();
     });
 
     /**
@@ -127,7 +120,7 @@ export default defineComponent({
      */
     function menuClickHandle(e: any) {
       const menuId = e.key;
-      const data = menuMap.value[menuId];
+      const data = menuIdMap.value[menuId];
 
       // 如果菜单存在URL则重定向
       if (data.url) {
@@ -136,10 +129,19 @@ export default defineComponent({
     }
 
     // 加载菜单数据
-    store.dispatch("menu/loadMenu");
+    (async () => {
+      await store.dispatch("menu/loadMenu");
+
+      const { value } = currentMenuTree;
+      if (value?.length > 0) {
+        state.selectedKeys.push(value[0]?.id);
+        state.openKeys = value.slice(1).map(item => item.id);
+      }
+    })();
 
     return {
       ...toRefs(state),
+      breadcrumbs,
       menuTree,
       menuClickHandle,
       menuCollapseHandle

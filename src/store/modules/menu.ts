@@ -10,7 +10,7 @@ const MENU_TREE_STORAGE = "menu-tree";
 const menuModule: Module<MenuStoreState, any> = {
   namespaced: true,
   state() {
-    let menuTree = null;
+    let menuTree = [];
 
     // 如果存在菜单数据则加载
     const mentTreeData = sessionStorage.getItem(MENU_TREE_STORAGE);
