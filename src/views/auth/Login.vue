@@ -1,17 +1,6 @@
 <template>
-  <a-form
-    id="formLogin"
-    class="user-login-page"
-    ref="formLogin"
-    :rules="rules"
-    :model="form"
-  >
-    <a-alert
-      v-if="state.isLoginError"
-      type="error"
-      :message="state.message"
-      show-icon
-    />
+  <a-form id="formLogin" class="user-login-page" ref="formLogin" :rules="rules" :model="form">
+    <a-alert v-if="state.isLoginError" type="error" :message="state.message" show-icon />
 
     <a-tabs
       :activeKey="activeKey"
@@ -34,11 +23,7 @@
         </a-form-item>
 
         <a-form-item name="password">
-          <a-input-password
-            v-model:value="form.password"
-            size="large"
-            placeholder="请输入密码"
-          >
+          <a-input-password v-model:value="form.password" size="large" placeholder="请输入密码">
             <template v-slot:prefix>
               <lock-outlined class="input-icon" />
             </template>
@@ -166,6 +151,7 @@ export default defineComponent({
     const route = useRoute();
     const router = useRouter();
     const store = useStore();
+
     const isLogin = store.getters["auth/isLogin"];
     if (isLogin) router.push(LOGIN_SUCCESS_PATH);
 

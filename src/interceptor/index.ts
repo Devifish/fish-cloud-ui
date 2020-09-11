@@ -3,9 +3,7 @@ import UserLoginInterceptor from "./user-login";
 import PermissionInterceptor from "./permission";
 
 export interface RouterInterceptor {
-  (to: RouteLocationNormalized, from?: RouteLocationNormalized):
-    | boolean
-    | RouteLocationRaw;
+  (to: RouteLocationNormalized, from?: RouteLocationNormalized): boolean | RouteLocationRaw;
 }
 
 /**

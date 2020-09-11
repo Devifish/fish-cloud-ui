@@ -5,12 +5,7 @@
     ref="formRegister"
     @submit="registerSubmit"
   >
-    <a-page-header
-      class="title"
-      title="用户注册"
-      @back="$router.back()"
-      style="padding: 0"
-    />
+    <a-page-header class="title" title="用户注册" @back="$router.back()" style="padding: 0" />
     <a-form-item>
       <a-input size="large" type="text" placeholder="请输入用户名">
         <template v-slot:prefix>
@@ -33,12 +28,7 @@
       </a-input-password>
     </a-form-item>
     <a-form-item>
-      <a-button
-        size="large"
-        type="primary"
-        htmlType="submit"
-        class="register-button"
-      >
+      <a-button size="large" type="primary" htmlType="submit" class="register-button">
         注册
       </a-button>
       <router-link class="login" to="/auth/login">

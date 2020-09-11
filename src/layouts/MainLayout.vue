@@ -1,11 +1,7 @@
 <template>
   <a-layout class="main-layout">
     <!-- 侧栏菜单 -->
-    <a-layout-sider
-      v-model:collapsed="collapsed"
-      theme="dark"
-      @collapse="menuCollapseHandle"
-    >
+    <a-layout-sider v-model:collapsed="collapsed" theme="dark" @collapse="menuCollapseHandle">
       <div class="logo" />
       <a-menu
         v-if="menuTree"
