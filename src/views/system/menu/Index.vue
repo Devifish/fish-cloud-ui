@@ -1,6 +1,21 @@
 <template>
   <a-card title="菜单列表">
-    <a-table :data-source="list" :loading="state.loading" row-key="id" children-column-name="children">
+    <template v-slot:extra>
+      <a-button type="primary">
+        <template v-slot:icon>
+          <plus-outlined />
+        </template>
+        添加菜单
+      </a-button>
+    </template>
+
+    <a-table
+      :data-source="list"
+      :loading="state.loading"
+      row-key="id"
+      :bordered="true"
+      children-column-name="children"
+    >
       <a-table-column data-index="name" title="名称" width="20%" />
       <a-table-column data-index="url" title="路径" width="35%" />
       <a-table-column data-index="permission" title="权限" width="10%" />
@@ -20,9 +35,13 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, onMounted } from "vue";
 import MenuApi from "@/api/menu";
+import { PlusOutlined } from "@ant-design/icons-vue";
 
 export default defineComponent({
   name: "MenuList",
+  components: {
+    PlusOutlined
+  },
   setup() {
     // 页面状态
     const state = reactive({
