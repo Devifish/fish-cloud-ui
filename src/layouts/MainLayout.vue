@@ -44,14 +44,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, defineAsyncComponent, reactive, computed, toRefs } from "vue";
+import { defineComponent, reactive, computed, toRefs } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore, mapGetters } from "vuex";
 import CommonFooter from "@/components/common/CommonFooter.vue";
 import SidebarMenu from "@/components/SidebarMenu.vue";
 import { MenuOutlined } from "@ant-design/icons-vue";
-
-defineAsyncComponent(async () => defineComponent({}))
 
 export default defineComponent({
   name: "MainLayout",
@@ -65,19 +63,13 @@ export default defineComponent({
     const router = useRouter();
     const store = useStore();
 
-    // 页面状态
-    const state = reactive({
-      collapsed: false,
-      openKeys: [] as Array<any>,
-      selectedKeys: [] as Array<any>
+    // 计算菜单IdMap
+    const menuIdMap = computed(() => {
+      const menuMap = store.getters["menu/menuMap"];
+      return menuMap((menu: any) => menu.id);
     });
 
-    const filterMenu = store.getters["menu/filterMenu"];
-    const menuMap = store.getters["menu/menuMap"];
-
-    // 监听菜单数据
-    const menuTree = computed(() => store.state.menu.menuTree);
-    const menuIdMap = computed(() => menuMap((menu: any) => menu.id));
+    // 计算当前路由菜单树
     const currentMenuTree = computed(() => {
       const findParentList = (menu: any) => {
         let list: any[] = [];
@@ -96,14 +88,21 @@ export default defineComponent({
 
       // 获取当前菜单数据
       const { path } = route;
+      const filterMenu = store.getters["menu/filterMenu"];
       const current = filterMenu((menu: any) => menu.url == path);
       return current ? [current, ...findParentList(current)] : [];
     });
 
-    // 计算面包屑
-    const breadcrumbs = computed(() => {
-      const { value } = currentMenuTree;
-      return value?.map(item => item.name).reverse();
+    // 页面状态
+    const state = reactive({
+      collapsed: false,
+      openKeys: [] as Array<any>,
+      selectedKeys: [] as Array<any>,
+      menuTree: computed(() => store.state.menu.menuTree),
+      breadcrumbs: computed(() => {
+        const { value } = currentMenuTree;
+        return value?.map(item => item.name).reverse();
+      })
     });
 
     /**
@@ -141,8 +140,6 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
-      breadcrumbs,
-      menuTree,
       menuClickHandle,
       menuCollapseHandle
     };
