@@ -2,21 +2,21 @@ import { RouteRecordRaw } from "vue-router";
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: "/user/role/list",
-    name: "RoleList",
+    path: "/user/role",
+    name: "RoleManagement",
     component: () =>
       import(
         /* webpackChunkName: "user" */
-        "@/views/user/role/RoleList.vue"
+        "@/views/user/role/Index.vue"
       )
   },
   {
     path: "/user/role/add",
-    name: "RoleAdd",
+    name: "AddRole",
     component: () =>
       import(
         /* webpackChunkName: "user" */
-        "@/views/user/role/RoleAdd.vue"
+        "@/views/user/role/AddRole.vue"
       )
   }
 ];

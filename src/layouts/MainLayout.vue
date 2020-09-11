@@ -46,7 +46,7 @@
 <script lang="ts">
 import { defineComponent, reactive, computed, toRefs } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useStore, mapGetters } from "vuex";
+import { useStore } from "vuex";
 import CommonFooter from "@/components/common/CommonFooter.vue";
 import SidebarMenu from "@/components/SidebarMenu.vue";
 import { MenuOutlined } from "@ant-design/icons-vue";
