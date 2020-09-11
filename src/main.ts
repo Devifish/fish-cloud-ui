@@ -17,5 +17,4 @@ app.use(Antd);
 // 加载拦截器
 Interceptor.setup(Router);
 
-// 挂载到Element
-app.mount("#app", false);
+app.mount("#app");

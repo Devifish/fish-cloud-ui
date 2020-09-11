@@ -22,12 +22,18 @@
         <menu-outlined class="menu-trigger" @click="collapsed = !collapsed" />
       </a-layout-header>
 
-      <a-layout-content style="margin: 0 16px">
+      <a-layout-content class="main-content">
         <!-- 菜单面包屑 -->
-        <a-breadcrumb v-if="breadcrumbs?.length > 0" style="margin: 16px 0">
-          <a-breadcrumb-item v-for="item of breadcrumbs" :key="item">
-            {{ item }}
+        <a-breadcrumb class="main-content-breadcrumb">
+          <a-breadcrumb-item href="/">
+            <home-outlined />
+            <span>首页</span>
           </a-breadcrumb-item>
+          <template v-if="breadcrumbs?.length > 0">
+            <a-breadcrumb-item v-for="item of breadcrumbs" :key="item">
+              {{ item }}
+            </a-breadcrumb-item>
+          </template>
         </a-breadcrumb>
 
         <!-- 菜单内容 -->
@@ -45,14 +51,15 @@ import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import CommonFooter from "@/components/common/CommonFooter.vue";
 import SidebarMenu from "@/components/SidebarMenu.vue";
-import { MenuOutlined } from "@ant-design/icons-vue";
+import { MenuOutlined, HomeOutlined } from "@ant-design/icons-vue";
 
 export default defineComponent({
   name: "MainLayout",
   components: {
     CommonFooter,
     SidebarMenu,
-    MenuOutlined
+    MenuOutlined,
+    HomeOutlined
   },
   setup() {
     const route = useRoute();
@@ -129,7 +136,7 @@ export default defineComponent({
 
       const { value } = currentMenuTree;
       if (value?.length > 0) {
-        state.selectedKeys.push(value[0]?.id);
+        state.selectedKeys = [value[0]?.id];
         state.openKeys = value.slice(1).map(item => item.id);
       }
     })();
@@ -165,6 +172,14 @@ export default defineComponent({
 
     &:hover {
       color: @primary-color;
+    }
+  }
+
+  .main-content {
+    margin: 0 16px;
+
+    .main-content-breadcrumb {
+      margin: 16px 0;
     }
   }
 }

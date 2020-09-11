@@ -1,10 +1,5 @@
 <template>
-  <a-form
-    id="formRegister"
-    class="user-register-page"
-    ref="formRegister"
-    @submit="registerSubmit"
-  >
+  <a-form id="formRegister" class="user-register-page" ref="formRegister" @submit="registerSubmit">
     <a-page-header class="title" title="用户注册" @back="$router.back()" style="padding: 0" />
     <a-form-item>
       <a-input size="large" type="text" placeholder="请输入用户名">
@@ -41,12 +36,7 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { Form, message } from "ant-design-vue";
-import {
-  UserOutlined,
-  LockOutlined,
-  MobileOutlined,
-  MailOutlined
-} from "@ant-design/icons-vue";
+import { UserOutlined, LockOutlined, MobileOutlined, MailOutlined } from "@ant-design/icons-vue";
 
 export default defineComponent({
   name: "Register",

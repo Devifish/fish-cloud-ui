@@ -10,12 +10,7 @@
       <!-- 用于账号密码方式登录系统 -->
       <a-tab-pane key="password" tab="账号密码登录">
         <a-form-item name="username">
-          <a-input
-            v-model:value="form.username"
-            size="large"
-            type="text"
-            placeholder="请输入用户名"
-          >
+          <a-input v-model:value="form.username" size="large" type="text" placeholder="请输入用户名">
             <template v-slot:prefix>
               <user-outlined class="input-icon" />
             </template>
@@ -34,12 +29,7 @@
       <!-- 用于短信验证码方式登录系统 -->
       <a-tab-pane key="sms-code" tab="短信登录">
         <a-form-item name="telephone">
-          <a-input
-            v-model:value="form.telephone"
-            size="large"
-            type="text"
-            placeholder="请输入手机号"
-          >
+          <a-input v-model:value="form.telephone" size="large" type="text" placeholder="请输入手机号">
             <template v-slot:prefix>
               <mobile-outlined class="input-icon" />
             </template>
@@ -49,12 +39,7 @@
         <a-row :gutter="16">
           <a-col class="gutter-row" :span="15">
             <a-form-item name="smsCode">
-              <a-input
-                v-model:value="form.smsCode"
-                size="large"
-                type="text"
-                placeholder="请输入验证码"
-              >
+              <a-input v-model:value="form.smsCode" size="large" type="text" placeholder="请输入验证码">
                 <template v-slot:prefix>
                   <mail-outlined class="input-icon" />
                 </template>
@@ -62,12 +47,7 @@
             </a-form-item>
           </a-col>
           <a-col class="gutter-row" :span="9">
-            <a-button
-              class="get-captcha"
-              tabindex="-1"
-              :disabled="state.disableSmsBtn"
-              @click="sendSmsCodeHandle"
-            >
+            <a-button class="get-captcha" tabindex="-1" :disabled="state.disableSmsBtn" @click="sendSmsCodeHandle">
               获取验证码
               <template v-if="state.disableSmsBtn">
                 {{ `(${state.timeout}s)` }}
@@ -136,6 +116,14 @@ import { PHONE_NUM } from "@/utils/regexp";
 const SEND_SMS_CODE_TIMEOUT = 60;
 const LOGIN_SUCCESS_PATH = "/";
 
+// 表单校验
+const rules = {
+  username: { required: true, message: "用户名不能为空", trigger: "blur" },
+  password: { required: true, message: "密码不能为空", trigger: "blur" },
+  telephone: { required: true, pattern: PHONE_NUM, message: "输入的手机号不正确", trigger: "blur" },
+  smsCode: { required: true, message: "验证码不能为空", trigger: "blur" }
+};
+
 export default defineComponent({
   name: "Login",
   components: {
@@ -171,31 +159,6 @@ export default defineComponent({
       telephone: "",
       smsCode: "",
       autoLogin: false
-    });
-
-    // 表单校验
-    const rules = reactive({
-      username: {
-        required: true,
-        message: "用户名不能为空",
-        trigger: "blur"
-      },
-      password: {
-        required: true,
-        message: "密码不能为空",
-        trigger: "blur"
-      },
-      telephone: {
-        required: true,
-        pattern: PHONE_NUM,
-        message: "请输出正确的手机号",
-        trigger: "blur"
-      },
-      smsCode: {
-        required: true,
-        message: "验证码不能为空",
-        trigger: "blur"
-      }
     });
 
     const formLogin = ref<Form>();
