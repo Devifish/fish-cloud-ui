@@ -5,7 +5,6 @@
       v-model:collapsed="collapsed"
       breakpoint="lg"
       collapsed-width="0"
-      width="256"
       :theme="theme"
       :trigger="null"
       @collapse="menuCollapseHandle"
