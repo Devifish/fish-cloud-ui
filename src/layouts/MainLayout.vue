@@ -1,14 +1,22 @@
 <template>
   <a-layout class="main-layout">
     <!-- 侧栏菜单 -->
-    <a-layout-sider v-model:collapsed="collapsed" theme="dark" @collapse="menuCollapseHandle">
+    <a-layout-sider
+      v-model:collapsed="collapsed"
+      breakpoint="lg"
+      collapsed-width="0"
+      width="256"
+      :theme="theme"
+      :trigger="null"
+      @collapse="menuCollapseHandle"
+    >
       <div class="logo" />
       <a-menu
         v-if="menuTree"
         v-model:openKeys="openKeys"
         v-model:selectedKeys="selectedKeys"
         mode="inline"
-        theme="dark"
+        :theme="theme"
         @click="menuClickHandle"
       >
         <template v-for="item of menuTree" :key="item.id">
@@ -23,24 +31,27 @@
       </a-layout-header>
 
       <a-layout-content class="main-content">
-        <!-- 菜单面包屑 -->
-        <a-breadcrumb class="main-content-breadcrumb">
-          <a-breadcrumb-item href="/">
-            <home-outlined />
-            <span>首页</span>
-          </a-breadcrumb-item>
-          <template v-if="breadcrumbs?.length > 0">
-            <a-breadcrumb-item v-for="item of breadcrumbs" :key="item">
-              {{ item }}
+        <div class="main-content-wrapper">
+          <!-- 菜单面包屑 -->
+          <a-breadcrumb class="main-content-breadcrumb">
+            <a-breadcrumb-item href="/">
+              <home-outlined />
+              <span>首页</span>
             </a-breadcrumb-item>
-          </template>
-        </a-breadcrumb>
+            <template v-if="breadcrumbs?.length > 0">
+              <a-breadcrumb-item v-for="item of breadcrumbs" :key="item">
+                {{ item }}
+              </a-breadcrumb-item>
+            </template>
+          </a-breadcrumb>
 
-        <!-- 菜单内容 -->
-        <router-view />
+          <!-- 内容部分 -->
+          <router-view />
+
+          <!-- 尾部 -->
+          <common-footer />
+        </div>
       </a-layout-content>
-
-      <common-footer />
     </a-layout>
   </a-layout>
 </template>
@@ -98,6 +109,7 @@ export default defineComponent({
 
     // 页面状态
     const state = reactive({
+      theme: "dark",
       collapsed: false,
       openKeys: [] as Array<any>,
       selectedKeys: [] as Array<any>,
@@ -176,10 +188,15 @@ export default defineComponent({
   }
 
   .main-content {
-    margin: 0 16px;
+    overflow: auto;
 
     .main-content-breadcrumb {
       margin: 16px 0;
+    }
+
+    .main-content-wrapper {
+      padding: 0 16px;
+      min-width: 900px;
     }
   }
 }
