@@ -112,19 +112,17 @@ export default defineComponent({
       openKeys: [] as Array<any>,
       selectedKeys: computed(() => [currentMenuTree.value[0]?.id ?? -1]),
       menuTree: computed(() => store.state.menu.menuTree),
-      breadcrumbs: computed(() => {
-        const { value } = currentMenuTree;
-        return value?.map(item => item.name).reverse();
-      })
+      breadcrumbs: computed(() => currentMenuTree.value?.map(item => item.name).reverse())
     });
 
     // 监听当前菜单变化自动展开父级菜单
     watch(currentMenuTree, val => {
       if (val.length == 0) return;
 
+      const openKeys = state.openKeys;
       const openMenuIds = val.slice(1).map(item => item.id);
-      if (!state.openKeys.includes(openMenuIds)) {
-        state.openKeys = state.openKeys.concat(openMenuIds);
+      if (!openKeys.includes(openMenuIds)) {
+        state.openKeys = openKeys.concat(openMenuIds);
       }
     });
 
