@@ -7,13 +7,12 @@
       collapsed-width="0"
       :theme="theme"
       :trigger="null"
-      @collapse="menuCollapseHandle"
     >
       <div class="logo" />
       <a-menu
         v-if="menuTree"
         v-model:openKeys="openKeys"
-        v-model:selectedKeys="selectedKeys"
+        :selectedKeys="selectedKeys"
         mode="inline"
         :theme="theme"
         @click="menuClickHandle"
@@ -56,7 +55,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, computed, toRefs } from "vue";
+import { defineComponent, reactive, computed, watch, toRefs } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import CommonFooter from "@/components/common/CommonFooter.vue";
@@ -111,7 +110,7 @@ export default defineComponent({
       theme: "dark",
       collapsed: false,
       openKeys: [] as Array<any>,
-      selectedKeys: [] as Array<any>,
+      selectedKeys: computed(() => [currentMenuTree.value[0]?.id ?? -1]),
       menuTree: computed(() => store.state.menu.menuTree),
       breadcrumbs: computed(() => {
         const { value } = currentMenuTree;
@@ -119,12 +118,15 @@ export default defineComponent({
       })
     });
 
-    /**
-     * 侧栏菜单打开收起事件处理
-     *
-     * @param collapsed 状态
-     */
-    function menuCollapseHandle(collapsed: boolean) {}
+    // 监听当前菜单变化自动展开父级菜单
+    watch(currentMenuTree, val => {
+      if (val.length == 0) return;
+
+      const openMenuIds = val.slice(1).map(item => item.id);
+      if (!state.openKeys.includes(openMenuIds)) {
+        state.openKeys = state.openKeys.concat(openMenuIds);
+      }
+    });
 
     /**
      * 菜单点击事件处理
@@ -142,20 +144,11 @@ export default defineComponent({
     }
 
     // 加载菜单数据
-    (async () => {
-      await store.dispatch("menu/loadMenu");
-
-      const { value } = currentMenuTree;
-      if (value?.length > 0) {
-        state.selectedKeys = [value[0]?.id];
-        state.openKeys = value.slice(1).map(item => item.id);
-      }
-    })();
+    store.dispatch("menu/loadMenu");
 
     return {
       ...toRefs(state),
-      menuClickHandle,
-      menuCollapseHandle
+      menuClickHandle
     };
   }
 });
