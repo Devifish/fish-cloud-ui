@@ -1,5 +1,6 @@
 import { Module } from "vuex";
 import Cookies from "js-cookie";
+import AuthApi from "@/api/auth";
 
 interface AuthStoreState {
   token: OAuth2Token | null;
@@ -64,6 +65,22 @@ const authModule: Module<AuthStoreState, any> = {
 
       Cookies.set(TOKEN_STORAGE, tokenValue);
       state.token = token;
+    },
+    removeToken(state) {
+      state.token = null;
+      Cookies.remove(TOKEN_STORAGE);
+    }
+  },
+  actions: {
+    async logout({ state, commit }) {
+      const tokenData = state.token?.tokenData();
+      if (!tokenData) return;
+
+      try {
+        await AuthApi.logout(tokenData.value);
+      } finally {
+        commit("removeToken")
+      }
     }
   }
 };

@@ -18,6 +18,7 @@ const pathMatcher = createPathMatcher(ignore);
  */
 const interceptor: RouterInterceptor = ({ path }) => {
   const isLogin = Store.getters["auth/isLogin"];
+  console.log(isLogin)
 
   // 用户已登录则直接放行
   if (isLogin) return true;

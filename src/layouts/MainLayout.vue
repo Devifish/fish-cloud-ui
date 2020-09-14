@@ -8,7 +8,9 @@
       :theme="theme"
       :trigger="null"
     >
-      <div class="logo" />
+      <div class="logo">
+        <h1>Fish Cloud</h1>
+      </div>
       <a-menu
         v-if="menuTree"
         v-model:openKeys="openKeys"
@@ -24,32 +26,40 @@
     </a-layout-sider>
 
     <a-layout>
-      <a-layout-header style="background: #fff; padding: 0">
-        <menu-outlined class="menu-trigger" @click="collapsed = !collapsed" />
+      <a-layout-header class="main-header">
+        <menu-outlined class="menu-item menu-icon" @click="collapsed = !collapsed" />
+
+        <div class="right-content">
+          <span class="menu-item">
+            <a-avatar class="account-avatar" />
+            <span>admin</span>
+          </span>
+          <span class="menu-item menu-icon">
+            <logout-outlined @click="userLogout" />
+          </span>
+        </div>
       </a-layout-header>
 
+      <!-- 内容部分 -->
       <a-layout-content class="main-content">
-        <div class="main-content-wrapper">
-          <!-- 菜单面包屑 -->
-          <a-breadcrumb class="main-content-breadcrumb">
-            <a-breadcrumb-item href="/">
-              <home-outlined />
-              <span>首页</span>
+        <!-- 菜单面包屑 -->
+        <a-breadcrumb class="main-content-breadcrumb">
+          <a-breadcrumb-item href="/">
+            <home-outlined />
+            <span>首页</span>
+          </a-breadcrumb-item>
+          <template v-if="breadcrumbs?.length > 0">
+            <a-breadcrumb-item v-for="item of breadcrumbs" :key="item">
+              {{ item }}
             </a-breadcrumb-item>
-            <template v-if="breadcrumbs?.length > 0">
-              <a-breadcrumb-item v-for="item of breadcrumbs" :key="item">
-                {{ item }}
-              </a-breadcrumb-item>
-            </template>
-          </a-breadcrumb>
+          </template>
+        </a-breadcrumb>
 
-          <!-- 内容部分 -->
-          <router-view />
-
-          <!-- 尾部 -->
-          <common-footer />
-        </div>
+        <router-view />
       </a-layout-content>
+
+      <!-- 尾部 -->
+      <common-footer />
     </a-layout>
   </a-layout>
 </template>
@@ -60,7 +70,8 @@ import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import CommonFooter from "@/components/common/CommonFooter.vue";
 import SidebarMenu from "@/components/SidebarMenu.vue";
-import { MenuOutlined, HomeOutlined } from "@ant-design/icons-vue";
+import { MenuOutlined, HomeOutlined, LogoutOutlined } from "@ant-design/icons-vue";
+import { message } from "ant-design-vue";
 
 export default defineComponent({
   name: "MainLayout",
@@ -68,7 +79,8 @@ export default defineComponent({
     CommonFooter,
     SidebarMenu,
     MenuOutlined,
-    HomeOutlined
+    HomeOutlined,
+    LogoutOutlined
   },
   setup() {
     const route = useRoute();
@@ -141,12 +153,23 @@ export default defineComponent({
       }
     }
 
+    /**
+     * 用户注销
+     */
+    async function userLogout() {
+      await store.dispatch("auth/logout");
+
+      // 完成注销后刷新页面
+      location.reload();
+    }
+
     // 加载菜单数据
     store.dispatch("menu/loadMenu");
 
     return {
       ...toRefs(state),
-      menuClickHandle
+      menuClickHandle,
+      userLogout
     };
   }
 });
@@ -160,33 +183,63 @@ export default defineComponent({
   height: 100%;
 
   .logo {
-    height: 32px;
-    background: rgba(255, 255, 255, 0.2);
-    margin: 16px;
+    height: 64px;
+    line-height: 64px;
+
+    > h1 {
+      color: #fff;
+      font-size: 22px;
+      font-weight: 600;
+      margin: 0 0 0 24px;
+      vertical-align: middle;
+    }
   }
 
-  .menu-trigger {
-    font-size: 18px;
-    line-height: 72px;
-    padding: 0 24px;
-    cursor: pointer;
-    transition: color 0.3s;
+  .main-header {
+    position: relative;
+    background: #fff;
+    padding: 0;
 
-    &:hover {
-      color: @primary-color;
+    .menu-item {
+      transition: all 0.3s;
+
+      &:hover {
+        cursor: pointer;
+        color: @primary-color;
+        background-color: #f5f5f5;
+      }
+    }
+
+    .menu-icon {
+      font-size: 18px;
+      line-height: 64px;
+      padding: 0 24px;
+    }
+
+    .right-content {
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin-right: 8px;
+
+      > span {
+        float: left;
+        height: 100%;
+        padding: 0 8px;
+      }
+    }
+
+    .account-avatar {
+      margin-right: 8px;
     }
   }
 
   .main-content {
+    padding: 0 16px;
     overflow: auto;
 
     .main-content-breadcrumb {
       margin: 16px 0;
-    }
-
-    .main-content-wrapper {
-      padding: 0 16px;
-      min-width: 900px;
     }
   }
 }
