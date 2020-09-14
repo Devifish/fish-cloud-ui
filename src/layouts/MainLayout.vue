@@ -47,7 +47,6 @@
         <a-breadcrumb class="main-content-breadcrumb">
           <a-breadcrumb-item href="/">
             <home-outlined />
-            <span>首页</span>
           </a-breadcrumb-item>
           <template v-if="breadcrumbs?.length > 0">
             <a-breadcrumb-item v-for="item of breadcrumbs" :key="item">
