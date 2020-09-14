@@ -30,10 +30,11 @@
         <menu-outlined class="menu-item menu-icon" @click="collapsed = !collapsed" />
 
         <div class="right-content">
-          <span class="menu-item">
-            <a-avatar class="account-avatar" />
-            <span>admin</span>
+          <span class="menu-item" v-if="user">
+            <a-avatar class="account-avatar" :src="user.avatar" />
+            <span>{{ user.nickname || user.username }}</span>
           </span>
+
           <span class="menu-item menu-icon">
             <logout-outlined @click="userLogout" />
           </span>
@@ -124,7 +125,8 @@ export default defineComponent({
       openKeys: [] as Array<any>,
       selectedKeys: computed(() => [currentMenuTree.value[0]?.id ?? -1]),
       menuTree: computed(() => store.state.menu.menuTree),
-      breadcrumbs: computed(() => currentMenuTree.value?.map(item => item.name).reverse())
+      breadcrumbs: computed(() => currentMenuTree.value?.map(item => item.name).reverse()),
+      user: computed(() => store.state.auth.user)
     });
 
     // 监听当前菜单变化自动展开父级菜单
@@ -163,7 +165,8 @@ export default defineComponent({
       location.reload();
     }
 
-    // 加载菜单数据
+    // 加载数据
+    store.dispatch("auth/currentUser");
     store.dispatch("menu/loadMenu");
 
     return {

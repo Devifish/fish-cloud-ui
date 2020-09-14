@@ -1,9 +1,11 @@
 import { Module } from "vuex";
 import Cookies from "js-cookie";
 import AuthApi from "@/api/auth";
+import UserApi from "@/api/user";
 
 interface AuthStoreState {
   token: OAuth2Token | null;
+  user: any;
 }
 
 export class OAuth2Token {
@@ -49,7 +51,8 @@ const authModule: Module<AuthStoreState, any> = {
     }
 
     return {
-      token
+      token,
+      user: null
     };
   },
   getters: {
@@ -69,6 +72,9 @@ const authModule: Module<AuthStoreState, any> = {
     removeToken(state) {
       state.token = null;
       Cookies.remove(TOKEN_STORAGE);
+    },
+    saveUser(state, data) {
+      state.user = data;
     }
   },
   actions: {
@@ -79,8 +85,13 @@ const authModule: Module<AuthStoreState, any> = {
       try {
         await AuthApi.logout(tokenData.value);
       } finally {
-        commit("removeToken")
+        commit("removeToken");
       }
+    },
+    async currentUser({ commit }) {
+      const { data } = await UserApi.currentUser();
+
+      commit("saveUser", data);
     }
   }
 };
