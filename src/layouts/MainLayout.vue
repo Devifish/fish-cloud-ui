@@ -29,14 +29,31 @@
       <a-layout-header class="main-header">
         <menu-outlined class="menu-item menu-icon" @click="collapsed = !collapsed" />
 
-        <div class="right-content">
-          <span class="menu-item" v-if="user">
-            <a-avatar class="account-avatar" :src="user.avatar" />
-            <span>{{ user.nickname || user.username }}</span>
-          </span>
+        <div class="right-content" v-if="user">
+          <avatar-dropdown
+            class="menu-item"
+            :avatar="user.avatar"
+            :username="user.nickname || user.username"
+          >
+            <a-menu>
+              <a-menu-item>
+                <user-outlined />
+                个人中心
+              </a-menu-item>
+              <a-menu-item>
+                <lock-outlined />
+                修改密码
+              </a-menu-item>
+              <a-menu-divider />
+              <a-menu-item @click="userLogout">
+                <logout-outlined />
+                退出登录
+              </a-menu-item>
+            </a-menu>
+          </avatar-dropdown>
 
-          <span class="menu-item menu-icon">
-            <logout-outlined @click="userLogout" />
+          <span class="menu-item menu-icon" @click="userLogout">
+            <logout-outlined />
           </span>
         </div>
       </a-layout-header>
@@ -68,17 +85,27 @@
 import { defineComponent, reactive, computed, watch, toRefs } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { MenuOutlined, HomeOutlined, LogoutOutlined } from "@ant-design/icons-vue";
 import CommonFooter from "@/components/common/CommonFooter.vue";
 import SidebarMenu from "@/components/SidebarMenu.vue";
+import AvatarDropdown from "@/components/AvatarDropdown.vue";
+import {
+  MenuOutlined,
+  HomeOutlined,
+  UserOutlined,
+  LockOutlined,
+  LogoutOutlined
+} from "@ant-design/icons-vue";
 
 export default defineComponent({
   name: "MainLayout",
   components: {
     CommonFooter,
     SidebarMenu,
+    AvatarDropdown,
     MenuOutlined,
     HomeOutlined,
+    UserOutlined,
+    LockOutlined,
     LogoutOutlined
   },
   setup() {
@@ -228,10 +255,6 @@ export default defineComponent({
         height: 100%;
         padding: 0 8px;
       }
-    }
-
-    .account-avatar {
-      margin-right: 8px;
     }
   }
 
