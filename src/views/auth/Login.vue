@@ -5,7 +5,7 @@
     <a-tabs
       :activeKey="activeKey"
       :tabBarStyle="{ textAlign: 'center', borderBottom: 'unset' }"
-      @change="key => $router.push({ query: { type: key } })"
+      @change="tabChangeHandle"
     >
       <!-- 用于账号密码方式登录系统 -->
       <a-tab-pane key="password" tab="账号密码登录">
@@ -215,7 +215,10 @@ export default defineComponent({
         message.success("登录成功");
         state.isLoginError = false;
         store.commit("auth/saveToken", tokenData);
-        router.push(LOGIN_SUCCESS_PATH);
+
+        // 登录成功重定向
+        const redirectUri = route.query.redirect_uri as string;
+        router.push(redirectUri || LOGIN_SUCCESS_PATH);
       } catch (error) {
         if (!error.response) return;
 
@@ -249,6 +252,20 @@ export default defineComponent({
       }, 1000);
     }
 
+    /**
+     * Tab切换事件处理
+     *
+     * @param e tab键
+     */
+    function tabChangeHandle(e: string) {
+      router.push({
+        query: {
+          ...route.query,
+          type: e
+        }
+      });
+    }
+
     return {
       state,
       form,
@@ -256,7 +273,8 @@ export default defineComponent({
       formLogin,
       activeKey,
       loginSubmit,
-      sendSmsCodeHandle
+      sendSmsCodeHandle,
+      tabChangeHandle
     };
   }
 });

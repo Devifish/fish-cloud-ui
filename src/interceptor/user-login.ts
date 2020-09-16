@@ -26,7 +26,12 @@ const interceptor: RouterInterceptor = ({ path }) => {
   if (pathMatcher.match(path)) return true;
 
   // 未登录则跳转至登录页
-  return { name: LOGIN_PAGE_NAME };
+  return {
+    name: LOGIN_PAGE_NAME,
+    query: {
+      redirect_uri: path
+    }
+  };
 };
 
 export default interceptor;

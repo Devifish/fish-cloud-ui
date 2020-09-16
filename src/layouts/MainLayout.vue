@@ -68,10 +68,9 @@
 import { defineComponent, reactive, computed, watch, toRefs } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
+import { MenuOutlined, HomeOutlined, LogoutOutlined } from "@ant-design/icons-vue";
 import CommonFooter from "@/components/common/CommonFooter.vue";
 import SidebarMenu from "@/components/SidebarMenu.vue";
-import { MenuOutlined, HomeOutlined, LogoutOutlined } from "@ant-design/icons-vue";
-import { message } from "ant-design-vue";
 
 export default defineComponent({
   name: "MainLayout",
