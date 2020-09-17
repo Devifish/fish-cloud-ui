@@ -13,7 +13,7 @@
       </div>
       <a-menu
         v-if="menuTree"
-        v-model:openKeys="state.openKeys"
+        v-model:openKeys="openKeys"
         :selectedKeys="selectedKeys"
         mode="inline"
         :theme="theme"
@@ -88,6 +88,7 @@ import { useStore } from "vuex";
 import CommonFooter from "@/components/common/CommonFooter.vue";
 import SidebarMenu from "@/components/SidebarMenu.vue";
 import AvatarDropdown from "@/components/AvatarDropdown.vue";
+import { LOGIN_PAGE_NAME } from "@/router/auth";
 import {
   MenuOutlined,
   HomeOutlined,
@@ -188,8 +189,8 @@ export default defineComponent({
     async function userLogout() {
       await store.dispatch("auth/logout");
 
-      // 完成注销后刷新页面
-      location.reload();
+      // 完成注销后返回登录页
+      router.push({ name: LOGIN_PAGE_NAME });
     }
 
     // 加载数据
@@ -197,7 +198,6 @@ export default defineComponent({
     store.dispatch("menu/loadMenu");
 
     return {
-      state,
       ...toRefs(state),
       menuClickHandle,
       userLogout
