@@ -13,7 +13,7 @@
       </div>
       <a-menu
         v-if="menuTree"
-        v-model:openKeys="openKeys"
+        v-model:openKeys="state.openKeys"
         :selectedKeys="selectedKeys"
         mode="inline"
         :theme="theme"
@@ -82,7 +82,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, computed, watch, toRefs } from "vue";
+import { defineComponent, reactive, ref, computed, watch, toRefs } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import CommonFooter from "@/components/common/CommonFooter.vue";
@@ -158,10 +158,12 @@ export default defineComponent({
     watch(currentMenuTree, val => {
       if (val.length == 0) return;
 
-      const openKeys = state.openKeys;
       const openMenuIds = val.slice(1).map(item => item.id);
-      if (!openKeys.includes(openMenuIds)) {
-        state.openKeys = openKeys.concat(openMenuIds);
+      for (let openMenuId of openMenuIds) {
+        const openKeys = state.openKeys;
+        if (!openKeys.includes(openMenuId)) {
+          openKeys.push(openMenuId);
+        }
       }
     });
 
@@ -195,6 +197,7 @@ export default defineComponent({
     store.dispatch("menu/loadMenu");
 
     return {
+      state,
       ...toRefs(state),
       menuClickHandle,
       userLogout
