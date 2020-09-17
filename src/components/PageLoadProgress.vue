@@ -15,9 +15,14 @@ export default defineComponent({
       show: false,
       percent: 0
     });
-    let loadPercentInterval: number;
+
+    // 加载进度定时器
+    let loadPercentInterval: number | undefined;
 
     function start() {
+      if (loadPercentInterval) return;
+
+      // 显示进度条
       state.show = true;
       state.percent = 0;
       loadPercentInterval = setInterval(() => {
@@ -26,14 +31,18 @@ export default defineComponent({
           state.percent += 1;
         } else if (percent <= 50) {
           state.percent += 0.5;
+        } else {
+          clearInterval(loadPercentInterval);
         }
       }, 100);
     }
 
     async function done() {
       clearInterval(loadPercentInterval);
+      loadPercentInterval = undefined;
       state.percent = 100;
 
+      // 等待400毫秒关闭进度条
       await sleep(400);
       state.show = false;
     }
@@ -48,6 +57,8 @@ export default defineComponent({
 </script>
 
 <style lang="less">
+@import "~ant-design-vue/lib/style/themes";
+
 .load-progress {
   position: fixed;
   overflow: hidden;
@@ -57,7 +68,7 @@ export default defineComponent({
   .progress-bg {
     position: relative;
     height: 2px;
-    background-color: #1890ff;
+    background-color: @primary-color;
     transition: width 0.4s cubic-bezier(0.08, 0.82, 0.17, 1);
   }
 }
