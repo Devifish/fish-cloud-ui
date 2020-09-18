@@ -10,7 +10,13 @@ import { sleep } from "@/utils/async";
 
 export default defineComponent({
   name: "PageLoadProgress",
-  setup() {
+  props: {
+    await: {
+      type: Number,
+      default: 250
+    }
+  },
+  setup(props) {
     const state = reactive({
       show: false,
       percent: 0
@@ -42,8 +48,8 @@ export default defineComponent({
       loadPercentInterval = undefined;
       state.percent = 100;
 
-      // 等待400毫秒关闭进度条
-      await sleep(400);
+      // 等待200毫秒关闭进度条
+      await sleep(props.await);
       state.show = false;
     }
 
