@@ -1,4 +1,5 @@
 import Axios from "@/library/axios";
+import { Page } from "@/model/page";
 
 const BASE_URL = "/api/upms/user";
 
@@ -27,6 +28,21 @@ export default {
    */
   selectById(userId: string) {
     return Axios.get(`${BASE_URL}/select/id/${userId}`);
+  },
+
+  /**
+   * 分页查询用户数据
+   *
+   * @param page 分页参数
+   * @param params 查询参数
+   */
+  selectPage(page: Page, params: any) {
+    return Axios.get(`${BASE_URL}/select/page`, {
+      params: {
+        ...page,
+        ...params
+      }
+    });
   },
 
   /**

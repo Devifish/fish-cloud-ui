@@ -52,9 +52,9 @@ export default defineComponent({
     const list = ref<Array<any>>();
 
     /**
-     * 初始化页面
+     * 加载页面数据
      */
-    async function init() {
+    async function loadData() {
       const { data } = await MenuApi.selectMenuTree();
 
       // 获取数据成功
@@ -71,7 +71,7 @@ export default defineComponent({
       console.log(data);
     }
 
-    onMounted(init);
+    onMounted(loadData);
     return {
       state,
       list,

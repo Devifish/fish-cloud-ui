@@ -68,10 +68,12 @@ axios.interceptors.response.use(
         let content: string;
         switch (status) {
           case 400:
-          case 401:
           case 403:
           case 412:
             content = data.message;
+            break;
+          case 401:
+            content = "登录已过期，请重新登录";
             break;
           case 500:
             content = "服务端异常";
