@@ -38,7 +38,7 @@
       </a-table-column>
       <a-table-column data-index="nickname" title="昵称" align="center" width="10%" />
       <a-table-column data-index="realname" title="真实姓名" align="center" width="10%" />
-      <a-table-column data-index="sex" title="性别" align="center" width="5%">
+      <a-table-column data-index="sex" title="性别" align="center" width="10%">
         <template v-slot="{ text }">
           <a-tag v-if="text == 1" color="blue">男</a-tag>
           <a-tag v-else-if="text == 2" color="red">女</a-tag>
@@ -71,7 +71,7 @@ export default defineComponent({
   setup() {
     // 页面状态
     const state = reactive({
-      loading: true,
+      loading: false,
       page: PageData.init()
     });
 
@@ -88,6 +88,7 @@ export default defineComponent({
      * 加载页面数据
      */
     async function loadData() {
+      state.loading = true;
       const { data } = await UserApi.selectPage(state.page, params);
 
       // 获取数据成功

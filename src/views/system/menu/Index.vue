@@ -45,7 +45,7 @@ export default defineComponent({
   setup() {
     // 页面状态
     const state = reactive({
-      loading: true
+      loading: false
     });
 
     // 列表数据
@@ -55,6 +55,7 @@ export default defineComponent({
      * 加载页面数据
      */
     async function loadData() {
+      state.loading = true;
       const { data } = await MenuApi.selectMenuTree();
 
       // 获取数据成功

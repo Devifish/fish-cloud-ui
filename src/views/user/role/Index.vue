@@ -52,7 +52,7 @@ export default defineComponent({
   setup() {
     // 页面状态
     const state = reactive({
-      loading: true,
+      loading: false,
       page: PageData.init()
     });
 
@@ -70,6 +70,7 @@ export default defineComponent({
      * 加载页面数据
      */
     async function loadData() {
+      state.loading = true;
       const { data } = await RoleApi.selectPage(state.page, params);
 
       // 获取数据成功
