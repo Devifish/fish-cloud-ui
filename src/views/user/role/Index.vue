@@ -1,11 +1,11 @@
 <template>
   <a-card title="内容筛选">
-    <a-form layout="inline" :model="params" @submit="search">
+    <a-form layout="inline" :model="search" @submit="searchHandle">
       <a-form-item label="角色名称">
-        <a-input v-model:value="params.name" placeholder="请输入角色名称" />
+        <a-input v-model:value="search.name" placeholder="请输入角色名称" />
       </a-form-item>
       <a-form-item label="角色编码">
-        <a-input v-model:value="params.code" placeholder="请输入角色编码" />
+        <a-input v-model:value="search.code" placeholder="请输入角色编码" />
       </a-form-item>
       <a-form-item>
         <a-button type="primary" html-type="submit">
@@ -25,6 +25,7 @@
       :data-source="state.page.records"
       :pagination="state.page.toPagination()"
       :bordered="true"
+      @change="tableChangeHandle"
     >
       <a-table-column title="序号" align="center" width="5%">
         <template v-slot="{ index }">
@@ -52,7 +53,7 @@
 <script lang="ts">
 import { defineComponent, reactive, onMounted } from "vue";
 import RoleApi from "@/api/role";
-import { PageData } from "@/model/page";
+import { PageData, PageParam } from "@/model/page";
 
 export default defineComponent({
   name: "UserList",
@@ -64,7 +65,7 @@ export default defineComponent({
     });
 
     // 请求参数
-    const params = reactive({
+    const search = reactive({
       name: "",
       code: "",
       authority: ""
@@ -73,26 +74,32 @@ export default defineComponent({
     /**
      * 加载页面数据
      */
-    async function loadData() {
+    async function loadData(param = state.page.toPageParam()) {
       state.loading = true;
-      const page = state.page.toPageParam();
-      const { data } = await RoleApi.selectPage(page, params);
+      const { data } = await RoleApi.selectPage(param, search);
 
       // 获取数据成功
       state.loading = false;
       state.page = PageData.of(data);
     }
 
-    function search() {
+    function searchHandle() {
       state.page.reset();
       loadData();
+    }
+
+    function tableChangeHandle(pagination: any) {
+      const { current, pageSize: size } = pagination;
+
+      loadData({ current, size });
     }
 
     onMounted(loadData);
     return {
       state,
-      params,
-      search
+      search,
+      searchHandle,
+      tableChangeHandle
     };
   }
 });

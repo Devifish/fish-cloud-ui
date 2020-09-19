@@ -1,11 +1,11 @@
 <template>
   <a-card title="内容筛选">
-    <a-form layout="inline" :model="params" @submit="search" ref="searchForm">
+    <a-form layout="inline" :model="search" @submit="searchHandle" ref="searchForm">
       <a-form-item label="用户名">
-        <a-input v-model:value="params.username" placeholder="请输入用户名" />
+        <a-input v-model:value="search.username" placeholder="请输入用户名" />
       </a-form-item>
       <a-form-item label="手机号码">
-        <a-input v-model:value="params.telephone" placeholder="请输入手机号码" />
+        <a-input v-model:value="search.telephone" placeholder="请输入手机号码" />
       </a-form-item>
       <a-form-item>
         <a-button type="primary" html-type="submit">
@@ -26,6 +26,7 @@
       :pagination="state.page.toPagination()"
       :bordered="true"
       :scroll="{ x: 1300 }"
+      @change="tableChangeHandle"
     >
       <a-table-column title="序号" align="center" width="5%">
         <template v-slot="{ index }">
@@ -68,7 +69,7 @@
 <script lang="ts">
 import { defineComponent, reactive, onMounted } from "vue";
 import UserApi from "@/api/user";
-import { PageData } from "@/model/page";
+import { PageData, PageParam } from "@/model/page";
 
 export default defineComponent({
   name: "UserList",
@@ -80,7 +81,7 @@ export default defineComponent({
     });
 
     // 请求参数
-    const params = reactive({
+    const search = reactive({
       username: "",
       telephone: ""
     });
@@ -88,26 +89,32 @@ export default defineComponent({
     /**
      * 加载页面数据
      */
-    async function loadData() {
+    async function loadData(param = state.page.toPageParam()) {
       state.loading = true;
-      const page = state.page.toPageParam();
-      const { data } = await UserApi.selectPage(page, params);
+      const { data } = await UserApi.selectPage(param, search);
 
       // 获取数据成功
       state.loading = false;
       state.page = PageData.of(data);
     }
 
-    function search() {
+    function searchHandle() {
       state.page.reset();
       loadData();
+    }
+
+    function tableChangeHandle(pagination: any) {
+      const { current, pageSize: size } = pagination;
+
+      loadData({ current, size });
     }
 
     onMounted(loadData);
     return {
       state,
-      params,
-      search
+      search,
+      searchHandle,
+      tableChangeHandle
     };
   }
 });
