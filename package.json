@@ -12,7 +12,7 @@
     "axios": "^0.20.0",
     "core-js": "^3.6.5",
     "js-cookie": "^2.2.1",
-    "vue": "^3.0.0-0",
+    "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0"
   },
@@ -22,7 +22,7 @@
     "@vue/cli-plugin-typescript": "^4.5.6",
     "@vue/cli-plugin-vuex": "^4.5.6",
     "@vue/cli-service": "^4.5.6",
-    "@vue/compiler-sfc": "^3.0.0-0",
+    "@vue/compiler-sfc": "^3.0.0",
     "less": "^3.12.2",
     "less-loader": "^7.0.0",
     "typescript": "~3.9.3"
