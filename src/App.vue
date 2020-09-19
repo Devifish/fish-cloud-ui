@@ -1,15 +1,19 @@
 <template>
   <page-load-progress ref="loadProgress" />
-  <a-config-provider :locale="locale" :transformCellText="transformCellText">
+  <a-config-provider
+    :locale="locale"
+    :transformCellText="transformCellText"
+    :autoInsertSpaceInButton="true"
+  >
     <router-view />
   </a-config-provider>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
+import zh_CN from "ant-design-vue/es/locale/zh_CN";
 import PageLoadProgress from "@/components/PageLoadProgress.vue";
-import locale from "ant-design-vue/es/locale/zh_CN";
 
 export default defineComponent({
   name: "App",
@@ -23,6 +27,9 @@ export default defineComponent({
     const loadProgress = ref();
     router.beforeEach(() => loadProgress.value.start());
     router.afterEach(() => loadProgress.value.done());
+
+    // Antd 国际化
+    const locale = ref(zh_CN);
 
     /**
      * Table 数据渲染
