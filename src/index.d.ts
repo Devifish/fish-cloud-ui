@@ -4,6 +4,11 @@ declare module "*.vue" {
   export default component;
 }
 
+declare module "ant-design-vue/es/locale/*" {
+  declare const locale: any;
+  export default locale;
+}
+
 declare module "js-cookie" {
   interface CookieAttributes {
     expires?: number | Date;
@@ -16,11 +21,7 @@ declare module "js-cookie" {
 
   interface CookiesStatic<T extends object = object> {
     defaults: CookieAttributes;
-    set(
-      name: string,
-      value: string | T,
-      options?: CookieAttributes
-    ): string | undefined;
+    set(name: string, value: string | T, options?: CookieAttributes): string | undefined;
     get(name: string): string | undefined;
     get(): { [key: string]: string };
     getJSON(name: string): any;
@@ -34,10 +35,7 @@ declare module "js-cookie" {
     ): CookiesStatic<TConv>;
   }
 
-  type CookieWriteConverter<T extends object> = (
-    value: string | T,
-    name: string
-  ) => string;
+  type CookieWriteConverter<T extends object> = (value: string | T, name: string) => string;
   type CookieReadConverter = (value: string, name: string) => string;
 
   declare const Cookies: CookiesStatic;
