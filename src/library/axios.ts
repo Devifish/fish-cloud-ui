@@ -39,7 +39,7 @@ const axios = Axios.create({
 
 // Request 过滤器
 axios.interceptors.request.use(request => {
-  const { headers } = request;
+  const { headers, params } = request;
   const { token } = Store.state.auth;
 
   // OAuth2用户Token注入
@@ -47,6 +47,22 @@ axios.interceptors.request.use(request => {
     const { header, value } = token.tokenData();
     headers[header] = value;
   }
+
+  // 过滤空参数
+  if (params) {
+    const keys = Object.keys(params);
+    for (let key of keys) {
+      const value = params[key];
+      switch (value) {
+        case undefined:
+        case null:
+        case "":
+          delete params[key];
+          break;
+      }
+    }
+  }
+
   return request;
 });
 
