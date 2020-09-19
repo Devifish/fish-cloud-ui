@@ -17,11 +17,13 @@
       </a-form-item>
     </a-form>
   </a-card>
+
   <a-card title="用户列表">
     <a-table
       row-key="id"
-      :data-source="list"
       :loading="state.loading"
+      :data-source="state.page.records"
+      :pagination="state.page.toPagination()"
       :bordered="true"
       :scroll="{ x: 1300 }"
     >
@@ -51,6 +53,8 @@
       <a-table-column title="操作" width="200px" fixed="right">
         <template v-slot="{ record }">
           <span>
+            <a>详情</a>
+            <a-divider type="vertical" />
             <a>编辑</a>
             <a-divider type="vertical" />
             <a>删除</a>
@@ -62,7 +66,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, onMounted } from "vue";
+import { defineComponent, reactive, onMounted } from "vue";
 import UserApi from "@/api/user";
 import { PageData } from "@/model/page";
 
@@ -72,7 +76,7 @@ export default defineComponent({
     // 页面状态
     const state = reactive({
       loading: false,
-      page: PageData.init()
+      page: new PageData()
     });
 
     // 请求参数
@@ -81,24 +85,21 @@ export default defineComponent({
       telephone: ""
     });
 
-    // 列表数据
-    const list = ref<Array<any>>();
-
     /**
      * 加载页面数据
      */
     async function loadData() {
       state.loading = true;
-      const { data } = await UserApi.selectPage(state.page, params);
+      const page = state.page.toPageParam();
+      const { data } = await UserApi.selectPage(page, params);
 
       // 获取数据成功
       state.loading = false;
-      list.value = data?.records;
       state.page = PageData.of(data);
     }
 
     function search() {
-      state.page = PageData.init();
+      state.page.reset();
       loadData();
     }
 
@@ -106,7 +107,6 @@ export default defineComponent({
     return {
       state,
       params,
-      list,
       search
     };
   }

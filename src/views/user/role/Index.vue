@@ -17,8 +17,15 @@
       </a-form-item>
     </a-form>
   </a-card>
-  <a-card title="用户列表">
-    <a-table :data-source="list" :loading="state.loading" row-key="id" :bordered="true">
+
+  <a-card title="角色列表">
+    <a-table
+      row-key="id"
+      :loading="state.loading"
+      :data-source="state.page.records"
+      :pagination="state.page.toPagination()"
+      :bordered="true"
+    >
       <a-table-column title="序号" align="center" width="5%">
         <template v-slot="{ index }">
           {{ index + 1 }}
@@ -43,7 +50,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, onMounted } from "vue";
+import { defineComponent, reactive, onMounted } from "vue";
 import RoleApi from "@/api/role";
 import { PageData } from "@/model/page";
 
@@ -53,7 +60,7 @@ export default defineComponent({
     // 页面状态
     const state = reactive({
       loading: false,
-      page: PageData.init()
+      page: new PageData()
     });
 
     // 请求参数
@@ -63,31 +70,27 @@ export default defineComponent({
       authority: ""
     });
 
-    // 列表数据
-    const list = ref<Array<any>>();
-
     /**
      * 加载页面数据
      */
     async function loadData() {
       state.loading = true;
-      const { data } = await RoleApi.selectPage(state.page, params);
+      const page = state.page.toPageParam();
+      const { data } = await RoleApi.selectPage(page, params);
 
       // 获取数据成功
       state.loading = false;
-      list.value = data?.records;
       state.page = PageData.of(data);
     }
 
     function search() {
-      state.page = PageData.init();
+      state.page.reset();
       loadData();
     }
 
     onMounted(loadData);
     return {
       state,
-      list,
       params,
       search
     };

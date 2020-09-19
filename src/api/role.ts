@@ -1,5 +1,5 @@
 import Axios from "@/library/axios";
-import { Page } from "@/model/page";
+import { PageParam } from "@/model/page";
 
 const BASE_URL = "/api/upms/role";
 
@@ -20,7 +20,7 @@ export default {
    * @param page 分页参数
    * @param params 查询参数
    */
-  selectPage(page: Page, params: any) {
+  selectPage(page: PageParam, params: any) {
     return Axios.get(`${BASE_URL}/select/page`, {
       params: {
         ...page,
