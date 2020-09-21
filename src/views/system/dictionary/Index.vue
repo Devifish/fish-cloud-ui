@@ -1,10 +1,17 @@
 <template>
-  <a-card title="内容筛选"> </a-card>
-  <a-card title="字典列表"> </a-card>
+  <list-table-container title="字典列表">
+
+  </list-table-container>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import ListTableContainer from "@/components/ListTableContainer.vue";
 
-export default defineComponent({});
+export default defineComponent({
+  name: "DictionaryList",
+  components: {
+    ListTableContainer
+  }
+});
 </script>

@@ -14,17 +14,22 @@
       v-bind="tableProps"
       :pagination="false"
       :bordered="true"
+      :scroll="{ x: 900 }"
       children-column-name="children"
     >
       <a-table-column data-index="name" title="名称" width="20%" />
-      <a-table-column data-index="url" title="路径" width="35%" />
-      <a-table-column data-index="permission" title="权限" width="10%" />
-      <a-table-column data-index="type" title="类型" width="10%" />
-      <a-table-column data-index="sort" title="排序" width="10%" />
-      <a-table-column title="操作" width="10%">
+      <a-table-column data-index="url" title="路径" />
+      <a-table-column data-index="permission" title="权限" align="center" width="10%" />
+      <a-table-column data-index="type" title="类型" align="center" width="10%" />
+      <a-table-column data-index="sort" title="排序" align="center" width="10%" />
+      <a-table-column title="操作" width="200px" fixed="right">
         <template v-slot="{ record }">
           <span>
-            <a @click="deleteMenu(record)">删除</a>
+            <a @click="deleteHandle(record)">编辑</a>
+            <a-divider type="vertical" />
+            <a @click="deleteHandle(record)">禁用</a>
+            <a-divider type="vertical" />
+            <a @click="deleteHandle(record)">删除</a>
           </span>
         </template>
       </a-table-column>
@@ -48,12 +53,7 @@ export default defineComponent({
   setup() {
     const { tableProps, load, reset, onLoadData } = useListTable();
 
-    /**
-     * 删除菜单
-     *
-     * @param 菜单数据
-     */
-    async function deleteMenu(data: any) {
+    async function deleteHandle(data: any) {
       load();
     }
 
@@ -65,7 +65,7 @@ export default defineComponent({
 
     return {
       tableProps,
-      deleteMenu
+      deleteHandle
     };
   }
 });

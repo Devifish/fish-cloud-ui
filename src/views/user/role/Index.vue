@@ -28,7 +28,13 @@
       </a-button>
     </template>
 
-    <a-table row-key="id" v-bind="tableProps" :bordered="true" @change="tableChangeHandle">
+    <a-table
+      row-key="id"
+      v-bind="tableProps"
+      :bordered="true"
+      :scroll="{ x: 900 }"
+      @change="tableChangeHandle"
+    >
       <a-table-column title="序号" align="center" width="5%">
         <template v-slot="{ index }">
           {{ index + 1 }}
@@ -36,10 +42,10 @@
       </a-table-column>
       <a-table-column data-index="name" title="角色名称" align="center" width="10%" />
       <a-table-column data-index="code" title="角色编码" align="center" width="10%" />
-      <a-table-column data-index="remark" title="描述" align="center" width="20%" />
+      <a-table-column data-index="remark" title="描述" align="center" />
       <a-table-column data-index="createTime" title="创建时间" align="center" width="15%" />
       <a-table-column data-index="updateTime" title="更新时间" align="center" width="15%" />
-      <a-table-column title="操作" width="10%">
+      <a-table-column title="操作" width="200px" fixed="right">
         <template v-slot="{ record }">
           <span>
             <a>编辑</a>

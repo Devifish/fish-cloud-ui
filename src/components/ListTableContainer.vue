@@ -5,7 +5,7 @@
     </a-card>
 
     <a-card :title="title">
-      <template v-slot:extra>
+      <template v-if="$slots.extra" v-slot:extra>
         <slot name="extra" />
       </template>
 
