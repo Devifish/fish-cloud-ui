@@ -1,4 +1,5 @@
 import { Module } from "vuex";
+import { toList } from "@/utils/tree";
 import MenuApi from "@/api/menu";
 
 interface MenuStoreState {
@@ -24,20 +25,7 @@ const menuModule: Module<MenuStoreState, any> = {
   },
   getters: {
     menuList({ menuTree }) {
-      const tree2list = (menu: Array<any>) => {
-        return menu.reduce((menus, item) => {
-          const children = item.children;
-          if (children?.length > 0) {
-            const childrenMenu = tree2list(children);
-            menus = menus.concat(childrenMenu);
-          }
-
-          menus.push(item);
-          return menus;
-        }, []);
-      };
-
-      return tree2list(menuTree);
+      return toList(menuTree);
     },
     menuMap(state, { menuList }) {
       return (keyGen: (menu: any) => any) => {
@@ -48,7 +36,7 @@ const menuModule: Module<MenuStoreState, any> = {
         }, {});
 
         return data;
-      }
+      };
     },
     filterMenu({ menuTree }) {
       return (filter: (menu: any) => boolean) => {

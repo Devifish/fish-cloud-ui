@@ -20,7 +20,13 @@
       <a-table-column data-index="name" title="名称" width="20%" />
       <a-table-column data-index="url" title="路径" />
       <a-table-column data-index="permission" title="权限" align="center" width="10%" />
-      <a-table-column data-index="type" title="类型" align="center" width="10%" />
+      <a-table-column data-index="type" title="类型" align="center" width="10%">
+        <template v-slot="{ text }">
+          <span v-if="text === 0">菜单</span>
+          <span v-else-if="text === 1">按钮</span>
+          <span v-else>其他</span>
+        </template>
+      </a-table-column>
       <a-table-column data-index="sort" title="排序" align="center" width="10%" />
       <a-table-column title="操作" width="200px" fixed="right">
         <template v-slot="{ record }">
@@ -43,6 +49,7 @@ import { useListTable } from "@/utils/use";
 import MenuApi from "@/api/menu";
 import ListTableContainer from "@/components/ListTableContainer.vue";
 import { PlusOutlined } from "@ant-design/icons-vue";
+import { removeEmptyChildren } from "@/utils/tree";
 
 export default defineComponent({
   name: "MenuList",
@@ -60,7 +67,7 @@ export default defineComponent({
     // 加载数据
     onLoadData(async () => {
       const { data } = await MenuApi.selectMenuTree();
-      return data;
+      return removeEmptyChildren(data);
     });
 
     return {
