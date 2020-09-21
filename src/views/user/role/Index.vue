@@ -28,15 +28,7 @@
       </a-button>
     </template>
 
-    <a-table
-      row-key="id"
-      :loading="loading"
-      :data-source="page.records"
-      :pagination="page.toPagination()"
-      :bordered="true"
-      @change="tableChangeHandle"
-      ref="table"
-    >
+    <a-table row-key="id" v-bind="tableProps" :bordered="true" @change="tableChangeHandle">
       <a-table-column title="序号" align="center" width="5%">
         <template v-slot="{ index }">
           {{ index + 1 }}
@@ -74,7 +66,7 @@ export default defineComponent({
     PlusOutlined
   },
   setup() {
-    const { loading, page, load, reset, tableChangeHandle, onLoadData } = useListTable();
+    const { tableProps, load, reset, onLoadData } = useListTable();
 
     // 请求参数
     const search = reactive({
@@ -92,6 +84,11 @@ export default defineComponent({
       load();
     }
 
+    function tableChangeHandle(pagination: any) {
+      const { current, pageSize } = pagination;
+      load(current, pageSize);
+    }
+
     // 加载数据
     onLoadData(async page => {
       const { data } = await RoleApi.selectPage(page, search);
@@ -99,8 +96,7 @@ export default defineComponent({
     });
 
     return {
-      loading,
-      page,
+      tableProps,
       tableChangeHandle,
       search,
       searchHandle,

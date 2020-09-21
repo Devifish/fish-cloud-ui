@@ -30,9 +30,7 @@
 
     <a-table
       row-key="id"
-      :loading="loading"
-      :data-source="page.records"
-      :pagination="page.toPagination()"
+      v-bind="tableProps"
       :bordered="true"
       :scroll="{ x: 1300 }"
       @change="tableChangeHandle"
@@ -89,7 +87,7 @@ export default defineComponent({
     PlusOutlined
   },
   setup() {
-    const { loading, page, load, reset, tableChangeHandle, onLoadData } = useListTable();
+    const { tableProps, load, reset, onLoadData } = useListTable();
 
     // 请求参数
     const search = reactive({
@@ -106,6 +104,11 @@ export default defineComponent({
       load();
     }
 
+    function tableChangeHandle(pagination: any) {
+      const { current, pageSize } = pagination;
+      load(current, pageSize);
+    }
+
     // 加载数据
     onLoadData(async page => {
       const { data } = await UserApi.selectPage(page, search);
@@ -113,10 +116,9 @@ export default defineComponent({
     });
 
     return {
-      loading,
-      page,
-      tableChangeHandle,
+      tableProps,
       search,
+      tableChangeHandle,
       searchHandle,
       deleteHandle
     };
