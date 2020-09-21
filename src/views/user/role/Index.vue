@@ -64,6 +64,7 @@ import { useListTable } from "@/utils/use";
 import RoleApi from "@/api/role";
 import ListTableContainer from "@/components/ListTableContainer.vue";
 import { PlusOutlined } from "@ant-design/icons-vue";
+import { Modal } from "ant-design-vue";
 
 export default defineComponent({
   name: "UserList",
@@ -86,8 +87,15 @@ export default defineComponent({
       load();
     }
 
-    async function deleteHandle(data: any) {
-      load();
+    function deleteHandle(data: any) {
+      Modal.confirm({
+        title: "删除角色",
+        content: "确认要删除此角色吗？",
+        async onOk() {
+          //await RoleApi.delete(data.id);
+          await load();
+        }
+      });
     }
 
     function tableChangeHandle(pagination: any) {

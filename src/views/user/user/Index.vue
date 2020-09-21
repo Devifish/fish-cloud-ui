@@ -78,6 +78,7 @@ import { defineComponent, reactive } from "vue";
 import { useListTable } from "@/utils/use";
 import UserApi from "@/api/user";
 import ListTableContainer from "@/components/ListTableContainer.vue";
+import { Modal } from "ant-design-vue";
 import { PlusOutlined } from "@ant-design/icons-vue";
 
 export default defineComponent({
@@ -100,8 +101,15 @@ export default defineComponent({
       load();
     }
 
-    async function deleteHandle() {
-      load();
+    function deleteHandle(data: any) {
+      Modal.confirm({
+        title: "删除用户",
+        content: "确认要删除此用户吗？",
+        async onOk() {
+          //await UserApi.delete(data.id);
+          await load();
+        }
+      });
     }
 
     function tableChangeHandle(pagination: any) {

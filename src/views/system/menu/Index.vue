@@ -48,6 +48,7 @@ import { defineComponent, ref, reactive, onMounted } from "vue";
 import { useListTable } from "@/utils/use";
 import MenuApi from "@/api/menu";
 import ListTableContainer from "@/components/ListTableContainer.vue";
+import { Modal } from "ant-design-vue";
 import { PlusOutlined } from "@ant-design/icons-vue";
 import { removeEmptyChildren } from "@/utils/tree";
 
@@ -60,8 +61,15 @@ export default defineComponent({
   setup() {
     const { tableProps, load, reset, onLoadData } = useListTable();
 
-    async function deleteHandle(data: any) {
-      load();
+    function deleteHandle(data: any) {
+      Modal.confirm({
+        title: "删除菜单",
+        content: "确认要删除此菜单吗？",
+        async onOk() {
+          //await MenuApi.delete(data.id);
+          await load();
+        }
+      });
     }
 
     // 加载数据

@@ -72,7 +72,7 @@ export default {
    * @return 是否成功
    */
   delete(userId: string) {
-    return Axios.delete(`${BASE_URL}/update/${userId}`);
+    return Axios.delete(`${BASE_URL}/delete/id/${userId}`);
   },
 
   /**
