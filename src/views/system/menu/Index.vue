@@ -1,5 +1,5 @@
 <template>
-  <a-card title="菜单列表">
+  <list-table-container title="菜单列表">
     <template v-slot:extra>
       <a-button type="primary">
         <template v-slot:icon>
@@ -10,9 +10,9 @@
     </template>
 
     <a-table
-      :data-source="list"
-      :loading="state.loading"
       row-key="id"
+      v-bind="tableProps"
+      :pagination="false"
       :bordered="true"
       children-column-name="children"
     >
@@ -29,39 +29,24 @@
         </template>
       </a-table-column>
     </a-table>
-  </a-card>
+  </list-table-container>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, reactive, onMounted } from "vue";
+import { useListTable } from "@/utils/use";
 import MenuApi from "@/api/menu";
+import ListTableContainer from "@/components/ListTableContainer.vue";
 import { PlusOutlined } from "@ant-design/icons-vue";
 
 export default defineComponent({
   name: "MenuList",
   components: {
+    ListTableContainer,
     PlusOutlined
   },
   setup() {
-    // 页面状态
-    const state = reactive({
-      loading: false
-    });
-
-    // 列表数据
-    const list = ref<Array<any>>();
-
-    /**
-     * 加载页面数据
-     */
-    async function loadData() {
-      state.loading = true;
-      const { data } = await MenuApi.selectMenuTree();
-
-      // 获取数据成功
-      state.loading = false;
-      list.value = data;
-    }
+    const { tableProps, load, reset, onLoadData } = useListTable();
 
     /**
      * 删除菜单
@@ -69,13 +54,17 @@ export default defineComponent({
      * @param 菜单数据
      */
     async function deleteMenu(data: any) {
-      console.log(data);
+      load();
     }
 
-    onMounted(loadData);
+    // 加载数据
+    onLoadData(async () => {
+      const { data } = await MenuApi.selectMenuTree();
+      return data;
+    });
+
     return {
-      state,
-      list,
+      tableProps,
       deleteMenu
     };
   }

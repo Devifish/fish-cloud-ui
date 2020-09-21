@@ -55,7 +55,11 @@ export class PageData implements PageParam {
   }
 
   static of(pageData: any) {
-    const { records, current, size, total } = pageData;
-    return new PageData(records, current, size, total);
+    if (pageData instanceof Array) {
+      return new PageData(pageData, DEFAULT_CURRENT, DEFAULT_SIZE);
+    } else {
+      const { records, current, size, total } = pageData;
+      return new PageData(records, current, size, total);
+    }
   }
 }

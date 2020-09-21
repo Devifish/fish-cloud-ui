@@ -1,6 +1,6 @@
 <template>
   <div class="fish-list-layout">
-    <a-card>
+    <a-card v-if="$slots.search">
       <slot name="search" />
     </a-card>
 
@@ -18,7 +18,7 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "HeaderAvatarMenu",
+  name: "ListTableContainer",
   props: {
     title: String
   }
