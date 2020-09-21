@@ -9,14 +9,14 @@
 
 ## 依赖环境
 
-| 依赖           | 版本         |
-| -------------- | ------------ |
-| Typescript     | 3.9.3        |
-| Vue.js         | 3.0.0-rc.10  |
-| Vuex           | 4.0.0-beta.4 |
-| Vue Router     | 4.0.0-beta.9 |
-| Ant Design Vue | 2.0.0-beta.8 |
-| Axios          | 0.20.0       |
+| 依赖           | 版本          |
+| -------------- | ------------- |
+| Typescript     | 3.9.3         |
+| Vue.js         | 3.0.0         |
+| Vuex           | 4.0.0-beta.4  |
+| Vue Router     | 4.0.0-beta.11 |
+| Ant Design Vue | 2.0.0-beta.9  |
+| Axios          | 0.20.0        |
 
 - 推荐使用 Node.js 12 及以上的运行/构建当前项目
 
