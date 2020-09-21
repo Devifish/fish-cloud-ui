@@ -1,29 +1,38 @@
 <template>
-  <a-card title="内容筛选">
-    <a-form layout="inline" :model="search" @submit="searchHandle" ref="searchForm">
-      <a-form-item label="用户名">
-        <a-input v-model:value="search.username" placeholder="请输入用户名" />
-      </a-form-item>
-      <a-form-item label="手机号码">
-        <a-input v-model:value="search.telephone" placeholder="请输入手机号码" />
-      </a-form-item>
-      <a-form-item>
-        <a-button type="primary" html-type="submit">
-          搜索
-        </a-button>
-        <a-button style="margin-left: 10px" @click="$refs.searchForm.resetFields()">
-          重置
-        </a-button>
-      </a-form-item>
-    </a-form>
-  </a-card>
+  <list-table-container title="用户列表">
+    <template v-slot:search>
+      <a-form layout="inline" :model="search" @submit="searchHandle" ref="searchForm">
+        <a-form-item label="用户名">
+          <a-input v-model:value="search.username" placeholder="请输入用户名" />
+        </a-form-item>
+        <a-form-item label="手机号码">
+          <a-input v-model:value="search.telephone" placeholder="请输入手机号码" />
+        </a-form-item>
+        <a-form-item>
+          <a-button type="primary" html-type="submit">
+            搜索
+          </a-button>
+          <a-button style="margin-left: 10px" @click="$refs.searchForm.resetFields()">
+            重置
+          </a-button>
+        </a-form-item>
+      </a-form>
+    </template>
 
-  <a-card title="用户列表">
+    <template v-slot:extra>
+      <a-button type="primary">
+        <template v-slot:icon>
+          <plus-outlined />
+        </template>
+        添加用户
+      </a-button>
+    </template>
+
     <a-table
       row-key="id"
-      :loading="state.loading"
-      :data-source="state.page.records"
-      :pagination="state.page.toPagination()"
+      :loading="loading"
+      :data-source="page.records"
+      :pagination="page.toPagination()"
       :bordered="true"
       :scroll="{ x: 1300 }"
       @change="tableChangeHandle"
@@ -58,27 +67,29 @@
             <a-divider type="vertical" />
             <a>编辑</a>
             <a-divider type="vertical" />
-            <a>删除</a>
+            <a @click="deleteHandle(record)">删除</a>
           </span>
         </template>
       </a-table-column>
     </a-table>
-  </a-card>
+  </list-table-container>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, onMounted } from "vue";
+import { defineComponent, reactive } from "vue";
+import { useListTable } from "@/utils/use";
 import UserApi from "@/api/user";
-import { PageData, PageParam } from "@/model/page";
+import ListTableContainer from "@/components/ListTableContainer.vue";
+import { PlusOutlined } from "@ant-design/icons-vue";
 
 export default defineComponent({
   name: "UserList",
+  components: {
+    ListTableContainer,
+    PlusOutlined
+  },
   setup() {
-    // 页面状态
-    const state = reactive({
-      loading: false,
-      page: new PageData()
-    });
+    const { loading, page, load, reset, tableChangeHandle, onLoadData } = useListTable();
 
     // 请求参数
     const search = reactive({
@@ -86,35 +97,28 @@ export default defineComponent({
       telephone: ""
     });
 
-    /**
-     * 加载页面数据
-     */
-    async function loadData(param = state.page.toPageParam()) {
-      state.loading = true;
-      const { data } = await UserApi.selectPage(param, search);
-
-      // 获取数据成功
-      state.loading = false;
-      state.page = PageData.of(data);
-    }
-
     function searchHandle() {
-      state.page.reset();
-      loadData();
+      reset();
+      load();
     }
 
-    function tableChangeHandle(pagination: any) {
-      const { current, pageSize: size } = pagination;
-
-      loadData({ current, size });
+    async function deleteHandle() {
+      load();
     }
 
-    onMounted(loadData);
+    // 加载数据
+    onLoadData(async page => {
+      const { data } = await UserApi.selectPage(page, search);
+      return data;
+    });
+
     return {
-      state,
+      loading,
+      page,
+      tableChangeHandle,
       search,
       searchHandle,
-      tableChangeHandle
+      deleteHandle
     };
   }
 });

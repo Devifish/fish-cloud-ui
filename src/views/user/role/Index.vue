@@ -1,31 +1,41 @@
 <template>
-  <a-card title="内容筛选">
-    <a-form layout="inline" :model="search" @submit="searchHandle">
-      <a-form-item label="角色名称">
-        <a-input v-model:value="search.name" placeholder="请输入角色名称" />
-      </a-form-item>
-      <a-form-item label="角色编码">
-        <a-input v-model:value="search.code" placeholder="请输入角色编码" />
-      </a-form-item>
-      <a-form-item>
-        <a-button type="primary" html-type="submit">
-          搜索
-        </a-button>
-        <a-button style="margin-left: 10px">
-          重置
-        </a-button>
-      </a-form-item>
-    </a-form>
-  </a-card>
+  <list-table-container title="角色列表">
+    <template v-slot:search>
+      <a-form layout="inline" :model="search" @submit="searchHandle">
+        <a-form-item label="角色名称">
+          <a-input v-model:value="search.name" placeholder="请输入角色名称" />
+        </a-form-item>
+        <a-form-item label="角色编码">
+          <a-input v-model:value="search.code" placeholder="请输入角色编码" />
+        </a-form-item>
+        <a-form-item>
+          <a-button type="primary" html-type="submit">
+            搜索
+          </a-button>
+          <a-button style="margin-left: 10px">
+            重置
+          </a-button>
+        </a-form-item>
+      </a-form>
+    </template>
 
-  <a-card title="角色列表">
+    <template v-slot:extra>
+      <a-button type="primary">
+        <template v-slot:icon>
+          <plus-outlined />
+        </template>
+        添加角色
+      </a-button>
+    </template>
+
     <a-table
       row-key="id"
-      :loading="state.loading"
-      :data-source="state.page.records"
-      :pagination="state.page.toPagination()"
+      :loading="loading"
+      :data-source="page.records"
+      :pagination="page.toPagination()"
       :bordered="true"
       @change="tableChangeHandle"
+      ref="table"
     >
       <a-table-column title="序号" align="center" width="5%">
         <template v-slot="{ index }">
@@ -42,27 +52,29 @@
           <span>
             <a>编辑</a>
             <a-divider type="vertical" />
-            <a>删除</a>
+            <a @click="deleteHandle(record)">删除</a>
           </span>
         </template>
       </a-table-column>
     </a-table>
-  </a-card>
+  </list-table-container>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, onMounted } from "vue";
+import { defineComponent, reactive } from "vue";
+import { useListTable } from "@/utils/use";
 import RoleApi from "@/api/role";
-import { PageData, PageParam } from "@/model/page";
+import ListTableContainer from "@/components/ListTableContainer.vue";
+import { PlusOutlined } from "@ant-design/icons-vue";
 
 export default defineComponent({
   name: "UserList",
+  components: {
+    ListTableContainer,
+    PlusOutlined
+  },
   setup() {
-    // 页面状态
-    const state = reactive({
-      loading: false,
-      page: new PageData()
-    });
+    const { loading, page, load, reset, tableChangeHandle, onLoadData } = useListTable();
 
     // 请求参数
     const search = reactive({
@@ -71,35 +83,28 @@ export default defineComponent({
       authority: ""
     });
 
-    /**
-     * 加载页面数据
-     */
-    async function loadData(param = state.page.toPageParam()) {
-      state.loading = true;
-      const { data } = await RoleApi.selectPage(param, search);
-
-      // 获取数据成功
-      state.loading = false;
-      state.page = PageData.of(data);
-    }
-
     function searchHandle() {
-      state.page.reset();
-      loadData();
+      reset();
+      load();
     }
 
-    function tableChangeHandle(pagination: any) {
-      const { current, pageSize: size } = pagination;
-
-      loadData({ current, size });
+    async function deleteHandle(data: any) {
+      load();
     }
 
-    onMounted(loadData);
+    // 加载数据
+    onLoadData(async page => {
+      const { data } = await RoleApi.selectPage(page, search);
+      return data;
+    });
+
     return {
-      state,
+      loading,
+      page,
+      tableChangeHandle,
       search,
       searchHandle,
-      tableChangeHandle
+      deleteHandle
     };
   }
 });
