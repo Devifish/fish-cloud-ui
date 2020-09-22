@@ -61,11 +61,17 @@
       <a-table-column title="操作" width="200px" fixed="right">
         <template v-slot="{ record }">
           <span>
-            <a>详情</a>
+            <a href="javascript:void(0);">
+              详情
+            </a>
             <a-divider type="vertical" />
-            <a>编辑</a>
+            <a href="javascript:void(0);">
+              编辑
+            </a>
             <a-divider type="vertical" />
-            <a @click="deleteHandle(record)">删除</a>
+            <a href="javascript:void(0);" @click="deleteHandle(record)">
+              删除
+            </a>
           </span>
         </template>
       </a-table-column>
@@ -107,7 +113,7 @@ export default defineComponent({
         content: "确认要删除此用户吗？",
         async onOk() {
           await UserApi.delete(data.id);
-          await load();
+          load();
         }
       });
     }

@@ -22,20 +22,26 @@
       <a-table-column data-index="permission" title="权限" align="center" width="10%" />
       <a-table-column data-index="type" title="类型" align="center" width="10%">
         <template v-slot="{ text }">
-          <span v-if="text === 0">菜单</span>
-          <span v-else-if="text === 1">按钮</span>
-          <span v-else>其他</span>
+          <a-tag v-if="text === 0" color="blue">菜单</a-tag>
+          <a-tag v-else-if="text === 1" color="green">按钮</a-tag>
+          <a-tag v-else>其他</a-tag>
         </template>
       </a-table-column>
       <a-table-column data-index="sort" title="排序" align="center" width="10%" />
       <a-table-column title="操作" width="200px" fixed="right">
         <template v-slot="{ record }">
           <span>
-            <a @click="deleteHandle(record)">编辑</a>
+            <a href="javascript:void(0);">
+              编辑
+            </a>
             <a-divider type="vertical" />
-            <a @click="deleteHandle(record)">禁用</a>
+            <a href="javascript:void(0);" @click="changeMenuState(record)">
+              {{ record.enable ? "禁用" : "启用" }}
+            </a>
             <a-divider type="vertical" />
-            <a @click="deleteHandle(record)">删除</a>
+            <a href="javascript:void(0);" @click="deleteHandle(record)">
+              删除
+            </a>
           </span>
         </template>
       </a-table-column>
@@ -61,13 +67,18 @@ export default defineComponent({
   setup() {
     const { tableProps, load, onLoadData } = useListTable();
 
+    async function changeMenuState(data: any) {
+      await MenuApi.update(data.id, { ...data, enable: !data.enable });
+      load();
+    }
+
     function deleteHandle(data: any) {
       Modal.confirm({
         title: "删除菜单",
         content: "确认要删除此菜单吗？",
         async onOk() {
           await MenuApi.delete(data.id);
-          await load();
+          load();
         }
       });
     }
@@ -80,6 +91,7 @@ export default defineComponent({
 
     return {
       tableProps,
+      changeMenuState,
       deleteHandle
     };
   }

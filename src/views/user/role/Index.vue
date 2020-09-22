@@ -48,9 +48,13 @@
       <a-table-column title="操作" width="200px" fixed="right">
         <template v-slot="{ record }">
           <span>
-            <a>编辑</a>
+            <a href="javascript:void(0);">
+              编辑
+            </a>
             <a-divider type="vertical" />
-            <a @click="deleteHandle(record)">删除</a>
+            <a href="javascript:void(0);" @click="deleteHandle(record)">
+              删除
+            </a>
           </span>
         </template>
       </a-table-column>
@@ -93,7 +97,7 @@ export default defineComponent({
         content: "确认要删除此角色吗？",
         async onOk() {
           await RoleApi.delete(data.id);
-          await load();
+          load();
         }
       });
     }
