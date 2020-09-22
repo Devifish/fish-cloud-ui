@@ -4,7 +4,6 @@ import { PageParam } from "@/model/page";
 const BASE_URL = "/api/upms/role";
 
 export default {
-
   /**
    * 根据角色ID查询单个信息
    *
@@ -27,6 +26,15 @@ export default {
         ...params
       }
     });
-  }
+  },
 
-}
+  /**
+   * 根据角色ID删除角色
+   *
+   * @param roleId 角色ID
+   * @return 是否成功
+   */
+  delete(roleId: string) {
+    return Axios.delete(`${BASE_URL}/delete/id/${roleId}`);
+  }
+};

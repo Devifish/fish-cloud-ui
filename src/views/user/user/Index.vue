@@ -106,7 +106,7 @@ export default defineComponent({
         title: "删除用户",
         content: "确认要删除此用户吗？",
         async onOk() {
-          //await UserApi.delete(data.id);
+          await UserApi.delete(data.id);
           await load();
         }
       });

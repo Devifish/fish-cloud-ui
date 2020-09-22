@@ -74,6 +74,7 @@ axios.interceptors.response.use(
   },
   error => {
     if (error.response) {
+      console.log(error?.response)
       const { config, data, status } = error.response;
       const show = config.message?.show ?? true;
 
@@ -84,12 +85,17 @@ axios.interceptors.response.use(
         let content: string;
         switch (status) {
           case 400:
-          case 403:
           case 412:
             content = data.message;
             break;
           case 401:
             content = "登录已过期，请重新登录";
+            break;
+          case 403:
+            content = "您没有权限，无法访问";
+            break;
+          case 404:
+            content = "Not Found 404";
             break;
           case 500:
             content = "服务端异常";

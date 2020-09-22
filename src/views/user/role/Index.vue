@@ -92,7 +92,7 @@ export default defineComponent({
         title: "删除角色",
         content: "确认要删除此角色吗？",
         async onOk() {
-          //await RoleApi.delete(data.id);
+          await RoleApi.delete(data.id);
           await load();
         }
       });

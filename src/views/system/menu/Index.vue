@@ -44,7 +44,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, onMounted } from "vue";
+import { defineComponent } from "vue";
 import { useListTable } from "@/utils/use";
 import MenuApi from "@/api/menu";
 import ListTableContainer from "@/components/ListTableContainer.vue";
@@ -59,14 +59,14 @@ export default defineComponent({
     PlusOutlined
   },
   setup() {
-    const { tableProps, load, reset, onLoadData } = useListTable();
+    const { tableProps, load, onLoadData } = useListTable();
 
     function deleteHandle(data: any) {
       Modal.confirm({
         title: "删除菜单",
         content: "确认要删除此菜单吗？",
         async onOk() {
-          //await MenuApi.delete(data.id);
+          await MenuApi.delete(data.id);
           await load();
         }
       });

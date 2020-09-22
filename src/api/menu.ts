@@ -58,6 +58,6 @@ export default {
    * @param menuId 菜单ID
    */
   delete(menuId: string) {
-    return Axios.delete(`${BASE_URL}/delete/${menuId}`);
+    return Axios.delete(`${BASE_URL}/delete/id/${menuId}`);
   }
 };
