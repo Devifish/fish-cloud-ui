@@ -74,7 +74,6 @@ axios.interceptors.response.use(
   },
   error => {
     if (error.response) {
-      console.log(error?.response)
       const { config, data, status } = error.response;
       const show = config.message?.show ?? true;
 
@@ -101,7 +100,7 @@ axios.interceptors.response.use(
             content = "服务端异常";
             break;
           default:
-            content = data.message;
+            content = data?.message ?? "未知异常";
             break;
         }
         message.error(content, undefined, callback);
