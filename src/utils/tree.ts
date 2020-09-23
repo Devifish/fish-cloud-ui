@@ -26,6 +26,8 @@ export function toList(tree: Array<any>, children = "children") {
 export function removeEmptyChildren(tree: Array<any>, children = "children") {
   for (let item of tree) {
     const childrenData = item[children];
+    if (!(childrenData instanceof Array)) continue;
+
     if (childrenData.length > 0) {
       item.children = removeEmptyChildren(childrenData);
     } else {
