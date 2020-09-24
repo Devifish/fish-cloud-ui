@@ -20,7 +20,7 @@
     </template>
 
     <template v-slot:extra>
-      <a-button type="primary">
+      <a-button type="primary" @click="$router.push('/user/role/add')">
         <template v-slot:icon>
           <plus-outlined />
         </template>
@@ -48,13 +48,13 @@
       <a-table-column title="操作" width="200px" fixed="right">
         <template v-slot="{ record }">
           <span>
-            <a href="javascript:void(0);">
+            <action-link :to="`/user/role/edit/${record.id}`">
               编辑
-            </a>
+            </action-link>
             <a-divider type="vertical" />
-            <a href="javascript:void(0);" @click="deleteHandle(record)">
+            <action-link @click="deleteHandle(record)">
               删除
-            </a>
+            </action-link>
           </span>
         </template>
       </a-table-column>
@@ -67,6 +67,7 @@ import { defineComponent, reactive } from "vue";
 import { useListTable } from "@/utils/use";
 import RoleApi from "@/api/role";
 import ListTableContainer from "@/components/ListTableContainer.vue";
+import ActionLink from "@/components/ActionLink.vue";
 import { PlusOutlined } from "@ant-design/icons-vue";
 import { Modal } from "ant-design-vue";
 
@@ -74,6 +75,7 @@ export default defineComponent({
   name: "UserList",
   components: {
     ListTableContainer,
+    ActionLink,
     PlusOutlined
   },
   setup() {

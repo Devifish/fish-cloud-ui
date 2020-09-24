@@ -12,11 +12,29 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: "/user/add",
-    name: "AddUser",
+    name: "UserAdd",
     component: () =>
       import(
         /* webpackChunkName: "user" */
-        "@/views/user/user/AddUser.vue"
+        "@/views/user/user/Edit.vue"
+      )
+  },
+  {
+    path: "/user/edit/:id",
+    name: "UserEdit",
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */
+        "@/views/user/user/Edit.vue"
+      )
+  },
+  {
+    path: "/user/info/:id",
+    name: "UserInfo",
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */
+        "@/views/user/user/Info.vue"
       )
   }
 ];

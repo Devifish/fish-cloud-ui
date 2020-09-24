@@ -61,15 +61,13 @@
       <!-- 内容部分 -->
       <a-layout-content class="main-content">
         <!-- 菜单面包屑 -->
-        <a-breadcrumb class="main-content-breadcrumb">
+        <a-breadcrumb class="main-content-breadcrumb" v-if="breadcrumbs?.length > 0">
           <a-breadcrumb-item href="/">
             <home-outlined />
           </a-breadcrumb-item>
-          <template v-if="breadcrumbs?.length > 0">
-            <a-breadcrumb-item v-for="item of breadcrumbs" :key="item">
-              {{ item }}
-            </a-breadcrumb-item>
-          </template>
+          <a-breadcrumb-item v-for="item of breadcrumbs" :key="item">
+            {{ item }}
+          </a-breadcrumb-item>
         </a-breadcrumb>
 
         <router-view />
@@ -85,7 +83,7 @@
 import { defineComponent, reactive, ref, computed, watch, toRefs } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
-import CommonFooter from "@/components/common/CommonFooter.vue";
+import CommonFooter from "@/components/CommonFooter.vue";
 import SidebarMenu from "@/components/SidebarMenu.vue";
 import AvatarDropdown from "@/components/AvatarDropdown.vue";
 import { LOGIN_PAGE_NAME } from "@/router/auth";

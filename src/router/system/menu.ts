@@ -9,6 +9,24 @@ const routes: Array<RouteRecordRaw> = [
         /* webpackChunkName: "system" */
         "@/views/system/menu/Index.vue"
       )
+  },
+  {
+    path: "/system/menu/add",
+    name: "UserAdd",
+    component: () =>
+      import(
+        /* webpackChunkName: "system" */
+        "@/views/system/menu/Edit.vue"
+      )
+  },
+  {
+    path: "/system/menu/edit/:id",
+    name: "UserEdit",
+    component: () =>
+      import(
+        /* webpackChunkName: "system" */
+        "@/views/system/menu/Edit.vue"
+      )
   }
 ];
 

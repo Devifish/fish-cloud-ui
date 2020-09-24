@@ -12,11 +12,20 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: "/user/role/add",
-    name: "AddRole",
+    name: "RoleAdd",
     component: () =>
       import(
         /* webpackChunkName: "user" */
-        "@/views/user/role/AddRole.vue"
+        "@/views/user/role/Edit.vue"
+      )
+  },
+  {
+    path: "/user/role/edit/:id",
+    name: "RoleEdit",
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */
+        "@/views/user/role/Edit.vue"
       )
   }
 ];
