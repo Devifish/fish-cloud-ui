@@ -13,8 +13,8 @@
         {{ data?.realname ?? "未设置" }}
       </a-descriptions-item>
       <a-descriptions-item label="性别">
-        <span v-if="text == 1">男</span>
-        <span v-else-if="text == 2">女</span>
+        <span v-if="data?.sex == 1">男</span>
+        <span v-else-if="data?.sex == 2">女</span>
         <span v-else>未设置</span>
       </a-descriptions-item>
       <a-descriptions-item label="生日">

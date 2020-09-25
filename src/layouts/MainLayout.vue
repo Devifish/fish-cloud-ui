@@ -72,9 +72,6 @@
 
         <router-view />
       </a-layout-content>
-
-      <!-- 尾部 -->
-      <common-footer />
     </a-layout>
   </a-layout>
 </template>
@@ -83,7 +80,6 @@
 import { defineComponent, reactive, ref, computed, watch, toRefs } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
-import CommonFooter from "@/components/CommonFooter.vue";
 import SidebarMenu from "@/components/SidebarMenu.vue";
 import AvatarDropdown from "@/components/AvatarDropdown.vue";
 import { LOGIN_PAGE_NAME } from "@/router/auth";
@@ -98,7 +94,6 @@ import {
 export default defineComponent({
   name: "MainLayout",
   components: {
-    CommonFooter,
     SidebarMenu,
     AvatarDropdown,
     MenuOutlined,
