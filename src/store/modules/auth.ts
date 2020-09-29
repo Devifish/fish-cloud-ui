@@ -1,10 +1,12 @@
 import { Module } from "vuex";
-import Cookies from "js-cookie";
+import Cookies from "@/library/cookie";
 import AuthApi from "@/api/auth";
 import UserApi from "@/api/user";
 
+type AuthStoreToken = OAuth2Token | null;
+
 interface AuthStoreState {
-  token: OAuth2Token | null;
+  token: AuthStoreToken;
   user: any;
 }
 
@@ -42,7 +44,7 @@ const TOKEN_STORAGE = OAuth2Token.TOKEN_HEADER;
 const authModule: Module<AuthStoreState, any> = {
   namespaced: true,
   state() {
-    let token = null;
+    let token: AuthStoreToken = null;
 
     // 如果存在Token则注入
     const tokenValue = Cookies.get(TOKEN_STORAGE);
