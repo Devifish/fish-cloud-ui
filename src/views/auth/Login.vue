@@ -215,7 +215,7 @@ export default defineComponent({
         message.success("登录成功");
         state.isLoginError = false;
         store.commit("auth/saveToken", {
-          token: tokenData,
+          tokenData,
           expire: form.autoLogin
         });
 
