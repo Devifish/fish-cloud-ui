@@ -10,6 +10,11 @@ interface AuthStoreState {
   user: any;
 }
 
+interface SaveTokenData {
+  tokenData: any;
+  expire: boolean;
+}
+
 export class OAuth2Token {
   static readonly TOKEN_HEADER = "Authorization";
 
@@ -63,13 +68,18 @@ const authModule: Module<AuthStoreState, any> = {
     }
   },
   mutations: {
-    saveToken(state, data) {
-      const { access_token, token_type, expires_in } = data;
+    saveToken(state, data: SaveTokenData) {
+      const { access_token, token_type, expires_in } = data.tokenData;
       const token = new OAuth2Token(access_token, token_type);
       const tokenValue = token.tokenData().value;
 
-      Cookies.set(TOKEN_STORAGE, tokenValue);
       state.token = token;
+      if (data.expire) {
+        const expires = new Date(Date.now() + expires_in * 1000);
+        Cookies.set(TOKEN_STORAGE, tokenValue, { expires });
+      } else {
+        Cookies.set(TOKEN_STORAGE, tokenValue);
+      }
     },
     removeToken(state) {
       state.token = null;

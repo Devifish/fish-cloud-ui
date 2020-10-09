@@ -214,7 +214,10 @@ export default defineComponent({
         // 登录成功
         message.success("登录成功");
         state.isLoginError = false;
-        store.commit("auth/saveToken", tokenData);
+        store.commit("auth/saveToken", {
+          token: tokenData,
+          expire: form.autoLogin
+        });
 
         // 登录成功重定向
         const redirectUri = route.query.redirect_uri as string;

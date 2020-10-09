@@ -14,7 +14,7 @@ const menuModule: Module<MenuStoreState, any> = {
     let menuTree = [];
 
     // 如果存在菜单数据则加载
-    const mentTreeData = sessionStorage.getItem(MENU_TREE_STORAGE);
+    const mentTreeData = localStorage.getItem(MENU_TREE_STORAGE);
     if (mentTreeData) {
       menuTree = JSON.parse(mentTreeData);
     }
@@ -62,7 +62,7 @@ const menuModule: Module<MenuStoreState, any> = {
     saveMenuTree(state, data) {
       state.menuTree = data;
 
-      sessionStorage.setItem(MENU_TREE_STORAGE, JSON.stringify(data));
+      localStorage.setItem(MENU_TREE_STORAGE, JSON.stringify(data));
     }
   },
   actions: {
