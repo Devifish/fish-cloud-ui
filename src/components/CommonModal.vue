@@ -8,7 +8,7 @@
     :confirmLoading="state.confirmLoading"
     @ok="onOk"
   >
-    <slot :data="data" :onOk="onOk" />
+    <slot :data="state.data" :onOk="onOk" />
   </a-modal>
 </template>
 
@@ -28,14 +28,13 @@ export default defineComponent({
   setup() {
     const state = reactive({
       visible: false,
-      confirmLoading: false
+      confirmLoading: false,
+      data: undefined
     });
 
-    const data = ref();
-
-    function open(value) {
+    function open(data) {
       state.visible = true;
-      data.value = value;
+      state.data = data;
     }
 
     function close() {
@@ -43,16 +42,17 @@ export default defineComponent({
     }
 
     async function onOk(callback: () => Promise<void>) {
-      if (typeof callback !== "function") return;
+      if (typeof callback === "function") {
+        state.confirmLoading = true;
+        const value = await callback();
+        state.confirmLoading = false;
+      }
 
-      state.confirmLoading = true;
-      await callback();
-      state.confirmLoading = false;
+      state.visible = false;
     }
 
     return {
       state,
-      data,
       open,
       close,
       onOk
