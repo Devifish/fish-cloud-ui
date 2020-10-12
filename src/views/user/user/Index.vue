@@ -61,11 +61,11 @@
       <a-table-column title="操作" width="200px" fixed="right">
         <template v-slot="{ record }">
           <span>
-            <action-link @click="userInfoHandle(record.id)">
+            <action-link @click="$refs.userInfoModel.open(record.id)">
               详情
             </action-link>
             <a-divider type="vertical" />
-            <action-link :to="`/user/edit/${record.id}`">
+            <action-link @click="$refs.userEditModel.open(record.id)">
               编辑
             </action-link>
             <a-divider type="vertical" />
@@ -78,24 +78,17 @@
     </a-table>
   </list-table-container>
 
-  <a-modal
-    title="用户详情"
-    v-model:visible="state.showUserInfo"
-    :width="1000"
-    :footer="null"
-    :destroyOnClose="true"
-  >
-    <user-info :id="state.id" />
-  </a-modal>
+  <common-modal title="用户详情" :footer="null" ref="userInfoModel">
+    <template v-slot:default="{ data }">
+      <user-info :id="data" />
+    </template>
+  </common-modal>
 
-  <a-modal
-    title="添加/编辑用户"
-    v-model:visible="state.showUserEdit"
-    :width="1000"
-    :destroyOnClose="true"
-  >
-    <user-edit :id="state.id" />
-  </a-modal>
+  <common-modal title="添加/编辑用户" ref="userEditModel">
+    <template v-slot:default="{ data, onOk }">
+      <user-edit :id="data" :onOk="onOk" />
+    </template>
+  </common-modal>
 </template>
 
 <script lang="ts">
@@ -106,6 +99,7 @@ import ListTableContainer from "@/components/ListTableContainer.vue";
 import ActionLink from "@/components/ActionLink.vue";
 import { Modal } from "ant-design-vue";
 import { PlusOutlined } from "@ant-design/icons-vue";
+import CommonModal from "@/components/CommonModal.vue";
 import UserInfo from "./UserInfo.vue";
 import UserEdit from "./UserEdit.vue";
 
@@ -115,28 +109,18 @@ export default defineComponent({
     ListTableContainer,
     ActionLink,
     PlusOutlined,
+    CommonModal,
     UserInfo,
     UserEdit
   },
   setup() {
     const { tableProps, load, reset, onLoadData } = useListTable();
 
-    const state = reactive({
-      id: null,
-      showUserInfo: false,
-      showUserEdit: false
-    });
-
     // 请求参数
     const search = reactive({
       username: "",
       telephone: ""
     });
-
-    function userInfoHandle(id) {
-      state.showUserInfo = true;
-      state.id = id;
-    }
 
     function searchHandle() {
       reset();
@@ -166,10 +150,8 @@ export default defineComponent({
     });
 
     return {
-      state,
       tableProps,
       search,
-      userInfoHandle,
       tableChangeHandle,
       searchHandle,
       deleteHandle
