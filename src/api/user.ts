@@ -26,7 +26,7 @@ export default {
    *
    * @param userId 用户ID
    */
-  selectById(userId: string) {
+  selectById(userId: any) {
     return Axios.get(`${BASE_URL}/select/id/${userId}`);
   },
 
