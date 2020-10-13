@@ -2,11 +2,12 @@
   <a-modal
     v-model:visible="state.visible"
     :title="title"
-    :width="1000"
+    :width="width"
     :footer="footer"
     :destroyOnClose="true"
+    :okText="okText"
     :confirmLoading="state.confirmLoading"
-    @ok="onOk"
+    @ok="clickOkHandle"
   >
     <slot :data="state.data" :onOk="onOk" />
   </a-modal>
@@ -22,14 +23,16 @@ export default defineComponent({
     footer: Object,
     width: {
       type: Number,
-      defaule: 1000
-    }
+      default: 900
+    },
+    okText: String
   },
   setup() {
     const state = reactive({
       visible: false,
       confirmLoading: false,
-      data: undefined
+      data: undefined,
+      onOk: async () => {}
     });
 
     function open(data) {
@@ -41,10 +44,14 @@ export default defineComponent({
       state.visible = false;
     }
 
-    async function onOk(callback: () => Promise<void>) {
-      if (typeof callback === "function") {
+    function onOk(callback: () => Promise<void>) {
+      state.onOk = callback;
+    }
+
+    async function clickOkHandle() {
+      if (typeof state.onOk === "function") {
         state.confirmLoading = true;
-        const value = await callback();
+        const value = await state.onOk();
         state.confirmLoading = false;
       }
 
@@ -55,7 +62,8 @@ export default defineComponent({
       state,
       open,
       close,
-      onOk
+      onOk,
+      clickOkHandle
     };
   }
 });

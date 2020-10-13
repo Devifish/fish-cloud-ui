@@ -20,7 +20,7 @@
     </template>
 
     <template v-slot:extra>
-      <a-button type="primary" @click="$router.push('/user/add')">
+      <a-button type="primary" @click="$refs.userEditModel.open()">
         <template v-slot:icon>
           <plus-outlined />
         </template>
@@ -84,7 +84,7 @@
     </template>
   </common-modal>
 
-  <common-modal title="添加/编辑用户" ref="userEditModel">
+  <common-modal title="添加/编辑用户" okText="保存" ref="userEditModel">
     <template v-slot:default="{ data, onOk }">
       <user-edit :id="data" :onOk="onOk" />
     </template>
