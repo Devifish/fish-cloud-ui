@@ -30,6 +30,10 @@
         <menu-outlined class="menu-item menu-icon" @click="collapsed = !collapsed" />
 
         <div class="right-content" v-if="user">
+          <span class="search-input">
+            <search-input size="large" />
+          </span>
+
           <avatar-dropdown
             class="menu-item"
             :avatar="user.avatar"
@@ -82,6 +86,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import SidebarMenu from "@/components/SidebarMenu.vue";
 import AvatarDropdown from "@/components/AvatarDropdown.vue";
+import SearchInput from "@/components/SearchInput.vue";
 import { LOGIN_PAGE_NAME } from "@/router/auth";
 import {
   MenuOutlined,
@@ -96,6 +101,7 @@ export default defineComponent({
   components: {
     SidebarMenu,
     AvatarDropdown,
+    SearchInput,
     MenuOutlined,
     HomeOutlined,
     UserOutlined,
@@ -250,6 +256,13 @@ export default defineComponent({
         float: left;
         height: 100%;
         padding: 0 8px;
+      }
+    }
+
+    .search-input {
+      input {
+        border: 0;
+        box-shadow: none;
       }
     }
   }
