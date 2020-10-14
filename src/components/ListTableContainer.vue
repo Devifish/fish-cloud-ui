@@ -7,10 +7,8 @@
     <a-card>
       <template v-slot:title>
         <span>{{ title }}</span>
-        <span class="reload" @click="reloadHandle">
-          <a-tooltip title="刷新">
-            <reload-outlined />
-          </a-tooltip>
+        <span class="reload" v-if="$attrs.onReload" @click="reloadHandle">
+          <reload-outlined />
         </span>
       </template>
       <template v-if="$slots.extra" v-slot:extra>
