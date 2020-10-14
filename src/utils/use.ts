@@ -35,6 +35,16 @@ export function useListTable() {
     state.page = PageData.of(data);
   }
 
+  function reload() {
+    reset();
+    load();
+  }
+
+  function tableChangeHandle(pagination: any) {
+    const { current, pageSize } = pagination;
+    load(current, pageSize);
+  }
+
   function reset() {
     state.loading = false;
     state.page.reset();
@@ -44,8 +54,12 @@ export function useListTable() {
   return {
     tableState: state,
     tableProps,
+    tableEvent: {
+      change: tableChangeHandle
+    },
     onLoadData,
     load,
+    reload,
     reset
   };
 }

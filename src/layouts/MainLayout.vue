@@ -32,7 +32,9 @@
         <div class="right-content" v-if="user">
           <!-- 搜索栏 -->
           <span class="search-input">
-            <search-input size="large" />
+            <a-auto-complete size="large" placeholder="请输入搜索内容">
+              <a-input-search />
+            </a-auto-complete>
           </span>
 
           <!-- 用户头像 -->
@@ -89,7 +91,6 @@ import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import SidebarMenu from "@/components/SidebarMenu.vue";
 import AvatarDropdown from "@/components/AvatarDropdown.vue";
-import SearchInput from "@/components/SearchInput.vue";
 import { LOGIN_PAGE_NAME } from "@/router/auth";
 import {
   MenuOutlined,
@@ -104,7 +105,6 @@ export default defineComponent({
   components: {
     SidebarMenu,
     AvatarDropdown,
-    SearchInput,
     MenuOutlined,
     HomeOutlined,
     UserOutlined,

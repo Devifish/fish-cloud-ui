@@ -1,7 +1,7 @@
 <template>
-  <list-table-container title="角色列表">
+  <list-table-container title="角色列表" @reload="reload">
     <template v-slot:search>
-      <a-form layout="inline" :model="search" @submit="searchHandle">
+      <a-form layout="inline" :model="search" @submit="reload">
         <a-form-item label="角色名称">
           <a-input v-model:value="search.name" placeholder="请输入角色名称" />
         </a-form-item>
@@ -29,11 +29,11 @@
     </template>
 
     <a-table
-      row-key="id"
       v-bind="tableProps"
+      v-on="tableEvent"
+      row-key="id"
       :bordered="true"
       :scroll="{ x: 900 }"
-      @change="tableChangeHandle"
     >
       <a-table-column title="序号" align="center" width="5%">
         <template v-slot="{ index }">
@@ -48,8 +48,12 @@
       <a-table-column title="操作" width="200px" fixed="right">
         <template v-slot="{ record }">
           <span>
-            <action-link :to="`/user/role/edit/${record.id}`">
+            <action-link>
               编辑
+            </action-link>
+            <a-divider type="vertical" />
+            <action-link>
+              权限
             </action-link>
             <a-divider type="vertical" />
             <action-link @click="deleteHandle(record)">
@@ -79,7 +83,7 @@ export default defineComponent({
     PlusOutlined
   },
   setup() {
-    const { tableProps, load, reset, onLoadData } = useListTable();
+    const { tableProps, tableEvent, load, reload, reset, onLoadData } = useListTable();
 
     // 请求参数
     const search = reactive({
@@ -87,11 +91,6 @@ export default defineComponent({
       code: "",
       authority: ""
     });
-
-    function searchHandle() {
-      reset();
-      load();
-    }
 
     function deleteHandle(data: any) {
       Modal.confirm({
@@ -104,11 +103,6 @@ export default defineComponent({
       });
     }
 
-    function tableChangeHandle(pagination: any) {
-      const { current, pageSize } = pagination;
-      load(current, pageSize);
-    }
-
     // 加载数据
     onLoadData(async page => {
       const { data } = await RoleApi.selectPage(page, search);
@@ -117,9 +111,9 @@ export default defineComponent({
 
     return {
       tableProps,
-      tableChangeHandle,
+      tableEvent,
       search,
-      searchHandle,
+      reload,
       deleteHandle
     };
   }

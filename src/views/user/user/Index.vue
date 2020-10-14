@@ -1,7 +1,7 @@
 <template>
-  <list-table-container title="用户列表">
+  <list-table-container title="用户列表" @reload="reload">
     <template v-slot:search>
-      <a-form layout="inline" :model="search" @submit="searchHandle" ref="searchForm">
+      <a-form layout="inline" :model="search" @submit="reload" ref="searchForm">
         <a-form-item label="用户名">
           <a-input v-model:value="search.username" placeholder="请输入用户名" />
         </a-form-item>
@@ -29,8 +29,9 @@
     </template>
 
     <a-table
-      row-key="id"
       v-bind="tableProps"
+      v-on="tableEvent"
+      row-key="id"
       :bordered="true"
       :scroll="{ x: 1300 }"
       @change="tableChangeHandle"
@@ -114,18 +115,13 @@ export default defineComponent({
     UserEdit
   },
   setup() {
-    const { tableProps, load, reset, onLoadData } = useListTable();
+    const { tableProps, tableEvent, load, reload, reset, onLoadData } = useListTable();
 
     // 请求参数
     const search = reactive({
       username: "",
       telephone: ""
     });
-
-    function searchHandle() {
-      reset();
-      load();
-    }
 
     function deleteHandle(data) {
       Modal.confirm({
@@ -138,11 +134,6 @@ export default defineComponent({
       });
     }
 
-    function tableChangeHandle(pagination) {
-      const { current, pageSize } = pagination;
-      load(current, pageSize);
-    }
-
     // 加载数据
     onLoadData(async page => {
       const { data } = await UserApi.selectPage(page, search);
@@ -151,9 +142,9 @@ export default defineComponent({
 
     return {
       tableProps,
+      tableEvent,
       search,
-      tableChangeHandle,
-      searchHandle,
+      reload,
       deleteHandle
     };
   }

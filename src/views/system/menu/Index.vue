@@ -1,5 +1,5 @@
 <template>
-  <list-table-container title="菜单列表">
+  <list-table-container title="菜单列表" @reload="reload">
     <template v-slot:extra>
       <a-button type="primary" @click="$router.push('/system/menu/add')">
         <template v-slot:icon>
@@ -67,7 +67,7 @@ export default defineComponent({
     PlusOutlined
   },
   setup() {
-    const { tableProps, load, onLoadData } = useListTable();
+    const { tableProps, load, reload, onLoadData } = useListTable();
 
     async function changeMenuState(data: any) {
       await MenuApi.update(data.id, { ...data, enable: !data.enable });
@@ -93,6 +93,7 @@ export default defineComponent({
 
     return {
       tableProps,
+      reload,
       changeMenuState,
       deleteHandle
     };
