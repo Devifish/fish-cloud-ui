@@ -31,6 +31,15 @@ export default {
   },
 
   /**
+   * 根据用户ID查询用户详情
+   *
+   * @param userId 用户ID
+   */
+  selectDetailById(userId: any) {
+    return Axios.get(`${BASE_URL}/select/detail/id/${userId}`);
+  },
+
+  /**
    * 分页查询用户数据
    *
    * @param page 分页参数

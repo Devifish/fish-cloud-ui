@@ -10,6 +10,19 @@
     <a-descriptions-item label="真实姓名">
       {{ data?.realname ?? "未设置" }}
     </a-descriptions-item>
+    <a-descriptions-item label="部门">
+      未设置
+    </a-descriptions-item>
+    <a-descriptions-item label="角色">
+      <template v-if="data?.roles.length > 0">
+        <a-tag v-for="item of data?.roles" :key="item.id">
+          {{ item.name }}
+        </a-tag>
+      </template>
+      <template v-else>
+        未设置
+      </template>
+    </a-descriptions-item>
     <a-descriptions-item label="性别">
       <span v-if="data?.sex == 1">男</span>
       <span v-else-if="data?.sex == 2">女</span>
@@ -26,6 +39,15 @@
     </a-descriptions-item>
     <a-descriptions-item label="电子邮箱">
       {{ data?.email ?? "未设置" }}
+    </a-descriptions-item>
+  </a-descriptions>
+  <a-divider />
+  <a-descriptions title="其他信息" :column="3">
+    <a-descriptions-item label="是否锁定">
+      <a-switch :checked="data?.locked" disabled />
+    </a-descriptions-item>
+    <a-descriptions-item label="是否禁用">
+      <a-switch :checked="data?.enabled" disabled />
     </a-descriptions-item>
   </a-descriptions>
 </template>
@@ -45,7 +67,7 @@ export default defineComponent({
     async function onLoadData() {
       if (!props.id) return;
 
-      const { data: temp } = await UserApi.selectById(props.id);
+      const { data: temp } = await UserApi.selectDetailById(props.id);
       data.value = temp;
     }
 
