@@ -83,10 +83,6 @@ axios.interceptors.response.use(
         // 处理各种状态下的消息
         let content: string;
         switch (status) {
-          case 400:
-          case 412:
-            content = data.message;
-            break;
           case 401:
             content = "登录已过期，请重新登录";
             Store.dispatch("auth/logout");
