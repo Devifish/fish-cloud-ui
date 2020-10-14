@@ -89,6 +89,7 @@ axios.interceptors.response.use(
             break;
           case 401:
             content = "登录已过期，请重新登录";
+            Store.dispatch("auth/logout");
             break;
           case 403:
             content = "您没有权限，无法访问";

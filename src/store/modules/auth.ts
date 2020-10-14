@@ -2,6 +2,8 @@ import { Module } from "vuex";
 import Cookies from "@/library/cookie";
 import AuthApi from "@/api/auth";
 import UserApi from "@/api/user";
+import Router from "@/router";
+import { LOGIN_PAGE_NAME } from "@/router/auth";
 
 type AuthStoreToken = OAuth2Token | null;
 
@@ -98,6 +100,9 @@ const authModule: Module<AuthStoreState, any> = {
         await AuthApi.logout(tokenData.value);
       } finally {
         commit("removeToken");
+
+        // 完成注销后返回登录页
+        Router.push({ name: LOGIN_PAGE_NAME });
       }
     },
     async currentUser({ commit }) {

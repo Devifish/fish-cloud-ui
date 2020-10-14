@@ -30,10 +30,12 @@
         <menu-outlined class="menu-item menu-icon" @click="collapsed = !collapsed" />
 
         <div class="right-content" v-if="user">
+          <!-- 搜索栏 -->
           <span class="search-input">
             <search-input size="large" />
           </span>
 
+          <!-- 用户头像 -->
           <avatar-dropdown
             class="menu-item"
             :avatar="user.avatar"
@@ -49,14 +51,15 @@
                 修改密码
               </a-menu-item>
               <a-menu-divider />
-              <a-menu-item @click="userLogout">
+              <a-menu-item @click="$store.dispatch('auth/logout')">
                 <logout-outlined />
                 退出登录
               </a-menu-item>
             </a-menu>
           </avatar-dropdown>
 
-          <span class="menu-item menu-icon" @click="userLogout">
+          <!-- 注销按钮 -->
+          <span class="menu-item menu-icon" @click="$store.dispatch('auth/logout')">
             <logout-outlined />
           </span>
         </div>
@@ -182,24 +185,13 @@ export default defineComponent({
       }
     }
 
-    /**
-     * 用户注销
-     */
-    async function userLogout() {
-      await store.dispatch("auth/logout");
-
-      // 完成注销后返回登录页
-      router.push({ name: LOGIN_PAGE_NAME });
-    }
-
     // 加载数据
     store.dispatch("auth/currentUser");
     store.dispatch("menu/loadMenu");
 
     return {
       ...toRefs(state),
-      menuClickHandle,
-      userLogout
+      menuClickHandle
     };
   }
 });
