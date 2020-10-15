@@ -20,7 +20,7 @@
     </template>
 
     <template v-slot:extra>
-      <a-button type="primary" @click="$router.push('/user/role/add')">
+      <a-button type="primary" @click="$refs['roleEdit'].open()">
         <template v-slot:icon>
           <plus-outlined />
         </template>
@@ -48,11 +48,11 @@
       <a-table-column title="操作" width="200px" fixed="right">
         <template v-slot="{ record }">
           <span>
-            <action-link>
+            <action-link @click="$refs['roleEdit'].open(record.id)">
               编辑
             </action-link>
             <a-divider type="vertical" />
-            <action-link>
+            <action-link @click="$refs['changeAuthority'].open(record.id)">
               权限
             </action-link>
             <a-divider type="vertical" />
@@ -64,6 +64,18 @@
       </a-table-column>
     </a-table>
   </list-table-container>
+
+  <common-modal title="添加/修改角色" okText="保存" ref="roleEdit">
+    <template v-slot:default="{ data, onOk }">
+      <role-edit :id="data" :onOk="onOk" />
+    </template>
+  </common-modal>
+
+  <common-modal title="修改权限" okText="保存" :width="500" ref="changeAuthority">
+    <template v-slot:default="{ data, onOk }">
+      <change-authority :id="data" :onOk="onOk" />
+    </template>
+  </common-modal>
 </template>
 
 <script lang="ts">
@@ -74,12 +86,18 @@ import ListTableContainer from "@/components/ListTableContainer.vue";
 import ActionLink from "@/components/ActionLink.vue";
 import { PlusOutlined } from "@ant-design/icons-vue";
 import { Modal } from "ant-design-vue";
+import CommonModal from "@/components/CommonModal.vue";
+import RoleEdit from "./RoleEdit.vue";
+import ChangeAuthority from "./ChangeAuthority.vue";
 
 export default defineComponent({
   name: "UserList",
   components: {
     ListTableContainer,
     ActionLink,
+    CommonModal,
+    RoleEdit,
+    ChangeAuthority,
     PlusOutlined
   },
   setup() {
@@ -108,7 +126,7 @@ export default defineComponent({
     }
 
     return {
-      table,
+      ...table,
       search,
       deleteHandle
     };

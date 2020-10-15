@@ -62,11 +62,11 @@
       <a-table-column title="操作" width="200px" fixed="right">
         <template v-slot="{ record }">
           <span>
-            <action-link @click="$refs.userInfoModel.open(record.id)">
+            <action-link @click="$refs['userInfo'].open(record.id)">
               详情
             </action-link>
             <a-divider type="vertical" />
-            <action-link @click="$refs.userEditModel.open(record.id)">
+            <action-link @click="$refs['userEdit'].open(record.id)">
               编辑
             </action-link>
             <a-divider type="vertical" />
@@ -79,13 +79,13 @@
     </a-table>
   </list-table-container>
 
-  <common-modal title="用户详情" :footer="null" ref="userInfoModel">
+  <common-modal title="用户详情" :footer="null" ref="userInfo">
     <template v-slot:default="{ data }">
       <user-info :id="data" />
     </template>
   </common-modal>
 
-  <common-modal title="添加/编辑用户" okText="保存" ref="userEditModel">
+  <common-modal title="添加/编辑用户" okText="保存" ref="userEdit">
     <template v-slot:default="{ data, onOk }">
       <user-edit :id="data" :onOk="onOk" />
     </template>

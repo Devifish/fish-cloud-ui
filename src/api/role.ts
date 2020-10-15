@@ -9,7 +9,7 @@ export default {
    *
    * @param roleId 角色ID
    */
-  selectById(roleId: string) {
+  selectById(roleId: any) {
     return Axios.get(`${BASE_URL}/select/id/${roleId}`);
   },
 
@@ -26,6 +26,15 @@ export default {
         ...params
       }
     });
+  },
+
+  /**
+   * 根据用户ID查询单个信息
+   *
+   * @param userId 用户ID
+   */
+  selectByUserId(userId: string) {
+    return Axios.get(`${BASE_URL}/select/user-id/${userId}`);
   },
 
   /**
