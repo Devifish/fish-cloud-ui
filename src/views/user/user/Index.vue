@@ -115,12 +115,16 @@ export default defineComponent({
     UserEdit
   },
   setup() {
-    const { tableProps, tableEvent, load, reload, reset, onLoadData } = useListTable();
-
-    // 请求参数
+    const table = useListTable();
     const search = reactive({
       username: "",
       telephone: ""
+    });
+
+    // 加载数据
+    table.onLoadData(async page => {
+      const { data } = await UserApi.selectPage(page, search);
+      return data;
     });
 
     function deleteHandle(data) {
@@ -129,22 +133,14 @@ export default defineComponent({
         content: "确认要删除此用户吗？",
         async onOk() {
           await UserApi.delete(data.id);
-          load();
+          table.load();
         }
       });
     }
 
-    // 加载数据
-    onLoadData(async page => {
-      const { data } = await UserApi.selectPage(page, search);
-      return data;
-    });
-
     return {
-      tableProps,
-      tableEvent,
+      ...table,
       search,
-      reload,
       deleteHandle
     };
   }

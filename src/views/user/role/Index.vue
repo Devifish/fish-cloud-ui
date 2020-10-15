@@ -83,13 +83,17 @@ export default defineComponent({
     PlusOutlined
   },
   setup() {
-    const { tableProps, tableEvent, load, reload, reset, onLoadData } = useListTable();
-
-    // 请求参数
+    const table = useListTable();
     const search = reactive({
       name: "",
       code: "",
       authority: ""
+    });
+
+    // 加载数据
+    table.onLoadData(async page => {
+      const { data } = await RoleApi.selectPage(page, search);
+      return data;
     });
 
     function deleteHandle(data: any) {
@@ -98,22 +102,14 @@ export default defineComponent({
         content: "确认要删除此角色吗？",
         async onOk() {
           await RoleApi.delete(data.id);
-          load();
+          table.load();
         }
       });
     }
 
-    // 加载数据
-    onLoadData(async page => {
-      const { data } = await RoleApi.selectPage(page, search);
-      return data;
-    });
-
     return {
-      tableProps,
-      tableEvent,
+      table,
       search,
-      reload,
       deleteHandle
     };
   }

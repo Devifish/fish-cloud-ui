@@ -67,11 +67,17 @@ export default defineComponent({
     PlusOutlined
   },
   setup() {
-    const { tableProps, load, reload, onLoadData } = useListTable();
+    const table = useListTable();
+
+    // 加载数据
+    table.onLoadData(async () => {
+      const { data } = await MenuApi.selectMenuTree();
+      return removeEmptyChildren(data);
+    });
 
     async function changeMenuState(data: any) {
       await MenuApi.update(data.id, { ...data, enable: !data.enable });
-      load();
+      table.load();
     }
 
     function deleteHandle(data: any) {
@@ -80,20 +86,13 @@ export default defineComponent({
         content: "确认要删除此菜单吗？",
         async onOk() {
           await MenuApi.delete(data.id);
-          load();
+          table.load();
         }
       });
     }
 
-    // 加载数据
-    onLoadData(async () => {
-      const { data } = await MenuApi.selectMenuTree();
-      return removeEmptyChildren(data);
-    });
-
     return {
-      tableProps,
-      reload,
+      ...table,
       changeMenuState,
       deleteHandle
     };
