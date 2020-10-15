@@ -2,7 +2,6 @@ module.exports = {
   devServer: {
     port: 8080
   },
-  runtimeCompiler: true,
   productionSourceMap: false,
   css: {
     sourceMap: false,
