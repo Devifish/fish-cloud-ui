@@ -4,7 +4,8 @@
     <a-layout-sider
       v-model:collapsed="collapsed"
       breakpoint="lg"
-      collapsed-width="0"
+      :width="250"
+      :collapsed-width="0"
       :theme="theme"
       :trigger="null"
     >

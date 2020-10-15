@@ -1,13 +1,13 @@
 <template>
-  <a-sub-menu
-    v-if="data.children?.length > 0"
-    :key="data.id"
-    :title="data.name"
-    v-bind="menuProps"
-  >
+  <a-sub-menu v-if="data.children?.length > 0" :key="data.id" v-bind="menuProps">
+    <template v-slot:title>
+      <img class="menu-icon" v-if="data.icon" :src="data.icon" />
+      <span>{{ data.name }}</span>
+    </template>
     <sidebar-menu v-for="item of data.children" :data="item" :key="item.id" />
   </a-sub-menu>
   <a-menu-item v-else :key="data.id" v-bind="menuProps">
+    <img class="menu-icon" v-if="data.icon" :src="data.icon" />
     {{ data.name }}
   </a-menu-item>
 </template>
@@ -41,3 +41,11 @@ export default defineComponent({
   }
 });
 </script>
+
+<style lang="less" scoped>
+.menu-icon {
+  height: 16px;
+  width: 16px;
+  margin: -4px 10px 0 0;
+}
+</style>
