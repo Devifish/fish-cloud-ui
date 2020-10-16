@@ -5,19 +5,20 @@
       v-bind="tableProps"
       row-key="id"
       size="middle"
-      :row-selection="state"
+      :row-selection="rowSelection"
       :pagination="false"
       children-column-name="children"
       bordered
       defaultExpandAllRows
     >
-      <a-table-column data-index="name" title="菜单权限" width="40%" />
+      <a-table-column data-index="name" title="菜单权限" width="35%" />
       <a-table-column title="功能权限">
         <template v-slot="{ record }">
           <template v-if="!isEmpty(getButtons(record.id))">
             <a-checkbox
               v-for="button of getButtons(record.id)"
               :key="button.id"
+              v-model:checked="state.selection[button.id]"
               style="margin-left: 0"
             >
               {{ button.name }}
@@ -35,7 +36,7 @@ import { defineComponent, reactive, ref, computed, onMounted } from "vue";
 import { Tree } from "ant-design-vue";
 import MenuApi from "@/api/menu";
 import RoleApi from "@/api/role";
-import { map, filter, toMap } from "@/utils/tree";
+import { map, filter, toList, toMap } from "@/utils/tree";
 import { useListTable } from "@/utils/use";
 import { isEmpty, deepClone } from "@/utils/common";
 import { message } from "ant-design-vue";
@@ -59,14 +60,29 @@ export default defineComponent({
     const table = useListTable();
     const state = reactive({
       treeData: [] as Array<any>,
-      selection: []
+      selection: {}
+    });
+
+    const rowSelection = reactive({
+      selectedRowKeys: computed(() => {
+        const ids = Object.keys(state.selection);
+        return ids.filter(id => state.selection[id]).map(key => Number.parseInt(key));
+      }),
+      getCheckboxProps(record: any) {
+        return {
+          disabled: isEmpty(record.permission),
+          name: record.name
+        };
+      },
+      onChange(selectedRowKeys, selectedRows) {
+        console.log(selectedRowKeys);
+      }
     });
 
     // 计算菜单相关数据
-    const menuMap = computed(() => toMap(state.treeData, item => item.id));
     const buttonList = computed(() => {
-      const menus = Object.values(menuMap.value);
-      return menus.filter(item => item.type === MenuType.Button);
+      const menuList = toList(state.treeData);
+      return menuList.filter(item => item.type === MenuType.Button);
     });
 
     table.onLoadData(async () => {
@@ -76,16 +92,25 @@ export default defineComponent({
       // 加载数据
       const { data: treeData } = await MenuApi.selectMenuTree();
       const { data: role } = await RoleApi.selectById(id);
-      const authorities: Array<string> = role.authorities ?? [];
+      const authorities = role.authorities ?? [];
+      const permissionMap = toMap(treeData, item => item.permission);
 
       // 拼装参数
       state.treeData = deepClone(treeData);
+      state.selection = authorities
+        .map(item => permissionMap[item])
+        .reduce((obj, item) => {
+          obj[item.id] = true;
+          return obj;
+        }, {});
+
       return filter(treeData, item => item.type === MenuType.Menu);
     });
 
     async function changeAuthorityHandle() {
       const { id } = props;
-      const authorities = state.selection
+      const menuMap = toMap(state.treeData, item => item.id);
+      const authorities = rowSelection.selectedRowKeys
         .map(key => menuMap.value[key].permission)
         .filter(item => !isEmpty(item));
 
@@ -102,6 +127,7 @@ export default defineComponent({
     return {
       ...table,
       state,
+      rowSelection,
       isEmpty,
       getButtons
     };
