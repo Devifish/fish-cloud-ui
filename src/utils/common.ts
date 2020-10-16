@@ -6,9 +6,15 @@ import Antd from "ant-design-vue";
  * @param obj 对象
  */
 export function isEmpty(obj: any): boolean {
-  if (obj) return false;
-  else if (typeof obj === "string" && obj.length > 0) return false;
-  else if (obj instanceof Array && obj.length > 0) return false;
-  else if (obj instanceof Set && obj.size > 0) return false;
-  else return true;
+  if (typeof obj === "string") {
+    return obj.length === 0;
+  } else if (obj instanceof Array) {
+    return obj.length === 0;
+  } else if (obj instanceof Set) {
+    return obj.size === 0;
+  } else if (obj) {
+    return false;
+  } else {
+    return true;
+  }
 }

@@ -38,6 +38,17 @@ export default {
   },
 
   /**
+   * 根据角色ID更新角色权限
+   *
+   * @param roleId      角色ID
+   * @param authorities 权限集合
+   * @return 是否成功
+   */
+  updateAuthoritiesByRoleId(roleId: any, authorities: Array<string>) {
+    return Axios.put(`${BASE_URL}/update/authorities/id/${roleId}`, authorities);
+  },
+
+  /**
    * 根据角色ID删除角色
    *
    * @param roleId 角色ID

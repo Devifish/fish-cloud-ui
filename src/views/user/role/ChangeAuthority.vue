@@ -1,7 +1,7 @@
 <template>
   <a-spin :spinning="state.loading">
     <a-tree
-      v-if="state.treeData.length > 0"
+      v-if="!isEmpty(state.treeData)"
       v-model:checkedKeys="state.checkedKeys"
       :treeData="state.treeData"
       :replaceFields="{ title: 'name', key: 'id' }"
@@ -19,6 +19,7 @@ import MenuApi from "@/api/menu";
 import RoleApi from "@/api/role";
 import { map, toMap } from "@/utils/tree";
 import { isEmpty } from "@/utils/common";
+import { message } from "ant-design-vue";
 
 export default defineComponent({
   name: "ChangeAuthority",
@@ -59,20 +60,22 @@ export default defineComponent({
     }
 
     async function changeAuthorityHandle() {
+      const { id } = props;
       const menuMap = toMap(state.treeData, item => item.id);
       const checkedKeys = [...state.checkedKeys.checked, ...state.checkedKeys.halfChecked];
-      const permission = checkedKeys
+      const authorities = checkedKeys
         .map(key => menuMap[key].permission)
         .filter(item => typeof item === "string");
 
-      console.log(state.checkedKeys);
-      console.log(permission);
+      await RoleApi.updateAuthoritiesByRoleId(id, authorities);
+      message.success("修改成功")
     }
 
     onOk(changeAuthorityHandle);
     onMounted(onLoadData);
     return {
-      state
+      state,
+      isEmpty
     };
   }
 });
