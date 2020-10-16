@@ -37,7 +37,18 @@ export function toMap<E extends keyof any>(
   }, {});
 }
 
-export function map<E extends any>(tree: Array<any>, callback: (value: any) => E, children = "children"): Array<E> {
+/**
+ * 树结构数据的Map实现
+ *
+ * @param tree Tree
+ * @param callback Callback
+ * @param children 子节点字段
+ */
+export function map<E extends any>(
+  tree: Array<any>,
+  callback: (value: any) => E,
+  children = "children"
+): Array<E> {
   return tree.map(item => {
     const childrenData = item[children];
     if (childrenData?.length > 0) {

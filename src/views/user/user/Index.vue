@@ -34,7 +34,6 @@
       row-key="id"
       :bordered="true"
       :scroll="{ x: 1300 }"
-      @change="tableChangeHandle"
     >
       <a-table-column title="序号" align="center" width="5%">
         <template v-slot="{ index }">

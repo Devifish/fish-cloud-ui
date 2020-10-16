@@ -6,6 +6,7 @@
       :treeData="state.treeData"
       :replaceFields="{ title: 'name', key: 'id' }"
       checkable
+      checkStrictly
       default-expand-all
     />
   </a-spin>
@@ -17,6 +18,7 @@ import { Tree } from "ant-design-vue";
 import MenuApi from "@/api/menu";
 import RoleApi from "@/api/role";
 import { map, toMap } from "@/utils/tree";
+import { isEmpty } from "@/utils/common";
 
 export default defineComponent({
   name: "ChangeAuthority",
@@ -32,7 +34,10 @@ export default defineComponent({
     const state = reactive({
       loading: false,
       treeData: [] as Array<any>,
-      checkedKeys: [] as Array<any>
+      checkedKeys: {
+        checked: [],
+        halfChecked: []
+      }
     });
 
     async function onLoadData() {
@@ -42,20 +47,21 @@ export default defineComponent({
       // 加载数据
       state.loading = true;
       const { data: treeData } = await MenuApi.selectMenuTree();
-      const { data: userRoles } = await RoleApi.selectById(id);
+      const { data: role } = await RoleApi.selectById(id);
+      const authorities: Array<string> = role.authorities ?? [];
 
-      state.treeData = map(treeData, item => {
-        return {
-          ...item,
-          disabled: item.permission ? false : true
-        };
-      });
+      // 拼装参数
+      state.treeData = map(treeData, item => ({
+        ...item,
+        disabled: isEmpty(item.permission)
+      }));
       state.loading = false;
     }
 
     async function changeAuthorityHandle() {
       const menuMap = toMap(state.treeData, item => item.id);
-      const permission = state.checkedKeys
+      const checkedKeys = [...state.checkedKeys.checked, ...state.checkedKeys.halfChecked];
+      const permission = checkedKeys
         .map(key => menuMap[key].permission)
         .filter(item => typeof item === "string");
 
