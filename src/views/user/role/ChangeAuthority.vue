@@ -65,10 +65,10 @@ export default defineComponent({
       const checkedKeys = [...state.checkedKeys.checked, ...state.checkedKeys.halfChecked];
       const authorities = checkedKeys
         .map(key => menuMap[key].permission)
-        .filter(item => typeof item === "string");
+        .filter(item => !isEmpty(item));
 
       await RoleApi.updateAuthoritiesByRoleId(id, authorities);
-      message.success("修改成功")
+      message.success("修改成功");
     }
 
     onOk(changeAuthorityHandle);
