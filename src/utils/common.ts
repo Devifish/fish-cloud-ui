@@ -18,3 +18,13 @@ export function isEmpty(obj: any): boolean {
     return true;
   }
 }
+
+/**
+ * 深克隆
+ *
+ * @param obj 对象
+ */
+export function deepClone<E extends any>(obj: E): E {
+  const json = JSON.stringify(obj);
+  return JSON.parse(json);
+}

@@ -79,13 +79,13 @@
   </list-table-container>
 
   <common-modal title="用户详情" :footer="null" ref="userInfo">
-    <template v-slot:default="{ data }">
+    <template v-slot="{ data }">
       <user-info :id="data" />
     </template>
   </common-modal>
 
   <common-modal title="添加/编辑用户" okText="保存" ref="userEdit">
-    <template v-slot:default="{ data, onOk }">
+    <template v-slot="{ data, onOk }">
       <user-edit :id="data" :onOk="onOk" />
     </template>
   </common-modal>

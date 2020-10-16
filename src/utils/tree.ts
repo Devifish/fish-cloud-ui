@@ -60,6 +60,28 @@ export function map<E extends any>(
 }
 
 /**
+ * 树结构数据的Map实现
+ *
+ * @param tree Tree
+ * @param callback Callback
+ * @param children 子节点字段
+ */
+export function filter(
+  tree: Array<any>,
+  callback: (value: any) => boolean,
+  children = "children"
+): Array<any> {
+  return tree.filter(item => {
+    const childrenData = item[children];
+    if (childrenData?.length > 0) {
+      item[children] = filter(childrenData, callback, children);
+    }
+
+    return callback(item);
+  })
+}
+
+/**
  * 清除空子节点
  *
  * @param tree Tree
