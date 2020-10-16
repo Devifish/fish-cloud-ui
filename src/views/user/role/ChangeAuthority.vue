@@ -74,8 +74,8 @@ export default defineComponent({
           name: record.name
         };
       },
-      onChange(selectedRowKeys, selectedRows) {
-        console.log(selectedRowKeys);
+      onSelect(record, selected, selectedRows) {
+        state.selection[record.id] = selected;
       }
     });
 
@@ -99,6 +99,7 @@ export default defineComponent({
       state.treeData = deepClone(treeData);
       state.selection = authorities
         .map(item => permissionMap[item])
+        .filter(item => !isEmpty(item))
         .reduce((obj, item) => {
           obj[item.id] = true;
           return obj;
@@ -111,7 +112,7 @@ export default defineComponent({
       const { id } = props;
       const menuMap = toMap(state.treeData, item => item.id);
       const authorities = rowSelection.selectedRowKeys
-        .map(key => menuMap.value[key].permission)
+        .map(key => menuMap[key]?.permission)
         .filter(item => !isEmpty(item));
 
       await RoleApi.updateAuthoritiesByRoleId(id, authorities);
