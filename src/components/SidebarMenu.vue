@@ -1,17 +1,15 @@
-<template>
-  <template v-if="filter(data)">
-    <a-sub-menu v-if="hasChildren(data)" :key="data.id" v-bind="menuProps">
-      <template v-slot:title>
-        <img class="menu-icon" v-if="data.icon" :src="data.icon" />
-        <span>{{ data.name }}</span>
-      </template>
-      <sidebar-menu v-for="item of data.children" :data="item" :key="item.id" :filter="filter" />
-    </a-sub-menu>
-    <a-menu-item v-else :key="data.id" v-bind="menuProps">
+<template v-if="filter(data)">
+  <a-sub-menu v-if="hasChildren(data)" :key="data.id" v-bind="menuProps">
+    <template v-slot:title>
       <img class="menu-icon" v-if="data.icon" :src="data.icon" />
-      {{ data.name }}
-    </a-menu-item>
-  </template>
+      <span>{{ data.name }}</span>
+    </template>
+    <sidebar-menu v-for="item of data.children" :data="item" :key="item.id" :filter="filter" />
+  </a-sub-menu>
+  <a-menu-item v-else :key="data.id" v-bind="menuProps">
+    <img class="menu-icon" v-if="data.icon" :src="data.icon" />
+    {{ data.name }}
+  </a-menu-item>
 </template>
 
 <script lang="ts">
