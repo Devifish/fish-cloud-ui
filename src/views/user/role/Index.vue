@@ -65,11 +65,11 @@
     </a-table>
   </list-table-container>
 
-  <common-modal title="添加/修改角色" :width="700" okText="保存" ref="roleEdit">
+  <common-drawer title="添加/修改角色" ref="roleEdit">
     <template v-slot="{ data, onOk }">
       <role-edit :id="data" :onOk="onOk" @success="load" />
     </template>
-  </common-modal>
+  </common-drawer>
 
   <common-modal title="修改权限" okText="保存" ref="changeAuthority">
     <template v-slot="{ data, onOk }">
@@ -81,7 +81,7 @@
 <script lang="ts">
 import { defineComponent, reactive } from "vue";
 import { useListTable } from "@/utils/use";
-import { ListTableContainer, ActionLink, CommonModal } from "@/components";
+import { ListTableContainer, ActionLink, CommonDrawer, CommonModal } from "@/components";
 import { PlusOutlined } from "@ant-design/icons-vue";
 import { Modal } from "ant-design-vue";
 import RoleApi from "@/api/role";
@@ -93,6 +93,7 @@ export default defineComponent({
   components: {
     ListTableContainer,
     ActionLink,
+    CommonDrawer,
     CommonModal,
     RoleEdit,
     ChangeAuthority,

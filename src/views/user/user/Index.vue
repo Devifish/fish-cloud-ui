@@ -78,23 +78,23 @@
     </a-table>
   </list-table-container>
 
-  <common-modal title="用户详情" :footer="null" ref="userInfo">
+  <common-drawer title="用户详情" :footer="false" ref="userInfo">
     <template v-slot="{ data }">
       <user-info :id="data" />
     </template>
-  </common-modal>
+  </common-drawer>
 
-  <common-modal title="添加/编辑用户" okText="保存" ref="userEdit">
+  <common-drawer title="添加/编辑用户" ref="userEdit">
     <template v-slot="{ data, onOk }">
       <user-edit :id="data" :onOk="onOk" />
     </template>
-  </common-modal>
+  </common-drawer>
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive } from "vue";
 import { useListTable } from "@/utils/use";
-import { ListTableContainer, ActionLink, CommonModal } from "@/components";
+import { ListTableContainer, ActionLink, CommonDrawer } from "@/components";
 import { Modal } from "ant-design-vue";
 import { PlusOutlined } from "@ant-design/icons-vue";
 import UserApi from "@/api/user";
@@ -107,7 +107,7 @@ export default defineComponent({
     ListTableContainer,
     ActionLink,
     PlusOutlined,
-    CommonModal,
+    CommonDrawer,
     UserInfo,
     UserEdit
   },
