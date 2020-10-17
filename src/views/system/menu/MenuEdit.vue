@@ -1,6 +1,6 @@
 <template>
   <a-spin :spinning="state.loading">
-    <a-form :model="form" :label-col="{ span: 4 }" :wrapper-col="{ span: 16 }">
+    <a-form :model="form">
       <a-form-item label="菜单名称" required>
         <a-input v-model:value="form.name" placeholder="请输入菜单名称" />
       </a-form-item>
@@ -76,7 +76,7 @@ export default defineComponent({
       const { id } = props;
       if (!id) return;
 
-      // 加载数据
+      // 加载菜单数据
       state.loading = true;
       const { data } = await MenuApi.selectById(id);
       copy(data, form, true);

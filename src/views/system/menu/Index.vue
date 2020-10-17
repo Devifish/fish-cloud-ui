@@ -52,18 +52,18 @@
     </a-spin>
   </list-table-container>
 
-  <common-modal title="添加/修改菜单" :width="700" okText="保存" ref="menuEdit">
+  <common-drawer title="添加/修改菜单" :width="700" okText="保存" ref="menuEdit">
     <template v-slot="{ data, onOk }">
       <menu-edit :id="data" :onOk="onOk" @success="load" />
     </template>
-  </common-modal>
+  </common-drawer>
 </template>
 
 <script lang="ts">
 import { defineComponent, provide } from "vue";
 import { useListTable } from "@/utils/use";
 import MenuApi from "@/api/menu";
-import { ListTableContainer, ActionLink, CommonModal } from "@/components";
+import { ListTableContainer, ActionLink, CommonDrawer } from "@/components";
 import { Modal } from "ant-design-vue";
 import { PlusOutlined } from "@ant-design/icons-vue";
 import { removeEmptyChildren } from "@/utils/tree";
@@ -74,7 +74,7 @@ export default defineComponent({
   components: {
     ListTableContainer,
     ActionLink,
-    CommonModal,
+    CommonDrawer,
     MenuEdit,
     PlusOutlined
   },
