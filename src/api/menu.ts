@@ -2,6 +2,11 @@ import Axios from "@/library/axios";
 
 const BASE_URL = "/api/upms/menu";
 
+export enum MenuType {
+  Menu = 0,
+  Button = 1
+}
+
 export default {
   /**
    * 根据菜单ID查询菜单数据

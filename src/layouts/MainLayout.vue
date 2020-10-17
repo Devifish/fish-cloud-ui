@@ -21,7 +21,7 @@
         @click="menuClickHandle"
       >
         <template v-for="item of menuTree" :key="item.id">
-          <sidebar-menu :data="item" />
+          <sidebar-menu :data="item" :filter="menu => menu.type === MenuType.Menu" />
         </template>
       </a-menu>
     </a-layout-sider>
@@ -93,6 +93,7 @@ import { useStore } from "vuex";
 import SidebarMenu from "@/components/SidebarMenu.vue";
 import AvatarDropdown from "@/components/AvatarDropdown.vue";
 import { LOGIN_PAGE_NAME } from "@/router/auth";
+import { MenuType } from "@/api/menu";
 import {
   MenuOutlined,
   HomeOutlined,
@@ -192,7 +193,8 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
-      menuClickHandle
+      menuClickHandle,
+      MenuType
     };
   }
 });

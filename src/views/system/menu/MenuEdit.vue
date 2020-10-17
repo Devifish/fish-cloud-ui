@@ -38,13 +38,8 @@
 <script lang="ts">
 import { defineComponent, inject, reactive, computed, onMounted } from "vue";
 import { message } from "ant-design-vue";
-import MenuApi from "@/api/menu";
+import MenuApi, { MenuType } from "@/api/menu";
 import { copy } from "@/utils/common";
-
-enum MenuType {
-  Menu = 0,
-  Button = 1
-}
 
 export default defineComponent({
   name: "MenuEdit",
@@ -67,7 +62,7 @@ export default defineComponent({
       name: "",
       url: "",
       permission: "",
-      type: -1,
+      type: 0,
       parentId: null,
       sort: 0
     });
@@ -86,9 +81,15 @@ export default defineComponent({
     async function menuEditHandle() {
       const { id } = props;
 
-      await MenuApi.update(id, form);
-      message.success("修改成功");
-      ctx.emit("success")
+      // 区分添加与编辑
+      if (id) {
+        await MenuApi.update(id, form);
+        message.success("修改成功");
+      } else {
+        await MenuApi.insert(form);
+        message.success("添加成功");
+      }
+      ctx.emit("success");
     }
 
     onOk(menuEditHandle);

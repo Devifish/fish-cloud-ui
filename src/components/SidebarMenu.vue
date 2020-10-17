@@ -1,23 +1,30 @@
 <template>
-  <a-sub-menu v-if="data.children?.length > 0" :key="data.id" v-bind="menuProps">
-    <template v-slot:title>
+  <template v-if="filter(data)">
+    <a-sub-menu v-if="hasChildren(data)" :key="data.id" v-bind="menuProps">
+      <template v-slot:title>
+        <img class="menu-icon" v-if="data.icon" :src="data.icon" />
+        <span>{{ data.name }}</span>
+      </template>
+      <sidebar-menu v-for="item of data.children" :data="item" :key="item.id" :filter="filter" />
+    </a-sub-menu>
+    <a-menu-item v-else :key="data.id" v-bind="menuProps">
       <img class="menu-icon" v-if="data.icon" :src="data.icon" />
-      <span>{{ data.name }}</span>
-    </template>
-    <sidebar-menu v-for="item of data.children" :data="item" :key="item.id" />
-  </a-sub-menu>
-  <a-menu-item v-else :key="data.id" v-bind="menuProps">
-    <img class="menu-icon" v-if="data.icon" :src="data.icon" />
-    {{ data.name }}
-  </a-menu-item>
+      {{ data.name }}
+    </a-menu-item>
+  </template>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 import { Menu } from "ant-design-vue";
+import { isEmpty } from "@/utils/common";
 
 const DEFAULT_PROPS = {
-  data: Object
+  data: Object,
+  filter: {
+    type: Function,
+    default: (menu: any) => true
+  }
 };
 
 export default defineComponent({
@@ -35,8 +42,17 @@ export default defineComponent({
       delete menuProps[key];
     }
 
+    function hasChildren(menu: any) {
+      const children: Array<any> = menu.children;
+      if (isEmpty(children)) return false;
+
+      // 校验过滤后的参数
+      return children.filter(props.filter).length > 0;
+    }
+
     return {
-      menuProps
+      menuProps,
+      hasChildren
     };
   }
 });
