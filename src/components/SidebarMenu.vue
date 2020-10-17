@@ -43,11 +43,15 @@ export default defineComponent({
     }
 
     function hasChildren(menu: any) {
-      const children: Array<any> = menu.children;
+      const { filter } = props;
+      const children: Array<any> = menu?.children;
       if (isEmpty(children)) return false;
 
       // 校验过滤后的参数
-      return children.filter(props.filter).length > 0;
+      for (const item of children) {
+        if (filter(item)) return true;
+      }
+      return false;
     }
 
     return {
