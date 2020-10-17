@@ -13,7 +13,8 @@
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 import zh_CN from "ant-design-vue/es/locale/zh_CN";
-import PageLoadProgress from "@/components/PageLoadProgress.vue";
+import { PageLoadProgress } from "@/components";
+import { isEmpty } from "@/utils/common";
 
 export default defineComponent({
   name: "App",
@@ -35,16 +36,8 @@ export default defineComponent({
      * Table 数据渲染
      * 用户空数据的默认配置
      */
-    function transformCellText(data: any) {
-      const { text } = data;
-
-      switch (text) {
-        case undefined:
-        case null:
-          return "/";
-        default:
-          return text;
-      }
+    function transformCellText({ text }) {
+      return isEmpty(text) ? "/" : text;
     }
 
     return {

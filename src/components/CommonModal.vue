@@ -51,8 +51,11 @@ export default defineComponent({
     async function clickOkHandle() {
       if (typeof state.onOk === "function") {
         state.confirmLoading = true;
-        const value = await state.onOk();
-        state.confirmLoading = false;
+        try {
+          const value = await state.onOk();
+        } finally {
+          state.confirmLoading = false;
+        }
       }
 
       state.visible = false;

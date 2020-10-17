@@ -34,6 +34,7 @@
 
 <script lang="ts">
 import { defineComponent, inject, reactive, computed, onMounted } from "vue";
+import { message } from "ant-design-vue";
 import MenuApi from "@/api/menu";
 import { copy } from "@/utils/common";
 
@@ -45,9 +46,14 @@ enum MenuType {
 export default defineComponent({
   name: "MenuEdit",
   props: {
-    id: Number
+    id: Number,
+    onOk: {
+      type: Function,
+      default: (callback: any) => {}
+    }
   },
   setup(props) {
+    const { onOk } = props;
     const menuListState: any = inject("MenuListState");
     const state = reactive({
       treeData: computed(() => menuListState.page.records),
@@ -69,10 +75,18 @@ export default defineComponent({
       // 加载菜单数据
       state.loading = true;
       const { data } = await MenuApi.selectById(id);
-      copy(data, form);
+      copy(data, form, true);
       state.loading = false;
     }
 
+    async function menuEditHandle() {
+      const { id } = props;
+
+      await MenuApi.update(id, form);
+      message.success("修改成功");
+    }
+
+    onOk(menuEditHandle);
     onMounted(onLoadData);
     return {
       state,

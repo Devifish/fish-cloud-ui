@@ -12,10 +12,12 @@ export function isEmpty(obj: any): boolean {
     return obj.length === 0;
   } else if (obj instanceof Set) {
     return obj.size === 0;
-  } else if (obj) {
-    return false;
-  } else {
+  } else if (obj === null) {
     return true;
+  } else if (obj === undefined) {
+    return true;
+  } else {
+    return false;
   }
 }
 
@@ -35,9 +37,15 @@ export function deepClone<E extends any>(obj: E): E {
  * @param source 来源
  * @param target 目标
  */
-export function copy(source: any, target: any) {
+export function copy(source: any, target: any, onlyExist: boolean = false) {
   const keys = Object.keys(source);
   for (const key of keys) {
+    const targetVal = target[key];
+    if (onlyExist && typeof targetVal === "undefined") {
+      continue;
+    }
+
+    // 复制对应参数
     target[key] = source[key];
   }
 }

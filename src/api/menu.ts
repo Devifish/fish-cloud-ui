@@ -47,7 +47,7 @@ export default {
    * @param menuId 菜单Id
    * @param data 菜单参数
    */
-  update(menuId: string, data: any) {
+  update(menuId: any, data: any) {
     return Axios.put(`${BASE_URL}/update/${menuId}`, data);
   },
 
