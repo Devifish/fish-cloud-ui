@@ -54,7 +54,7 @@
 
   <common-modal title="添加/修改菜单" :width="700" okText="保存" ref="roleEdit">
     <template v-slot="{ data, onOk }">
-      <menu-edit :id="data" :onOk="onOk" />
+      <menu-edit :id="data" :onOk="onOk" @success="load" />
     </template>
   </common-modal>
 </template>

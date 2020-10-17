@@ -4,7 +4,7 @@
       <a-form-item label="菜单名称">
         <a-input v-model:value="form.name" placeholder="请输入菜单名称" />
       </a-form-item>
-      <a-form-item label="菜单路径">
+      <a-form-item label="菜单URL">
         <a-input v-model:value="form.url" placeholder="请输入菜单路径" />
       </a-form-item>
       <a-form-item label="授权编码">
@@ -27,6 +27,9 @@
           :replaceFields="{ title: 'name', key: 'id', value: 'id' }"
           placeholder="请选择父级菜单"
         />
+      </a-form-item>
+      <a-form-item label="排序值">
+        <a-input v-model:value="form.sort" placeholder="请输入排序值" />
       </a-form-item>
     </a-form>
   </a-spin>
@@ -52,7 +55,7 @@ export default defineComponent({
       default: (callback: any) => {}
     }
   },
-  setup(props) {
+  setup(props, ctx) {
     const { onOk } = props;
     const menuListState: any = inject("MenuListState");
     const state = reactive({
@@ -65,7 +68,8 @@ export default defineComponent({
       url: "",
       permission: "",
       type: -1,
-      parentId: null
+      parentId: null,
+      sort: 0
     });
 
     async function onLoadData() {
@@ -84,6 +88,7 @@ export default defineComponent({
 
       await MenuApi.update(id, form);
       message.success("修改成功");
+      ctx.emit("success")
     }
 
     onOk(menuEditHandle);
