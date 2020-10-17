@@ -4,7 +4,8 @@
     :title="title"
     :width="width"
     :placement="placement"
-    destroyOnClose
+    :get-container="false"
+    destroy-on-close
   >
     <slot :data="state.data" :onOk="onOk" />
     <div class="common-drawer-footer" v-if="footer">
