@@ -1,7 +1,7 @@
 <template>
   <list-table-container title="菜单列表" @reload="reload">
     <template v-slot:extra>
-      <a-button type="primary" @click="$refs['roleEdit'].open()">
+      <a-button type="primary" @click="$refs['menuEdit'].open()">
         <template v-slot:icon>
           <plus-outlined />
         </template>
@@ -34,7 +34,7 @@
         <a-table-column title="操作" width="200px" fixed="right">
           <template v-slot="{ record }">
             <span>
-              <action-link @click="$refs['roleEdit'].open(record.id)">
+              <action-link @click="$refs['menuEdit'].open(record.id)">
                 编辑
               </action-link>
               <a-divider type="vertical" />
@@ -52,7 +52,7 @@
     </a-spin>
   </list-table-container>
 
-  <common-modal title="添加/修改菜单" :width="700" okText="保存" ref="roleEdit">
+  <common-modal title="添加/修改菜单" :width="700" okText="保存" ref="menuEdit">
     <template v-slot="{ data, onOk }">
       <menu-edit :id="data" :onOk="onOk" @success="load" />
     </template>

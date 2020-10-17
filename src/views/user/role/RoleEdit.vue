@@ -11,7 +11,7 @@
         <a-textarea
           v-model:value="form.remark"
           placeholder="请输入描述"
-          :auto-size="{ minRows: 3 }"
+          :rows="3"
         />
       </a-form-item>
     </a-form>
@@ -49,7 +49,7 @@ export default defineComponent({
       const { id } = props;
       if (!id) return;
 
-      // 加载菜单数据
+      // 加载数据
       state.loading = true;
       const { data } = await RoleApi.selectById(id);
       copy(data, form, true);

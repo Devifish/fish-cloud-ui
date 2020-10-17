@@ -20,7 +20,7 @@
     </template>
 
     <template v-slot:extra>
-      <a-button type="primary" @click="$refs.userEditModel.open()">
+      <a-button type="primary" @click="$refs['userEdit'].open()">
         <template v-slot:icon>
           <plus-outlined />
         </template>

@@ -34,17 +34,12 @@
 <script lang="ts">
 import { defineComponent, reactive, ref, computed, onMounted } from "vue";
 import { Tree } from "ant-design-vue";
-import MenuApi from "@/api/menu";
+import MenuApi, { MenuType } from "@/api/menu";
 import RoleApi from "@/api/role";
 import { map, filter, toList, toMap } from "@/utils/tree";
 import { useListTable } from "@/utils/use";
 import { isEmpty, deepClone } from "@/utils/common";
 import { message } from "ant-design-vue";
-
-enum MenuType {
-  Menu = 0,
-  Button = 1
-}
 
 export default defineComponent({
   name: "ChangeAuthority",

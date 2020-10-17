@@ -29,7 +29,12 @@
         />
       </a-form-item>
       <a-form-item label="排序值">
-        <a-input v-model:value="form.sort" placeholder="请输入排序值" />
+        <a-input-number
+          v-model:value="form.sort"
+          :defaultValue="0"
+          placeholder="请输入排序值"
+          style="width: 100%"
+        />
       </a-form-item>
     </a-form>
   </a-spin>
@@ -71,7 +76,7 @@ export default defineComponent({
       const { id } = props;
       if (!id) return;
 
-      // 加载菜单数据
+      // 加载数据
       state.loading = true;
       const { data } = await MenuApi.selectById(id);
       copy(data, form, true);
