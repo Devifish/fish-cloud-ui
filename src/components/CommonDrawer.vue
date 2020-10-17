@@ -7,11 +7,16 @@
     destroyOnClose
   >
     <slot :data="state.data" :onOk="onOk" />
-    <div class="common-drawer-footer">
+    <div class="common-drawer-footer" v-if="footer">
       <a-button @click="close">
         {{ cancelText }}
       </a-button>
-      <a-button type="primary" @click="clickOkHandle" style="margin-left: 8px">
+      <a-button
+        type="primary"
+        @click="clickOkHandle"
+        :loading="state.confirmLoading"
+        style="margin-left: 8px"
+      >
         {{ okText }}
       </a-button>
     </div>
@@ -26,7 +31,14 @@ export default defineComponent({
   name: "CommonDrawer",
   props: {
     title: String,
-    width: Number,
+    width: {
+      type: Number,
+      default: 700
+    },
+    footer: {
+      type: Boolean,
+      default: true
+    },
     placement: String,
     okText: {
       type: String,
@@ -41,6 +53,7 @@ export default defineComponent({
     const state = reactive({
       visible: false,
       data: undefined,
+      confirmLoading: false,
       onOk: async () => {}
     });
 
@@ -59,11 +72,11 @@ export default defineComponent({
 
     async function clickOkHandle() {
       if (typeof state.onOk === "function") {
-        //state.confirmLoading = true;
+        state.confirmLoading = true;
         try {
           const value = await state.onOk();
         } finally {
-          //state.confirmLoading = false;
+          state.confirmLoading = false;
         }
       }
 
