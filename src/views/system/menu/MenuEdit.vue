@@ -1,7 +1,7 @@
 <template>
   <a-spin :spinning="state.loading">
     <a-form :model="form" :label-col="{ span: 4 }" :wrapper-col="{ span: 16 }">
-      <a-form-item label="菜单名称">
+      <a-form-item label="菜单名称" required>
         <a-input v-model:value="form.name" placeholder="请输入菜单名称" />
       </a-form-item>
       <a-form-item label="菜单URL">
@@ -78,7 +78,7 @@ export default defineComponent({
       state.loading = false;
     }
 
-    async function menuEditHandle() {
+    async function saveDataHandle() {
       const { id } = props;
 
       // 区分添加与编辑
@@ -92,7 +92,7 @@ export default defineComponent({
       ctx.emit("success");
     }
 
-    onOk(menuEditHandle);
+    onOk(saveDataHandle);
     onMounted(onLoadData);
     return {
       state,

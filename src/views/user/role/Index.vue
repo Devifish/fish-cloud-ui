@@ -65,9 +65,9 @@
     </a-table>
   </list-table-container>
 
-  <common-modal title="添加/修改角色" okText="保存" ref="roleEdit">
+  <common-modal title="添加/修改角色" :width="700" okText="保存" ref="roleEdit">
     <template v-slot="{ data, onOk }">
-      <role-edit :id="data" :onOk="onOk" />
+      <role-edit :id="data" :onOk="onOk" @success="load" />
     </template>
   </common-modal>
 
