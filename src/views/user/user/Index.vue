@@ -94,12 +94,10 @@
 <script lang="ts">
 import { defineComponent, reactive } from "vue";
 import { useListTable } from "@/utils/use";
-import UserApi from "@/api/user";
-import ListTableContainer from "@/components/ListTableContainer.vue";
-import ActionLink from "@/components/ActionLink.vue";
+import { ListTableContainer, ActionLink, CommonModal } from "@/components";
 import { Modal } from "ant-design-vue";
 import { PlusOutlined } from "@ant-design/icons-vue";
-import CommonModal from "@/components/CommonModal.vue";
+import UserApi from "@/api/user";
 import UserInfo from "./UserInfo.vue";
 import UserEdit from "./UserEdit.vue";
 

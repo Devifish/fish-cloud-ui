@@ -28,3 +28,16 @@ export function deepClone<E extends any>(obj: E): E {
   const json = JSON.stringify(obj);
   return JSON.parse(json);
 }
+
+/**
+ * 复制参数
+ *
+ * @param source 来源
+ * @param target 目标
+ */
+export function copy(source: any, target: any) {
+  const keys = Object.keys(source);
+  for (const key of keys) {
+    target[key] = source[key];
+  }
+}

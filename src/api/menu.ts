@@ -8,7 +8,7 @@ export default {
    *
    * @param menuId 菜单ID
    */
-  selectById(menuId: string) {
+  selectById(menuId: any) {
     return Axios.get(`${BASE_URL}/select/id/${menuId}`);
   },
 

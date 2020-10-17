@@ -81,12 +81,10 @@
 <script lang="ts">
 import { defineComponent, reactive } from "vue";
 import { useListTable } from "@/utils/use";
-import RoleApi from "@/api/role";
-import ListTableContainer from "@/components/ListTableContainer.vue";
-import ActionLink from "@/components/ActionLink.vue";
+import { ListTableContainer, ActionLink, CommonModal } from "@/components";
 import { PlusOutlined } from "@ant-design/icons-vue";
 import { Modal } from "ant-design-vue";
-import CommonModal from "@/components/CommonModal.vue";
+import RoleApi from "@/api/role";
 import RoleEdit from "./RoleEdit.vue";
 import ChangeAuthority from "./ChangeAuthority.vue";
 
