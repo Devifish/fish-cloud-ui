@@ -4,7 +4,8 @@
     :title="title"
     :width="width"
     :placement="placement"
-    :get-container="false"
+    :get-container="$parent.$el?.nextSibling"
+    wrap-class-name="common-drawer"
     destroy-on-close
   >
     <slot :data="state.data" :onOk="onOk" />
@@ -96,13 +97,15 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-.common-drawer-footer {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  border-top: 1px solid #e8e8e8;
-  padding: 10px 16px;
-  text-align: right;
+.common-drawer {
+  .common-drawer-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    border-top: 1px solid #e8e8e8;
+    padding: 10px 16px;
+    text-align: right;
+  }
 }
 </style>
