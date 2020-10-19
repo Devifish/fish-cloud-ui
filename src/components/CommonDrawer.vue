@@ -86,7 +86,7 @@ export default defineComponent({
         }
       }
 
-      state.visible = false;
+      close();
     }
 
     provide<DrawerData>(CommonDrawerData, {
