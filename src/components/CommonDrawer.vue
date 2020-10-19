@@ -8,7 +8,7 @@
     wrap-class-name="common-drawer"
     destroy-on-close
   >
-    <slot :data="state.data" :onOk="onOk" />
+    <slot />
     <div class="common-drawer-footer" v-if="footer">
       <a-button @click="close">
         {{ cancelText }}
@@ -26,8 +26,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from "vue";
+import { defineComponent, reactive, ref, provide, inject, computed } from "vue";
 import { Drawer } from "ant-design-vue";
+import { CommonDrawerData, DrawerData } from "@/utils/use";
 
 export default defineComponent({
   name: "CommonDrawer",
@@ -84,6 +85,12 @@ export default defineComponent({
 
       state.visible = false;
     }
+
+    provide<DrawerData>(CommonDrawerData, {
+      onOk,
+      close,
+      data: computed(() => state.data)
+    });
 
     return {
       state,

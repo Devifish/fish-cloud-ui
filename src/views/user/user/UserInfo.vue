@@ -55,19 +55,18 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted } from "vue";
 import UserApi from "@/api/user";
+import { useDrawer } from "@/utils/use";
 
 export default defineComponent({
   name: "UserInfo",
-  props: {
-    id: Number
-  },
-  setup(props, ctx) {
+  setup() {
+    const { data: id } = useDrawer();
     const data = ref();
 
     async function onLoadData() {
-      if (!props.id) return;
+      if (!id.value) return;
 
-      const { data: temp } = await UserApi.selectDetailById(props.id);
+      const { data: temp } = await UserApi.selectDetailById(id.value);
       data.value = temp;
     }
 

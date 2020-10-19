@@ -79,15 +79,11 @@
   </list-table-container>
 
   <common-drawer title="用户详情" :footer="false" ref="userInfo">
-    <template v-slot="{ data }">
-      <user-info :id="data" />
-    </template>
+    <user-info />
   </common-drawer>
 
   <common-drawer title="添加/编辑用户" ref="userEdit">
-    <template v-slot="{ data, onOk }">
-      <user-edit :id="data" :onOk="onOk" />
-    </template>
+    <user-edit />
   </common-drawer>
 </template>
 

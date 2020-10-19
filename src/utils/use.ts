@@ -1,4 +1,4 @@
-import { reactive, ref, toRefs, computed, onMounted } from "vue";
+import { reactive, Ref, inject, computed, onMounted } from "vue";
 import { PageData, PageParam } from "@/model/page";
 
 export type LoadDataCallBack = (page: PageParam) => Promise<any>;
@@ -62,4 +62,21 @@ export function useListTable() {
     reload,
     reset
   };
+}
+
+export const CommonDrawerData = Symbol();
+
+export interface DrawerData {
+  onOk: (callback: () => Promise<void>) => void;
+  close: () => void;
+  data: Ref<any>;
+}
+
+export function useDrawer(): DrawerData {
+  const drawer = inject<DrawerData>(CommonDrawerData);
+  if (!drawer) {
+    throw new Error("请在CommonDrawer的组件内使用");
+  }
+
+  return drawer;
 }

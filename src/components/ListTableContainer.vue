@@ -8,7 +8,7 @@
       <template v-slot:title>
         <span>{{ title }}</span>
         <span class="reload" v-if="$attrs.onReload" @click="reloadHandle">
-          <reload-outlined />
+          <sync-outlined />
         </span>
       </template>
       <template v-if="$slots.extra" v-slot:extra>
@@ -22,12 +22,12 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { ReloadOutlined } from "@ant-design/icons-vue";
+import { SyncOutlined } from "@ant-design/icons-vue";
 
 export default defineComponent({
   name: "ListTableContainer",
   components: {
-    ReloadOutlined
+    SyncOutlined
   },
   props: {
     title: String

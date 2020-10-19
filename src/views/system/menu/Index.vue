@@ -53,9 +53,7 @@
   </list-table-container>
 
   <common-drawer title="添加/修改菜单" ref="menuEdit">
-    <template v-slot="{ data, onOk }">
-      <menu-edit :id="data" :onOk="onOk" @success="load" />
-    </template>
+    <menu-edit @success="load" />
   </common-drawer>
 </template>
 

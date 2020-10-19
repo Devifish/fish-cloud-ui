@@ -45,18 +45,12 @@ import { defineComponent, inject, reactive, computed, onMounted } from "vue";
 import { message } from "ant-design-vue";
 import MenuApi, { MenuType } from "@/api/menu";
 import { copy } from "@/utils/common";
+import { useDrawer } from "@/utils/use";
 
 export default defineComponent({
   name: "MenuEdit",
-  props: {
-    id: Number,
-    onOk: {
-      type: Function,
-      default: (callback: any) => {}
-    }
-  },
   setup(props, ctx) {
-    const { onOk } = props;
+    const { onOk, data } = useDrawer();
     const menuListState: any = inject("MenuListState");
     const state = reactive({
       treeData: computed(() => menuListState.page.records),
@@ -73,18 +67,18 @@ export default defineComponent({
     });
 
     async function onLoadData() {
-      const { id } = props;
+      const id = data.value;
       if (!id) return;
 
       // 加载菜单数据
       state.loading = true;
-      const { data } = await MenuApi.selectById(id);
-      copy(data, form, true);
+      const { data: menuData } = await MenuApi.selectById(id);
+      copy(menuData, form, true);
       state.loading = false;
     }
 
     async function saveDataHandle() {
-      const { id } = props;
+      const id = data.value;
 
       // 区分添加与编辑
       if (id) {
