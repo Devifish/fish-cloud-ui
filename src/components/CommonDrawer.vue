@@ -5,11 +5,12 @@
     :width="width"
     :placement="placement"
     :get-container="$parent.$el?.nextSibling"
+    :body-style="{ height: 'calc(100% - (55px + 53px))', overflow: 'auto' }"
     wrap-class-name="common-drawer"
     destroy-on-close
   >
     <slot />
-    <div class="common-drawer-footer" v-if="footer">
+    <footer class="common-drawer-footer" v-if="footer">
       <a-button @click="close">
         {{ cancelText }}
       </a-button>
@@ -21,7 +22,7 @@
       >
         {{ okText }}
       </a-button>
-    </div>
+    </footer>
   </a-drawer>
 </template>
 
