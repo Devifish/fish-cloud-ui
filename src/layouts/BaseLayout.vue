@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import CommonFooter from "@/components/CommonFooter.vue";
+import { CommonFooter } from "@/components";
 
 export default defineComponent({
   name: "BaseLayout",

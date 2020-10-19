@@ -47,7 +47,7 @@
       <a-switch :checked="data?.locked" disabled />
     </a-descriptions-item>
     <a-descriptions-item label="是否禁用">
-      <a-switch :checked="data?.enabled" disabled />
+      <a-switch :checked="!data?.enabled" disabled />
     </a-descriptions-item>
   </a-descriptions>
 </template>
