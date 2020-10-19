@@ -30,8 +30,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, toRef, provide, inject } from "vue";
-import { Drawer } from "ant-design-vue";
+import { defineComponent, reactive, ref, toRef, provide } from "vue";
 import { CommonDrawerData, DrawerData } from "@/utils/use";
 
 export default defineComponent({

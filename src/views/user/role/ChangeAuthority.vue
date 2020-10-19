@@ -37,22 +37,15 @@ import { Tree } from "ant-design-vue";
 import MenuApi, { MenuType } from "@/api/menu";
 import RoleApi from "@/api/role";
 import { map, filter, toList, toMap } from "@/utils/tree";
-import { useListTable } from "@/utils/use";
+import { useListTable, useModal } from "@/utils/use";
 import { isEmpty, deepClone } from "@/utils/common";
 import { message } from "ant-design-vue";
 
 export default defineComponent({
   name: "ChangeAuthority",
-  props: {
-    id: Number,
-    onOk: {
-      type: Function,
-      default: (callback: any) => {}
-    }
-  },
-  setup(props) {
-    const { onOk } = props;
+  setup() {
     const table = useListTable();
+    const { onOk, data } = useModal();
     const state = reactive({
       treeData: [] as Array<any>,
       selection: {}
@@ -81,7 +74,7 @@ export default defineComponent({
     });
 
     table.onLoadData(async () => {
-      const { id } = props;
+      const { value: id } = data;
       if (!id) return;
 
       // 加载数据
@@ -104,7 +97,7 @@ export default defineComponent({
     });
 
     async function changeAuthorityHandle() {
-      const { id } = props;
+      const { value: id } = data;
       const menuMap = toMap(state.treeData, item => item.id);
       const authorities = rowSelection.selectedRowKeys
         .map(key => menuMap[key]?.permission)

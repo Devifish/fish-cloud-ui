@@ -66,13 +66,11 @@
   </list-table-container>
 
   <common-drawer title="添加/修改角色" ref="roleEdit">
-    <role-edit :id="data" :onOk="onOk" @success="load" />
+    <role-edit @success="load" />
   </common-drawer>
 
   <common-modal title="修改权限" okText="保存" ref="changeAuthority">
-    <template v-slot="{ data, onOk }">
-      <change-authority :id="data" :onOk="onOk" />
-    </template>
+    <change-authority />
   </common-modal>
 </template>
 

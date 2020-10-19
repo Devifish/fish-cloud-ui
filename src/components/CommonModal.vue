@@ -9,12 +9,13 @@
     :confirmLoading="state.confirmLoading"
     @ok="clickOkHandle"
   >
-    <slot :data="state.data" :onOk="onOk" />
+    <slot />
   </a-modal>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from "vue";
+import { defineComponent, reactive, ref, toRef, provide } from "vue";
+import { CommonModalData, ModalData } from "@/utils/use";
 
 export default defineComponent({
   name: "CommonModal",
@@ -60,6 +61,12 @@ export default defineComponent({
 
       state.visible = false;
     }
+
+    provide<ModalData>(CommonModalData, {
+      onOk,
+      close,
+      data: toRef(state, "data")
+    });
 
     return {
       state,
