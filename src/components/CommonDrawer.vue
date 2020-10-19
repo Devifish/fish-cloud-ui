@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, provide, inject, computed } from "vue";
+import { defineComponent, reactive, ref, toRef, provide, inject } from "vue";
 import { Drawer } from "ant-design-vue";
 import { CommonDrawerData, DrawerData } from "@/utils/use";
 
@@ -89,7 +89,7 @@ export default defineComponent({
     provide<DrawerData>(CommonDrawerData, {
       onOk,
       close,
-      data: computed(() => state.data)
+      data: toRef(state, "data")
     });
 
     return {
