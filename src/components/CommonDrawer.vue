@@ -5,7 +5,10 @@
     :width="width"
     :placement="placement"
     :get-container="$parent.$el?.nextSibling"
-    :body-style="{ height: 'calc(100% - (55px + 53px))', overflow: 'auto' }"
+    :body-style="{
+      height: `calc(100% - (55px + ${footer ? 53 : 0}px))`,
+      overflow: 'auto'
+    }"
     wrap-class-name="common-drawer"
     destroy-on-close
   >
