@@ -45,7 +45,9 @@ axios.interceptors.request.use(request => {
   // OAuth2用户Token注入
   if (token) {
     const { header, value } = token.tokenData();
-    headers[header] = value;
+    if (!headers[header]) {
+      headers[header] = value;
+    }
   }
 
   // 过滤空参数

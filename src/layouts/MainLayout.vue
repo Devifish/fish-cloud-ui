@@ -270,7 +270,7 @@ export default defineComponent({
   }
 
   .main-content {
-    padding: 0 16px;
+    padding: 0 16px 16px;
     overflow: auto;
 
     .main-content-breadcrumb {
