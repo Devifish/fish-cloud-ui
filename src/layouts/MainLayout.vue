@@ -208,7 +208,7 @@ export default defineComponent({
   height: 100%;
 
   .main-sider {
-    box-shadow: 1px 0 4px #888;
+    box-shadow: 2px 0 4px #888;
     z-index: 10;
 
     .logo {
