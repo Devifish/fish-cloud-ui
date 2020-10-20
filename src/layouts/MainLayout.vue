@@ -2,6 +2,7 @@
   <a-layout class="main-layout">
     <!-- 侧栏菜单 -->
     <a-layout-sider
+      class="main-sider"
       v-model:collapsed="collapsed"
       breakpoint="lg"
       :width="250"
@@ -206,23 +207,30 @@ export default defineComponent({
   width: 100%;
   height: 100%;
 
-  .logo {
-    height: 64px;
-    line-height: 64px;
+  .main-sider {
+    box-shadow: 1px 0 4px #888;
+    z-index: 10;
 
-    > h1 {
-      color: #fff;
-      font-size: 22px;
-      font-weight: 600;
-      margin: 0 0 0 24px;
-      vertical-align: middle;
+    .logo {
+      height: 64px;
+      line-height: 64px;
+
+      > h1 {
+        color: #fff;
+        font-size: 22px;
+        font-weight: 600;
+        margin: 0 0 0 24px;
+        vertical-align: middle;
+      }
     }
   }
 
   .main-header {
     position: relative;
-    background: #fff;
     padding: 0;
+    background: #fff;
+    box-shadow: 0 1px 4px #ddd;
+    z-index: 9;
 
     .menu-item {
       transition: all 0.3s;
