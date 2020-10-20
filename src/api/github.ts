@@ -1,7 +1,7 @@
 import Axios from "@/library/axios";
 
 const BASE_URL = "https://api.github.com";
-const TOKEN = `token ${process.env.VUE_APP_API_GITHUB_TOKEN}`;
+const TOKEN = `token ${process.env.VUE_APP_GITHUB_TOKEN}`;
 const OWNER = "Devifish";
 const REPO = "fish-cloud-ui";
 
