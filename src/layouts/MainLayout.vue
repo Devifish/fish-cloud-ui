@@ -73,7 +73,7 @@
       <!-- 内容部分 -->
       <a-layout-content class="main-content">
         <!-- 菜单面包屑 -->
-        <a-breadcrumb class="main-content-breadcrumb" v-if="isEmpty(breadcrumbs)?.length > 0">
+        <a-breadcrumb class="main-content-breadcrumb" v-if="!isEmpty(breadcrumbs)">
           <a-breadcrumb-item href="/">
             <home-outlined />
           </a-breadcrumb-item>
