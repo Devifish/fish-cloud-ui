@@ -5,14 +5,16 @@ const TOKEN = `token ${process.env.VUE_APP_GITHUB_TOKEN}`;
 const OWNER = "Devifish";
 const REPO = "fish-cloud-ui";
 
+const commonHeaders = {
+  Accept: "application/vnd.github.v3+json",
+  Authorization: TOKEN
+};
+
 export default {
   getLastCommits(size: number) {
     return Axios.get(`${BASE_URL}/repos/${OWNER}/${REPO}/commits`, {
       withCredentials: false,
-      headers: {
-        Accept: "application/vnd.github.v3+json",
-        Authorization: TOKEN
-      },
+      headers: commonHeaders,
       params: {
         per_page: size
       }

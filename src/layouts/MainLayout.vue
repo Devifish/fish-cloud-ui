@@ -31,7 +31,7 @@
       <a-layout-header class="main-header">
         <menu-outlined class="menu-item menu-icon" @click="collapsed = !collapsed" />
 
-        <div class="right-content" v-if="user">
+        <div class="right-content">
           <!-- 搜索栏 -->
           <span class="search-input">
             <a-auto-complete size="large" placeholder="请输入搜索内容">
@@ -42,8 +42,9 @@
           <!-- 用户头像 -->
           <avatar-dropdown
             class="menu-item"
-            :avatar="user.avatar"
-            :username="user.nickname || user.username"
+            :loading="isEmpty(user)"
+            :avatar="user?.avatar"
+            :username="user?.nickname || user?.username"
           >
             <a-menu>
               <a-menu-item>
@@ -72,7 +73,7 @@
       <!-- 内容部分 -->
       <a-layout-content class="main-content">
         <!-- 菜单面包屑 -->
-        <a-breadcrumb class="main-content-breadcrumb" v-if="breadcrumbs?.length > 0">
+        <a-breadcrumb class="main-content-breadcrumb" v-if="isEmpty(breadcrumbs)?.length > 0">
           <a-breadcrumb-item href="/">
             <home-outlined />
           </a-breadcrumb-item>
@@ -94,6 +95,7 @@ import { useStore } from "vuex";
 import { SidebarMenu, AvatarDropdown } from "@/components";
 import { LOGIN_PAGE_NAME } from "@/router/auth";
 import { MenuType } from "@/api/menu";
+import { isEmpty } from "@/utils/common";
 import {
   MenuOutlined,
   HomeOutlined,
@@ -121,12 +123,12 @@ export default defineComponent({
     // 计算菜单IdMap
     const menuIdMap = computed(() => {
       const menuMap = store.getters["menu/menuMap"];
-      return menuMap((menu: any) => menu.id);
+      return menuMap(menu => menu.id);
     });
 
     // 计算当前路由菜单树
     const currentMenuTree = computed(() => {
-      const findParentList = (menu: any) => {
+      const findParentList = menu => {
         let list: any[] = [];
         const { parentId } = menu;
         if (parentId) {
@@ -144,7 +146,7 @@ export default defineComponent({
       // 获取当前菜单数据
       const { path } = route;
       const filterMenu = store.getters["menu/filterMenu"];
-      const current = filterMenu((menu: any) => menu.url == path);
+      const current = filterMenu(({ url }) => url === path);
       return current ? [current, ...findParentList(current)] : [];
     });
 
@@ -194,6 +196,7 @@ export default defineComponent({
     return {
       ...toRefs(state),
       menuClickHandle,
+      isEmpty,
       MenuType
     };
   }
