@@ -6,7 +6,8 @@ const cdn = {
     vuex: "Vuex",
     "vue-router": "VueRouter",
     axios: "axios",
-    moment: "moment"
+    moment: "moment",
+    "ant-design-vue": "antd",
   },
   css: [],
   js: [
@@ -14,7 +15,8 @@ const cdn = {
     "https://cdn.jsdelivr.net/npm/vuex@4.0.0-beta.4/dist/vuex.global.prod.js",
     "https://cdn.jsdelivr.net/npm/vue-router@4.0.0-beta.13/dist/vue-router.global.prod.js",
     "https://cdn.jsdelivr.net/npm/axios@0.20.0/dist/axios.min.js",
-    "https://cdn.jsdelivr.net/npm/moment@2.29.1/min/moment-with-locales.min.js"
+    "https://cdn.jsdelivr.net/npm/moment@2.29.1/min/moment-with-locales.min.js",
+    "https://cdn.jsdelivr.net/npm/ant-design-vue@2.0.0-beta.10/dist/antd-with-locales.min.js"
   ]
 };
 
