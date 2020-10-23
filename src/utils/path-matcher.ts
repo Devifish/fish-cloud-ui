@@ -17,11 +17,11 @@ class AntPathMatcher implements PathMatcher {
 
   constructor(urls: Array<string>) {
     this.pathMatcherRegexp = urls.map(item => {
-      if (item.includes("/**")) {
-        item = item.replaceAll("/**", ".*");
+      while (item.includes("/**")) {
+        item = item.replace("/**", ".*");
       }
-      if (item.includes("/*")) {
-        item = item.replaceAll("/*", "/\\w+");
+      while (item.includes("/*")) {
+        item = item.replace("/*", "/\\w+");
       }
 
       return new RegExp(`^${item}$`);
