@@ -47,7 +47,7 @@ export default defineComponent({
     MailOutlined
   },
   setup() {
-    const formRegister = ref<Form>();
+    const formRegister = ref();
 
     /**
      * 提交注册表单

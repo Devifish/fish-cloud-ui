@@ -181,7 +181,7 @@ export default defineComponent({
       autoLogin: false
     });
 
-    const formLogin = ref<Form>();
+    const formLogin = ref();
     const activeKey = computed(() => route.query.type ?? "password");
 
     /**
