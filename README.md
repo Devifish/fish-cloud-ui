@@ -13,10 +13,10 @@
 | -------------- | ------------- |
 | Typescript     | 3.9.3         |
 | Vue.js         | 3.0.2         |
-| Vuex           | 4.0.0-beta.4  |
-| Vue Router     | 4.0.0-beta.13 |
+| Vuex           | 4.0.0-rc.1    |
+| Vue Router     | 4.0.0-rc.2    |
 | Vue CLI        | 4.5.8         |
-| Ant Design Vue | 2.0.0-beta.10 |
+| Ant Design Vue | 2.0.0-beta.15 |
 
 - 推荐使用 Node.js 12 及以上的运行/构建当前项目
 
