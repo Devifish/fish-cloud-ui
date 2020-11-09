@@ -1,6 +1,6 @@
 <template>
   <a-spin :spinning="state.loading">
-    <a-form :model="form">
+    <a-form layout="vertical" :model="form">
       <a-form-item label="菜单名称" required>
         <a-input v-model:value="form.name" placeholder="请输入菜单名称" />
       </a-form-item>

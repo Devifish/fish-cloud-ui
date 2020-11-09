@@ -265,9 +265,12 @@ export default defineComponent({
     }
 
     .search-input {
-      input {
+      .ant-input-affix-wrapper {
         border: 0;
         box-shadow: none;
+      }
+      .ant-select-selection-placeholder {
+        font-size: 14px;
       }
     }
   }

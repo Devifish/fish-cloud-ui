@@ -1,5 +1,12 @@
 <template>
-  <a-form id="formLogin" class="user-login-page" ref="formLogin" :rules="rules" :model="form">
+  <a-form
+    id="formLogin"
+    class="user-login-page"
+    ref="formLogin"
+    :wrapper-col="{ span: 24 }"
+    :rules="rules"
+    :model="form"
+  >
     <a-alert v-if="state.isLoginError" type="error" :message="state.message" show-icon />
 
     <a-tabs
