@@ -9,14 +9,14 @@
 
 ## 依赖环境
 
-| 依赖           | 版本          |
-| -------------- | ------------- |
-| Typescript     | 3.9.3         |
-| Vue.js         | 3.0.2         |
-| Vuex           | 4.0.0-rc.1    |
-| Vue Router     | 4.0.0-rc.2    |
-| Vue CLI        | 4.5.8         |
-| Ant Design Vue | 2.0.0-beta.15 |
+| 依赖           | 版本       |
+| -------------- | ---------- |
+| Typescript     | 3.9.3      |
+| Vue.js         | 3.0.2      |
+| Vuex           | 4.0.0-rc.1 |
+| Vue Router     | 4.0.0-rc.3 |
+| Vue CLI        | 4.5.8      |
+| Ant Design Vue | 2.0.0-rc.1 |
 
 - 推荐使用 Node.js 12 及以上的运行/构建当前项目
 
