@@ -9,44 +9,30 @@
   </a-config-provider>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from "vue";
+<script setup lang="ts">
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import zh_CN from "ant-design-vue/es/locale/zh_CN";
 import { PageLoadProgress } from "@/components";
 import { isEmpty } from "@/utils/common";
 
-export default defineComponent({
-  name: "App",
-  components: {
-    PageLoadProgress
-  },
-  setup() {
-    const router = useRouter();
+const router = useRouter();
 
-    // 路由变化更新loadProgress状态
-    const loadProgress = ref();
-    router.beforeEach(() => loadProgress.value.start());
-    router.afterEach(() => loadProgress.value.done());
+// 路由变化更新loadProgress状态
+const loadProgress = ref();
+router.beforeEach(() => loadProgress.value.start());
+router.afterEach(() => loadProgress.value.done());
 
-    // Antd 国际化
-    const locale = ref(zh_CN);
+// Antd 国际化
+const locale = ref(zh_CN);
 
-    /**
-     * Table 数据渲染
-     * 用户空数据的默认配置
-     */
-    function transformCellText({ text }) {
-      return isEmpty(text) ? "/" : text;
-    }
-
-    return {
-      locale,
-      loadProgress,
-      transformCellText
-    };
-  }
-});
+/**
+ * Table 数据渲染
+ * 用户空数据的默认配置
+ */
+function transformCellText({ text }) {
+  return isEmpty(text) ? "/" : text;
+}
 </script>
 
 <style lang="less">
