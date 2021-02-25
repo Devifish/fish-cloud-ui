@@ -1,7 +1,6 @@
-const isProd = process.env.NODE_ENV == "production";
-const cdn = {
-  enable: isProd,
-  externals: {
+const useCDN = eval(process.env.USE_CDN);
+const cdnData = {
+  library: {
     vue: "Vue",
     vuex: "Vuex",
     "vue-router": "VueRouter",
@@ -35,13 +34,13 @@ module.exports = {
     }
   },
   configureWebpack: {
-    externals: cdn.enable ? cdn.externals : []
+    externals: useCDN ? cdnData.library : []
   },
   chainWebpack: config => {
     config.plugin("html").tap(args => {
       const options = args[0];
-      options.js = cdn.enable ? cdn.js : [];
-      options.css = cdn.enable ? cdn.css : [];
+      options.js = useCDN ? cdnData.js : [];
+      options.css = useCDN ? cdnData.css : [];
       return args;
     });
   }
