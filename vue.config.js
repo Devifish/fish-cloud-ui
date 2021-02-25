@@ -6,17 +6,15 @@ const cdn = {
     vuex: "Vuex",
     "vue-router": "VueRouter",
     axios: "axios",
-    moment: "moment",
-    "ant-design-vue": "antd",
+    moment: "moment"
   },
   css: [],
   js: [
-    "https://cdn.jsdelivr.net/npm/vue@3.0.4/dist/vue.runtime.global.prod.js",
-    "https://cdn.jsdelivr.net/npm/vuex@4.0.0-rc.2/dist/vuex.global.prod.js",
-    "https://cdn.jsdelivr.net/npm/vue-router@4.0.1/dist/vue-router.global.prod.js",
-    "https://cdn.jsdelivr.net/npm/axios@0.20.0/dist/axios.min.js",
-    "https://cdn.jsdelivr.net/npm/moment@2.29.1/min/moment-with-locales.min.js",
-    "https://cdn.jsdelivr.net/npm/ant-design-vue@2.0.0-rc.5/dist/antd-with-locales.min.js"
+    "https://cdn.jsdelivr.net/npm/vue@3.0.6/dist/vue.runtime.global.prod.js",
+    "https://cdn.jsdelivr.net/npm/vuex@4.0.0/dist/vuex.global.prod.js",
+    "https://cdn.jsdelivr.net/npm/vue-router@4.0.3/dist/vue-router.global.prod.js",
+    "https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js",
+    "https://cdn.jsdelivr.net/npm/moment@2.29.1/min/moment-with-locales.min.js"
   ]
 };
 
