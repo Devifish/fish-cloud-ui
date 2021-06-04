@@ -9,7 +9,7 @@ const cdnData = {
   },
   css: [],
   js: [
-    "https://cdn.jsdelivr.net/npm/vue@3.0.6/dist/vue.runtime.global.prod.js",
+    "https://cdn.jsdelivr.net/npm/vue@3.0.11/dist/vue.runtime.global.prod.js",
     "https://cdn.jsdelivr.net/npm/vuex@4.0.0/dist/vuex.global.prod.js",
     "https://cdn.jsdelivr.net/npm/vue-router@4.0.3/dist/vue-router.global.prod.js",
     "https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js",
