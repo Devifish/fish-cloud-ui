@@ -93,7 +93,7 @@ export function removeEmptyChildren(tree: Array<any>, children = "children") {
     if (!(childrenData instanceof Array)) continue;
 
     if (childrenData.length > 0) {
-      item.children = removeEmptyChildren(childrenData);
+      item[children] = removeEmptyChildren(childrenData);
     } else {
       delete item[children];
     }
